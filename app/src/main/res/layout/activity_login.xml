@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:paddingTop="50dp"
+    android:orientation="vertical" >
+    tools:context="tp.taller2.udrive.LoginActivity">
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:paddingBottom="50dp"
+        android:src="@drawable/udrive" />
+    <EditText android:id="@+id/username_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/username_message" />
+    <EditText android:id="@+id/password_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType = "textPassword"
+        android:hint="@string/password_message" />
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:onClick="loginMessage"
+        android:text="@string/button_login" />
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:onClick="singUpMessage"
+        android:text="@string/button_singup" />
+ </LinearLayout>
