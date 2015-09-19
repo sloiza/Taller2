@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
+        // automatically handle clicks on the Home/Up borderbutton, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
@@ -40,9 +40,9 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** Called when the user clicks the login button */
+    /** Called when the user clicks the login borderbutton */
     public void loginMessage(View view) {
-        // Do something in response to button
+        // Do something in response to borderbutton
         Intent intent = new Intent(this, UsersActivity.class);
         EditText usernameText = (EditText) findViewById(R.id.username_message);
         String welcomeMessage = usernameText.getText().toString();
@@ -50,9 +50,9 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /** Called when the user clicks the sing up button */
+    /** Called when the user clicks the sing up borderbutton */
     public void singUpMessage(View view) {
-        // Do something in response to button
+        // Do something in response to borderbutton
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }

@@ -1,21 +1,62 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="tp.taller2.udrive.UsersActivity">
-     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingButton"
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/folders"
+        android:textSize="15sp"
+        android:textColor="#000000"
+        android:background="#e6e6e3"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:layout_marginBottom="10dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"/>
+    <ImageView
+        android:id="@+id/folder"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/folder" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:text="@string/files"
+        android:textSize="15sp"
+        android:textColor="#000000"
+        android:background="#e6e6e3"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="250dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"/>
+    <ImageView
+        android:id="@+id/file"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="300dp"
+        android:src="@drawable/file"
+        android:layout_marginLeft="16dp"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/myFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:clickable="true"
-        android:src="@android:drawable/ic_menu_more"
-        android:elevation="10dp"
-        android:padding="10dp"
-        android:layout_gravity="bottom"
-        app:backgroundTint="#FF0000"
-        app:rippleColor="#FFF" />
+        android:src="@drawable/plus_white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        app:elevation="16dp"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="#0D7694"/>
 </RelativeLayout>
