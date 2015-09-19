@@ -25,7 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
+        // automatically handle clicks on the Home/Up borderbutton, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
@@ -37,9 +37,9 @@ public class RegisterActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** Called when the user clicks the register button */
+    /** Called when the user clicks the register borderbutton */
     public void registerMessage(View view) {
-        // Do something in response to button
+        // Do something in response to borderbutton
         Intent intent = new Intent(this, UsersActivity.class);
         startActivity(intent);
     }

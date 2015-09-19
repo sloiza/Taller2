@@ -5,14 +5,17 @@
     <string name="username_message">Username</string>
     <string name="password_message">Password</string>
     <string name="email_message">Email</string>
-    <string name="register_message">Please complete this fields to finish your registration:</string>
+    <string name="register_message">Please fill this form to complete your registration:</string>
     <string name="button_login">Login</string>
     <string name="button_singup">Sing up</string>
     <string name="button_register">Register</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_users">UsersActivity</string>
+    <string name="title_activity_users">My unity</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
-    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_register">Sing Up</string>
     <string name="new_game">New Game</string>
     <string name="help">Help</string>
+    <string name="forgot_pass">Forgot password?</string>
+    <string name="folders">Folders</string>
+    <string name="files">Files</string>
 </resources>

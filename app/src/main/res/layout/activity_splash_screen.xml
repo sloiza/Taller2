@@ -5,12 +5,10 @@
     tools:context=".SplashScreenActivity"
     android:paddingTop="150dp"
     android:paddingLeft="30dp">
-
     <ImageView
         android:layout_width="300dp"
         android:layout_height="200dp"
         android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
-        android:src="@drawable/udrive_presentation" />
-
+        android:src="@drawable/udrive_presentation"/>
 </RelativeLayout>

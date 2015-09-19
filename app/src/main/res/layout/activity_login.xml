@@ -4,35 +4,59 @@
     android:layout_height="match_parent"
     android:paddingLeft="50dp"
     android:paddingRight="50dp"
-    android:paddingTop="50dp"
-    android:orientation="vertical" >
+    android:paddingTop="30dp"
+    android:orientation="vertical"
     tools:context="tp.taller2.udrive.LoginActivity">
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
-        android:paddingBottom="50dp"
         android:src="@drawable/udrive" />
     <EditText android:id="@+id/username_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/username_message" />
+        android:fontFamily="arial"
+        android:hint="@string/username_message"
+        android:textSize="20sp"
+        android:theme="@style/EditTextTheme"/>
     <EditText android:id="@+id/password_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType = "textPassword"
-        android:hint="@string/password_message" />
+        android:fontFamily="arial"
+        android:hint="@string/password_message"
+        android:textSize="20sp"
+        android:theme="@style/EditTextTheme"/>
     <Button
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         android:onClick="loginMessage"
-        android:text="@string/button_login" />
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/button_login"
+        android:background="@drawable/radioussolidbutton"
+        android:textColor="#ffffff"/>
     <Button
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         android:onClick="singUpMessage"
-        android:text="@string/button_singup" />
- </LinearLayout>
+        android:text="@string/button_singup"
+        android:background="@drawable/borderbutton"
+        android:textColor="#0D7694"/>
+    <TextView
+        android:id="@+id/link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/forgot_pass"
+        android:autoLink="all"
+        android:linksClickable="true"
+        android:textColor="#000000"
+        android:textStyle="italic"
+        android:onClick="singUpMessage"
+        android:textSize="13sp"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"/>
+</LinearLayout>

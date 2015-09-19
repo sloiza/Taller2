@@ -37,7 +37,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     startActivity(mainIntent);
 
                     // Close the activity so the user won't able to go back this
-                    // activity pressing Back button
+                    // activity pressing Back borderbutton
                     finish();
                 }
             };
