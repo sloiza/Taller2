@@ -11,9 +11,8 @@
 1- /servidor/build/$ make
 
 ##### Correr:
-1- /servidor/build/$ ./servidor
-
-2- para terminar la ejecución del servidor -> CTRL + C
+###### Ayuda: /servidor/build/$ ./servidor -h
+###### Terminar ejecucion: CTRL + C
 
 ##### Probar:
 desde el navegador ingresar: 'localhost:8080/una/url/cualquiera'.
