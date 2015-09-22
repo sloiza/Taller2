@@ -27,6 +27,7 @@ public:
 	virtual ~Servidor();
 
 	void crear();
+	void crear(int puerto);
 	void setPuerto(int);
 	void setOpcion(std::string nombre, std::string valor);
 	void correr(int);

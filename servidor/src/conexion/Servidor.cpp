@@ -26,6 +26,12 @@ void Servidor::crear()
 	signal(SIGINT, Servidor::handlerSenial);
 }
 
+void Servidor::crear(int puerto)
+{
+	this->crear();
+	this->setPuerto(puerto);
+}
+
 void Servidor::setPuerto(int numero)
 {
 	mg_set_option(this->servidorMG, "listening_port", Utiles::toString(numero).c_str());

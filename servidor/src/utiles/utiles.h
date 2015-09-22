@@ -5,11 +5,15 @@
  *      Author: manuel
  */
 
-#ifndef TIPOS_H_
-#define TIPOS_H_
+#ifndef UTILES_H_
+#define UTILES_H_
 
+// STL
+#include <fstream>
 #include <string>
 #include <sstream>
+#include <map>
+
 
 namespace Utiles
 {
@@ -17,6 +21,10 @@ namespace Utiles
 		std::stringstream ss;
 		ss << i;
 		return ss.str();
+	}
+
+	static int toInt(std::string s){
+		return atoi(s.c_str());
 	}
 
 	static std::string fechaYhora(){
@@ -32,9 +40,18 @@ namespace Utiles
 		return str;
 	}
 
-	enum niveles { DEBUG, AVISO, INFO, ERROR };
+	static void imprimirAyuda()
+	{
+		std::fstream archivo;
+		archivo.open("../ayuda.txt");
+		if( !archivo.is_open() )
+		{
+			std::cout << "No se encontro el texto de ayuda \"ayuda.txt\".\n";
+		}
+		std::cout << archivo.rdbuf();
+	}
 };
 
 
 
-#endif /* TIPOS_H_ */
+#endif /* UTILES_H_ */

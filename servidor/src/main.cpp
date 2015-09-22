@@ -5,13 +5,25 @@
  *      Author: manuel
  */
 
+// Conexion Servidor
 #include "conexion/Servidor.h"
+#include "utiles/LectorParametros.h"
 
-int main()
+int main(int argc, char** argv)
 {
+	ConexionServidor::LectorParametros lector;
+
+	lector.leerParametros(argc, argv);
+
+	if( lector.getAyuda() )
+	{
+		Utiles::imprimirAyuda();
+		return 0;
+	}
+
 	ConexionServidor::Servidor servidor;
 
-	servidor.crear();
+	servidor.crear(lector.getPuertoInt());
 
 	std::cout << "Servidor creado!\n";
 	while( servidor.estaCorriendo() )

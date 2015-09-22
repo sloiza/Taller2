@@ -27,7 +27,7 @@ int HandlerEventos::handler(struct mg_connection *conn, enum mg_event ev)
 	{
 		case MG_AUTH: return MG_TRUE;
 		case MG_REQUEST:
-		  mg_printf_data(conn, "Hello! Requested URI is [%s]", conn->uri);
+		  mg_printf_data(conn, "Hello! Requested URI is [%s]\n", conn->uri);
 		  return MG_TRUE;
 //			Respuesta rta = procesarRequest(conexion);
 //			return rta.getResultado();
