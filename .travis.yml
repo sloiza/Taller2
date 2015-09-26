@@ -13,4 +13,4 @@ before_script:
   - mkdir servidor/build
   
 script: 
-  - cd servidor/build && cmake .. && make 
+  - cd servidor/build && cmake -DINCLUIR_TEST=OFF .. && make 

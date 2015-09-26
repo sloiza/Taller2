@@ -9,6 +9,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -pthread -lrocksdb")
 
 enable_testing()
 
+option(INCLUIR_TEST ON)
+
 add_executable(servidor src/main.cpp src/conexion/Servidor.cpp src/conexion/HandlerEventos.cpp src/conexion/mongoose.c src/utiles/LectorParametros.cpp)
 
 ## esto es igual a lo que estamos haciendo: agregar '-lrocksdb' a los flags ###
@@ -30,6 +32,8 @@ add_executable(servidor src/main.cpp src/conexion/Servidor.cpp src/conexion/Hand
 
 #target_link_libraries(servidor rocksdb libz snappy bz2)
 
-add_subdirectory(test)
+if(INCLUIR_TEST)
+	add_subdirectory(test)
+endif()
 
 install(TARGETS servidor DESTINATION bin)
