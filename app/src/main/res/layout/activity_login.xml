@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="50dp"
     android:paddingRight="50dp"
-    android:paddingTop="30dp"
+    android:paddingTop="10dp"
     android:orientation="vertical"
     tools:context="tp.taller2.udrive.LoginActivity">
     <ImageView
@@ -13,11 +13,12 @@
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:src="@drawable/udrive" />
-    <EditText android:id="@+id/username_message"
+    <EditText android:id="@+id/email_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="arial"
-        android:hint="@string/username_message"
+        android:inputType="textEmailAddress"
+        android:hint="@string/email_message"
         android:textSize="20sp"
         android:theme="@style/EditTextTheme"/>
     <EditText android:id="@+id/password_message"
@@ -28,6 +29,13 @@
         android:hint="@string/password_message"
         android:textSize="20sp"
         android:theme="@style/EditTextTheme"/>
+    <TextView
+        android:id="@+id/login_error"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textColor="#e30000"
+        android:textStyle="bold" />
     <Button
         android:layout_width="100dp"
         android:layout_height="wrap_content"
