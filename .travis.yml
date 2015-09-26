@@ -1,9 +1,12 @@
 language:
-  - c
+  - cpp
   
 compiler:
   - gcc
-  
+
+before_install:
+  - sudo apt-get install -y -qq gcc-4.9 g++-4.9
+
 before_script:
   - mkdir servidor/build
   
