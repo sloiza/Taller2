@@ -1,2 +1,16 @@
-language: c
-compiler: gcc
+language:
+  - cpp
+  
+compiler:
+  - clang
+  - gcc
+
+#before_install:
+#  - sudo apt-get update -qq
+#  - sudo apt-get install -y -qq gcc-4.9 g++-4.9
+
+before_script:
+  - mkdir servidor/build
+  
+script: 
+  - cd servidor/build && cmake .. && make 

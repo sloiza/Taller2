@@ -9,7 +9,7 @@
 
 using namespace ConexionServidor;
 
-bool Servidor::corriendo = true;
+bool Servidor::corriendo = false;
 
 Servidor::Servidor() : servidorMG(NULL), puerto(0) {}
 
@@ -24,6 +24,7 @@ void Servidor::crear()
 	this->setPuerto(8080);
 	this->setOpcion("document_root", ".");
 	signal(SIGINT, Servidor::handlerSenial);
+	corriendo = true;
 }
 
 void Servidor::crear(int puerto)
@@ -48,9 +49,9 @@ bool Servidor::estaCorriendo()
 	return corriendo;
 }
 
-void Servidor::correr(int milisegs)
+int Servidor::correr(int milisegs)
 {
-	mg_poll_server(this->servidorMG, milisegs);
+	return mg_poll_server(this->servidorMG, milisegs);
 }
 
 void Servidor::destruir()
