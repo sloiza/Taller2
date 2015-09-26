@@ -1,2 +1,11 @@
-language: c
-compiler: gcc
+language:
+  - c
+  
+compiler:
+  - gcc
+  
+before_script:
+  - mkdir servidor/build
+  
+script: 
+  - cd servidor/build && cmake -DCHECK_COVERAGE=ON .. && make 
