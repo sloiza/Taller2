@@ -5,7 +5,8 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -pthread -lrocksdb")
 
-add_executable(servidor src/main.cpp src/conexion/Servidor.cpp src/conexion/HandlerEventos.cpp src/conexion/mongoose.c src/utiles/LectorParametros.cpp)
+add_executable(servidor src/main.cpp src/conexion/Servidor.cpp src/conexion/HandlerEventos.cpp src/conexion/mongoose.c src/utiles/LectorParametros.cpp src/database/rocks_db.cpp)
+
 
 ## esto es igual a lo que estamos haciendo: agregar '-lrocksdb' a los flags ###
 #include_directories(rocksdb)
