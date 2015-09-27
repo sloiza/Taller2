@@ -67,6 +67,7 @@ int main(int argc, char** argv)
 	servidor.crear(lector.getPuertoInt());
 
 	std::cout << "Servidor creado!\n";
+
 	while( servidor.estaCorriendo() )
 	{
 		servidor.correr(1000);
