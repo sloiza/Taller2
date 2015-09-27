@@ -35,6 +35,7 @@ add_executable(servidor src/main.cpp src/conexion/Servidor.cpp src/conexion/Hand
 
 if(INCLUIR_TEST)
 	add_subdirectory(test)
+	target_link_libraries(servidor "-fprofile-arcs -ftest-coverage")
 endif()
 
 install(TARGETS servidor DESTINATION bin)
