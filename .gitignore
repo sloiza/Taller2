@@ -2,3 +2,4 @@ servidor/build
 .cproject
 .project
 servidor/dbTest
+*.log

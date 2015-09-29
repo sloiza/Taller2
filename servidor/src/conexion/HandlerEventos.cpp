@@ -16,21 +16,32 @@ HandlerEventos::~HandlerEventos()
 {
 }
 
-int HandlerEventos::handler(struct mg_connection *conn, enum mg_event ev)
+int HandlerEventos::handler(struct mg_connection* conn, enum mg_event ev)
 {
-	//Conexion* conexion = new Conexion(conn);
-	static const char *s_no_cache_header =
-	  "Cache-Control: max-age=0, post-check=0, "
-	  "pre-check=0, no-store, no-cache, must-revalidate\r\n";
-
 	switch(ev)
 	{
 		case MG_AUTH: return MG_TRUE;
 		case MG_REQUEST:
-		  mg_printf_data(conn, "Hello! Requested URI is [%s]. verbo usado: [%s]. data: [%s]\n", conn->uri, conn->request_method, conn->query_string);
-		  return MG_TRUE;
+		{
+			Conexion* conexion = new Conexion();
+			conexion->inicializar(conn);
+
+			mg_printf_data(conn, conexion->impresion().c_str());
+
+			Utiles::Log::instancia()->info( std::string("\nConexion recibida:\n") + conexion->impresion(), std::string("HandlerEventos"));
+
 //			Respuesta rta = procesarRequest(conexion);
-//			return rta.getResultado();
+//			switch( rta.getResultado() )
+//			  {
+//				  HAY_RESPUESTA: return MG_TRUE;
+//				  NO_HAY_RESPUESTA: return MG_FALSE;
+//				  FALTA_COMPLETAR_RESPUESTA: return MG_MORE;
+//			  }
+
+			delete conexion;
+		  return MG_TRUE;
+		}
+
 		default: return MG_FALSE;
 	}
 }

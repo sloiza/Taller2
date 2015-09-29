@@ -8,6 +8,7 @@
 // Conexion Servidor
 #include "conexion/Servidor.h"
 #include "utiles/LectorParametros.h"
+#include "utiles/Log.h"
 
 int main(int argc, char** argv)
 {
@@ -26,12 +27,14 @@ int main(int argc, char** argv)
 	servidor.crear(lector.getPuertoInt());
 
 	std::cout << "Servidor creado!\n";
+	Utiles::Log::instancia()->info("Servidor creado!", "main.cpp");
 
 	while( servidor.estaCorriendo() )
 	{
 		servidor.correr(1000);
 	}
 	std::cout << "\nServidor cerrado. Saliendo...\n";
+	Utiles::Log::instancia()->info("Servidor cerrado.", "main.cpp");
 	servidor.destruir();
 }
 

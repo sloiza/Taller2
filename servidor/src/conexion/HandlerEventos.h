@@ -10,9 +10,12 @@
 
 // STL
 #include <string.h>
+#include <sstream>
 
 // Servidor
+#include "Conexion.h"
 #include "mongoose.h"
+#include "../utiles/Log.h"
 
 namespace ConexionServidor
 {
@@ -29,7 +32,6 @@ private:
 
 
 };
-
-} /* namespace Servidor */
+};
 
 #endif /* HANDLEREVENTOS_H_ */

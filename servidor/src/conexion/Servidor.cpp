@@ -20,7 +20,7 @@ Servidor::~Servidor()
 
 void Servidor::crear()
 {
-	this->servidorMG = mg_create_server(NULL, HandlerEventos::handler );
+	this->servidorMG = mg_create_server(NULL, HandlerEventos::handler);
 	this->setPuerto(8080);
 	this->setOpcion("document_root", ".");
 	signal(SIGINT, Servidor::handlerSenial);
