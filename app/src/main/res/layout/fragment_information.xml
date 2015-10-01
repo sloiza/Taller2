@@ -1,0 +1,67 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="tp.taller2.udrive.InformationFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/contentNameBox"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/material_blue_grey_800"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/typeImage"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:src="@drawable/file"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="FileOrFolderName"
+                android:layout_toRightOf="@id/typeImage"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contentNameBox">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <GridView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/contentActions"
+                    android:layout_below="@id/contentNameBox"
+                    android:columnWidth="120dp"
+                    android:numColumns="auto_fit"
+                    android:stretchMode="columnWidth"
+                    android:gravity="center">
+                </GridView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/contentActions">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Information"/>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+</FrameLayout>
