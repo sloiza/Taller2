@@ -17,12 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import static android.widget.Toast.*;
 
 public class UsersActivity extends AppCompatActivity {
 
@@ -34,6 +38,11 @@ public class UsersActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
 
     ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
+
+    GridView foldersGrid;
+    ArrayList<Content> folders = new ArrayList<Content>();
+    GridView filesGrid;
+    ArrayList<Content> files = new ArrayList<Content>();
 
     class NavItem {
         String mTitle;
@@ -96,6 +105,62 @@ public class UsersActivity extends AppCompatActivity {
         }
     }
 
+
+    class Content {
+        String name;
+        int image;
+
+        public Content(String name, int image) {
+            this.name = name;
+            this.image = image;
+        }
+    }
+
+    class ContentsGridAdapter extends BaseAdapter {
+        private Context context;
+        private ArrayList<Content> contents;
+
+        public ContentsGridAdapter(Context context, ArrayList<Content> contents) {
+            this.context = context;
+            this.contents = contents;
+        }
+
+        @Override
+        public int getCount() {
+            return contents.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return contents.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = convertView;
+
+            if (view == null) {
+
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflater.inflate(R.layout.icon_grid_view, parent, false);
+            }
+
+            TextView nameView = (TextView) view.findViewById(R.id.contentName);
+            ImageView iconView = (ImageView) view.findViewById(R.id.contentIcon);
+
+            nameView.setText(contents.get(position).name );
+            iconView.setImageResource(contents.get(position).image);
+
+            return view;
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +184,35 @@ public class UsersActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItemFromDrawer(position);
+            }
+        });
+
+
+        folders.add(new Content("Folder1", R.drawable.folder));
+        folders.add(new Content("Folder2", R.drawable.folder));
+        folders.add(new Content("Folder3", R.drawable.folder));
+
+        foldersGrid = (GridView) findViewById(R.id.foldersGridView);
+        foldersGrid.setAdapter(new ContentsGridAdapter(this, folders));
+
+        foldersGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO: Open folder
+            }
+        });
+
+        files.add(new Content("File1", R.drawable.file_image_box));
+        files.add(new Content("File2", R.drawable.file_excel_box));
+        files.add(new Content("File3", R.drawable.file_pdf_box));
+
+        filesGrid = (GridView) findViewById(R.id.filesGridView);
+        filesGrid.setAdapter(new ContentsGridAdapter(this, files));
+
+        filesGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO: Open file
             }
         });
 
