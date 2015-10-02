@@ -12,7 +12,12 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <iostream>
 #include <map>
+#include <vector>
+using namespace std;
+
+
 
 
 namespace Utiles
@@ -50,6 +55,25 @@ namespace Utiles
 		}
 		std::cout << archivo.rdbuf();
 	}
+
+	static vector<string> split(string str, char sep){
+
+		vector<string> vect;
+		stringstream ss(str);
+		
+		while (ss.good())
+		{
+			string substr;
+			getline( ss, substr, sep);
+		    vect.push_back(substr);
+		}
+		return vect;
+		
+	}
+
+	// string getHashValue(void* obj){
+
+	// }
 };
 
 

@@ -4,10 +4,12 @@
 #include <string>
 #include <iostream>
 #include <assert.h>
+#include <vector>
 
 #include <rocksdb/db.h>
 #include <rocksdb/slice.h>
 #include <rocksdb/options.h>
+
 
 
 using namespace std;
@@ -23,23 +25,45 @@ class rocks_db{
 
 		Status open_db();
 		Status create_db();
-		Status put(string key, string value);
-		Status get(string key, string* value); //con  prefijo y sin prefijo
+		Status put(string column, Slice key, Slice value);
+		Status get(string column, Slice key, string* value); //con  prefijo y sin prefijo
 		void delete_db();
 		DB* get_db();
 		void set_db(DB* db);
+		void iterate_db();
+		void search(Slice prefix);
+		void ListColumnFamilies();
+
+		//struct que tiene el id en el vector del handler de column families
+		struct CF_id{
+			int def = 0;
+			int user = 1;
+			int file = 2;
+		};
+
+		
+
+
 
 	protected:
 		
 		Options get_options();
 		void set_options(Options opt);
-		
+		string CF_name[3] = {kDefaultColumnFamilyName, "user", "file"};
+		int cantCFs();
+
+
 
 	private:
 		DB* db = NULL;
 		Options options;
 		string dbpath = "../dbTest";
 		Status st;
+		vector<ColumnFamilyDescriptor> column_families;
+		vector<ColumnFamilyHandle*> handles;
+		void createCF(DB* db);
+		void createCFDescriptor();
+		int getIdCF(string column);
 
 };	
 
