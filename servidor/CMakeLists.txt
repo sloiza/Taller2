@@ -17,8 +17,9 @@ file(GLOB SRC_CONEXION "src/conexion/*.cpp" src/conexion/mongoose.c)
 file(GLOB SRC_CONEXION_REQUEST "src/conexion/request/*.cpp")
 file(GLOB SRC_UTILES "src/utiles/*.cpp")
 file(GLOB SRC_DB_ROCKS "src/database/*.cpp")
+file(GLOB SRC_CLASES "src/clases/*.cpp")
 
-file(GLOB SRC_COMPLETO ${SRC} ${SRC_CONEXION} ${SRC_CONEXION_REQUEST} ${SRC_UTILES} ${SRC_DB_ROCKS})
+file(GLOB SRC_COMPLETO ${SRC} ${SRC_CONEXION} ${SRC_CONEXION_REQUEST} ${SRC_UTILES} ${SRC_DB_ROCKS} ${SRC_CLASES})
 
 add_executable(servidor ${SRC_COMPLETO})
 include_directories(libz)
