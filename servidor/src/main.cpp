@@ -9,10 +9,26 @@
 #include "conexion/Servidor.h"
 #include "utiles/LectorParametros.h"
 #include "utiles/Log.h"
+#include "database/rocks_db.h"
+#include "testDB.cpp"
+ 
+ //to test db
+#include <cstdio>
+#include <string>
+#include <iostream>
+#include <assert.h>
+
+
+using namespace rocksdb;
+
+
 
 int main(int argc, char** argv)
 {
+	using namespace test;
 	ConexionServidor::LectorParametros lector;
+	//test_db();
+	testUser();
 
 	lector.leerParametros(argc, argv);
 
@@ -37,4 +53,6 @@ int main(int argc, char** argv)
 	Utiles::Log::instancia()->info("Servidor cerrado.", "main.cpp");
 	servidor.destruir();
 }
+
+
 
