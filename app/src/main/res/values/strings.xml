@@ -20,4 +20,29 @@
     <string name="files">Files</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="email_error">Please enter valid email</string>
+    <string name="password_error">The password must have at least 6 chars</string>
+    <string name="error_emptyFields">Please fill the form, don\'t leave any field blank</string>
+    <string name="success_login">You are successfully registered!</string>
+    <string name="invalidJsonResponse">Error Occured [Server\'s JSON response might be invalid]!</string>
+    <string name="resourceNotFound">Requested resource not found</string>
+    <string name="error_serverEnd">Something went wrong at server end</string>
+    <string name="unexpected_error">Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]</string>
+    <string name="wait">Please wait...</string>
+    <string name="home_subtitle">See your local content</string>
+    <string name="share_title">Share with me</string>
+    <string name="share_subtitle">Content share with you</string>
+    <string name="preferences_title">Preferences</string>
+    <string name="preferences_subtitle">Change your preferences</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
 </resources>

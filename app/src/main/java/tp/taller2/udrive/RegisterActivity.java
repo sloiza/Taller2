@@ -22,34 +22,24 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 public class RegisterActivity extends AppCompatActivity {
-    // Progress Dialog Object
     ProgressDialog prgDialog;
-    // Error Msg TextView Object
     TextView errorMsg;
-    // Name Edit View Object
     EditText nameET;
-    // Email Edit View Object
     EditText emailET;
-    // Passwprd Edit View Object
     EditText pwdET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        // Find Error Msg Text View control by ID
+
         errorMsg = (TextView)findViewById(R.id.register_error);
-        // Find Name Edit View control by ID
         nameET = (EditText)findViewById(R.id.username_message);
-        // Find Email Edit View control by ID
         emailET = (EditText)findViewById(R.id.newEmail_message);
-        // Find Password Edit View control by ID
         pwdET = (EditText)findViewById(R.id.newPassword_message);
-        // Instantiate Progress Dialog object
+
         prgDialog = new ProgressDialog(this);
-        // Set Progress Dialog Text
-        prgDialog.setMessage("Please wait...");
-        // Set Cancelable as False
+        prgDialog.setMessage(getString(R.string.wait));
         prgDialog.setCancelable(false);
     }
 
@@ -81,45 +71,39 @@ public class RegisterActivity extends AppCompatActivity {
         String email = emailET.getText().toString();
         String password = pwdET.getText().toString();
         RequestParams params = new RequestParams();
-        // When Name Edit View, Email Edit View and Password Edit View have values other than Null
         if(Utility.isNotNull(name) && Utility.isNotNull(email) && Utility.isNotNull(password)){
-            // When Email entered is Valid
-            if(Utility.validate(email)){
-                // Put Http parameter name with value of Name Edit View control
+            if(Utility.validateEmail(email)){
                 params.put("name", name);
-                // Put Http parameter username with value of Email Edit View control
                 params.put("username", email);
-                // Put Http parameter password with value of Password Edit View control
-                params.put("password", password);
-                // Invoke RESTful Web Service with Http parameters
-                invokeWS(params);
             }
-            // When Email is invalid
             else{
-                Toast.makeText(getApplicationContext(), "Please enter valid email", Toast.LENGTH_LONG).show();
+                emailET.requestFocus();
+                emailET.setError(getString(R.string.email_error));
+            }
+            if(Utility.validatePassword(password)){
+                params.put("password", password);
+                invokeWS(params);
+            } else {
+                pwdET.requestFocus();
+                pwdET.setError(getString(R.string.password_error));
             }
         }
-        // When any of the Edit View control left blank
         else{
-            Toast.makeText(getApplicationContext(), "Please fill the form, don't leave any field blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.error_emptyFields, Toast.LENGTH_LONG).show();
         }
     }
 
     /**
      * Method that performs RESTful webservice invocations
-     *
-     * @param params
-     */
+      */
     public void invokeWS(RequestParams params){
-        // Show Progress Dialog
         prgDialog.show();
         // Make RESTful webservice call using AsyncHttpClient object
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://192.168.2.2:9999/useraccount/register/doregister",params ,new AsyncHttpResponseHandler() {
+        client.get("http://192.168.1.108:8080/useraccount/register/doregister",params ,new AsyncHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                // Hide Progress Dialog
                 prgDialog.hide();
 
                 if(statusCode == 200) {
@@ -128,23 +112,18 @@ public class RegisterActivity extends AppCompatActivity {
 
                         String response = responseBody.toString();
                         Log.i("Tag", "content http://192.168.2.2:9999/useraccount/register/doregister " + response);
-                        // JSON Object
                         JSONObject obj = new JSONObject(response);
-                        // When the JSON response has status boolean value assigned with true
                         if(obj.getBoolean("status")){
-                            // Set Default Values for Edit View controls
                             setDefaultValues();
-                            // Display successfully registered message using Toast
-                            Toast.makeText(getApplicationContext(), "You are successfully registered!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.success_login, Toast.LENGTH_LONG).show();
                         }
-                        // Else display error message
                         else{
                             errorMsg.setText(obj.getString("error_msg"));
                             Toast.makeText(getApplicationContext(), obj.getString("error_msg"), Toast.LENGTH_LONG).show();
                         }
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
-                        Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.invalidJsonResponse, Toast.LENGTH_LONG).show();
                         e.printStackTrace();
 
                     }
@@ -153,19 +132,15 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                // Hide Progress Dialog
                 prgDialog.hide();
-                // When Http response code is '404'
                 if(statusCode == 404){
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.resourceNotFound, Toast.LENGTH_LONG).show();
                 }
-                // When Http response code is '500'
                 else if(statusCode == 500){
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.error_serverEnd, Toast.LENGTH_LONG).show();
                 }
-                // When Http response code other than 404, 500
                 else{
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -176,14 +151,10 @@ public class RegisterActivity extends AppCompatActivity {
      */
     public void navigatetoLoginActivity(View view){
         Intent loginIntent = new Intent(getApplicationContext(),LoginActivity.class);
-        // Clears History of Activity
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(loginIntent);
     }
 
-    /**
-     * Set degault values for Edit View controls
-     */
     public void setDefaultValues(){
         nameET.setText("");
         emailET.setText("");
