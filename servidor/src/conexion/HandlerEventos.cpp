@@ -25,8 +25,9 @@ int HandlerEventos::handler(struct mg_connection* conn, enum mg_event ev)
 		{
 			Conexion* conexion = new Conexion();
 			conexion->inicializar(conn);
+			conexion->sendData(conn);
 
-			mg_printf_data(conn, conexion->impresion().c_str());
+			//mg_printf_data(conn, conexion->impresion().c_str());
 
 			Utiles::Log::instancia()->info( std::string("\nConexion recibida:\n") + conexion->impresion(), std::string("HandlerEventos"));
 

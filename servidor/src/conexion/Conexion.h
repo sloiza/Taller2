@@ -48,6 +48,7 @@ public:
 	Request::IMetodoREST* getMetodo();
 	std::string getContenido();
 	std::string getQuery();
+	void sendData(struct mg_connection *conn);
 
 	std::string impresion();
 

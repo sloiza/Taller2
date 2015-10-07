@@ -8,6 +8,7 @@
 #include "Conexion.h"
 
 using namespace ConexionServidor;
+using namespace std;
 
 Conexion::Conexion() : uri(NULL), metodo(NULL), mapaMetodos(NULL) {}
 
@@ -74,6 +75,13 @@ std::string Conexion::getContenido()
 std::string Conexion::getQuery()
 {
 	return this->query;
+}
+
+void Conexion::sendData(struct mg_connection *conn){
+	string json = "{\"firstName\":\"Samanta\",\"lastName\":\"Loiza\",\"nickName\":\"\",\"email\":\"samiloiza@gmail.com\",\"location\":\"Argentina\",\"id\":\"0\"}}";
+	const void * data = json.c_str();
+	int le = data.length();	
+	mg_send_data(conn, data, le);
 }
 
 Request::IMetodoREST* Conexion::reconocerMetodo(std::string nombre)
