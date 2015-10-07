@@ -21,11 +21,18 @@ public class Utility {
      * @param email
      * @return true for Valid Email and false for Invalid Email
      */
-    public static boolean validate(String email) {
+    public static boolean validateEmail(String email) {
         pattern = Pattern.compile(EMAIL_PATTERN);
         matcher = pattern.matcher(email);
         return matcher.matches();
 
+    }
+
+    public static boolean validatePassword(String password) {
+        if (password.length() > 6) {
+            return true;
+        }
+        return false;
     }
     /**
      * Checks for Null String object
