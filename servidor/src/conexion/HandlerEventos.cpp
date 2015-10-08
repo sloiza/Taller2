@@ -25,7 +25,11 @@ int HandlerEventos::handler(struct mg_connection* conn, enum mg_event ev)
 		{
 			Conexion* conexion = new Conexion();
 			conexion->inicializar(conn);
-			conexion->sendData(conn);
+
+			string json = "{\"firstName\":\"Samanta\",\"lastName\":\"Loiza\",\"nickName\":\"\",\"email\":\"samiloiza@gmail.com\",\"location\":\"Argentina\",\"id\":\"0\"}";
+			int le = json.length();	
+			const void * data = json.c_str();
+			conexion->sendData(conn, data, le);
 
 			//mg_printf_data(conn, conexion->impresion().c_str());
 
