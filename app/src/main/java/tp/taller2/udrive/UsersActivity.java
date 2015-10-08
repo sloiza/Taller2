@@ -3,6 +3,7 @@ package tp.taller2.udrive;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -101,20 +102,17 @@ public class UsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
 
-        mNavItems.add(new NavItem("My Unity", "See your local content", R.drawable.home));
-        mNavItems.add(new NavItem("Share with me", "Content share with you", R.drawable.share));
-        mNavItems.add(new NavItem("Preferences", "Change your preferences", R.drawable.settings));
+        mNavItems.add(new NavItem(getString(R.string.title_activity_users), getString(R.string.home_subtitle), R.drawable.home));
+        mNavItems.add(new NavItem(getString(R.string.share_title), getString(R.string.share_subtitle), R.drawable.share));
+        mNavItems.add(new NavItem(getString(R.string.preferences_title), getString(R.string.preferences_subtitle), R.drawable.settings));
 
-        // DrawerLayout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
-        // Populate the Navigtion Drawer with options
         mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
         mDrawerList = (ListView) findViewById(R.id.navList);
         DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
         mDrawerList.setAdapter(adapter);
 
-        // Drawer Item click listeners
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -122,7 +120,7 @@ public class UsersActivity extends AppCompatActivity {
             }
         });
 
-       /* mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -133,14 +131,12 @@ public class UsersActivity extends AppCompatActivity {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                Log.d(TAG, "onDrawerClosed: " + getTitle());
-
                 invalidateOptionsMenu();
             }
-        };
+       };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -150,24 +146,45 @@ public class UsersActivity extends AppCompatActivity {
 * is selected.
 * */
     private void selectItemFromDrawer(int position) {
-        Fragment fragment = new PreferencesFragment();
+            // update the main content by replacing fragments
+            Fragment fragment = null;
+            switch (position) {
+                case 0:
+                    fragment = new HomeFragment();
+                    break;
+                case 1:
+                    fragment = new PreferencesFragment();
+                    break;
+                case 2:
+                    fragment = new ShareFragment();
+                    break;
+                 default:
+                    break;
+            }
 
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
+            if (fragment != null) {
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.mainContent, fragment).commit();
 
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mNavItems.get(position).mTitle);
-
-        mDrawerLayout.closeDrawer(mDrawerPane);
+                // update selected item and title, then close the drawer
+                mDrawerList.setItemChecked(position, true);
+                mDrawerList.setSelection(position);
+                setTitle(mNavItems.get(position).mTitle);
+//                mDrawerLayout.closeDrawer(mDrawerLayout);
+            } else {
+                // error in creating fragment
+                Log.e("MainActivity", "Error in creating fragment");
+            }
     }
 
-    /*// Called when invalidateOptionsMenu() is invoked
+    // Called when invalidateOptionsMenu() is invoked
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.avatar).setVisible(!drawerOpen);
+        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        //menu.findItem(R.id.avatar).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
-    }*/
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -191,10 +208,17 @@ public class UsersActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-   /* @Override
+    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
-    }*/
+    }
+
+    //Called when the user clicks the sing up
+    public void profileMessage(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 
 }

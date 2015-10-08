@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="42a1ee578b62fd1bd28b3307a679dc9ba0791587">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-6f40a36acbf796ef680fb6a7885d88333a972609.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="edea92852b40eee716e910af8dad9eeaa58fb0e1">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-cbc6db1756c4f09f335e2e7db659e50907962c11.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="dcf8c83c3dead00a6c4fe313e95f7aaca20dc641">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-bbdb800f00afa111886d61630a0111fa9e2dc6cf.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c756d14e99d39471e99013a1e8fd2f3813ed42bf">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-c27b50695be81bdf9fc3f4efe178cbdfceae9970.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="77a9dcb5f8b1dba36aacaa9c150eb0942dbea158">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-888dac21fb6e641dfe0a86aae686bf6cb36b9bb1.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="adebe28e0c0c05d34a3bfd76f3275bf4d8ff87b6">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-a615d9a5f75e9100ebc11e86f2b0ce0beadc5bdc.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c2ac04c5b232f6f0658ee4f1c13be09cd76406e2">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-bc8ed4a022f68a526d5176f983e3551085520532.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1ff30fa49c07a08c3035d7218a3efebf5680d522">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-b2f05caa8a563ee000680bfcef2acf8f575bc41e.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="98137c4d12c50923f5809852b1ef4d1c4e162081">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-8abae8e3853f93628e28a3fed773e510f3c95358.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2491ae1b2a848af1f4f0c795f3117c1bd6a1989f">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-f8d87f66094a61329201d39a70e184335895e64a.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="166e458ee3b5fb5fcff0f936df3f3a788e6c54f3">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-b51250047c5741a1169d57083abbfd61fe3c26c7.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-vision/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b99f0b78bbcb76b915bc6529a83b65d4d46990dd">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-f244326a4627416b50765e730fe5d14da976d609.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e23ea11124bb700eeddd4ab7aa848c615f493850">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-0aa1f4b3aaf3fc4bd45347f0d33c891c007d6f28.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d11330ea68c0d964d30d5caed1f27e6b1488b189">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-bad0f58face7f63a61f381c65511747f60f73668.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="6e85edfc9b5346d216e50ccef1f8e825504144a3">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-05b0ebf11a2c0d1282641a1f1e6e2035dbe22168.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="cb6fab7a71fa9ec1f483d44c5fca65ab469d8aca">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-9e7f9f7c6c5ab56c8eb83c797add25a28876b920.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="4a135d56554069e5d0ff80e3220e887e57146ee5">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-5b527076733ec33751153fa08c31254960953de2.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="0632f06970823b7e3436f649bfa65b47035c91d0">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-94a9bd6b30a3d3d34ce30e2201a8d0cb42addbfa.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="0124ce31248c0e8acfa2b28283c6d1a4d76e73d2">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-b4a98ef6beb635af3ba98ca6ec0fdd4f40ac9c29.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c5cafb324568d954780abb858c25db7ce675ab3c">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-090e62afaac3160ee69bafa9eda840c772fbd925.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="130b32ed466fa0f63efd4c7d6250ccd2ed506790">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-c8fbcae7a3b35fb6a4ca60b425e150a64b6ba91d.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2e24e5f1b11170163028277de63f709e42525db4">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-8cf844950ba772b7e314b0bfa8504a74bcbd3de0.jar" />
+    </item>
+    <item
+        jar="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.8.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c0c912d58c9468b1f9d9769c8975afdf2c85d681">
+        <dex dex="/home/mati/AndroidStudioProjects/Udrive/app/build/intermediates/pre-dexed/debug/classes-b506da8ecfe95dc3ee6faacbcf84b4b96518c6ff.jar" />
+    </item>
+
+</items>

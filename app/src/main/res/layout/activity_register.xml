@@ -55,7 +55,7 @@
         android:layout_height="50dp"
         android:layout_gravity="end"
         android:onClick="registerMessage"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="150dp"
         android:text="@string/button_register"
         android:background="@drawable/radioussolidbutton"
         android:textColor="#ffffff"/>
