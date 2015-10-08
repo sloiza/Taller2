@@ -11,10 +11,11 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install libgtest-dev
   - sudo apt-get install  zlib1g-dev libbz2-dev libsnappy-dev
-  - wget https://github.com/facebook/rocksdb/archive/master.zip
+  - wget https://github.com/sloiza/rocksdb-travis/archive/master.zip
   - sudo apt-get install unzip
   - unzip master.zip
-  - cd rocksdb-master && make static_lib && make shared_lib && make install && make all
+  - cd rocksdb-travis-master/ROCKS/ 
+  - "sudo make static_lib && sudo make shared_lib && sudo make install && sudo make all"
   - "cd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
   - sudo pip install cpp-coveralls
 
