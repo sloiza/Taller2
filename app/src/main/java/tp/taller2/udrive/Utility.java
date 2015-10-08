@@ -29,7 +29,7 @@ public class Utility {
     }
 
     public static boolean validatePassword(String password) {
-        if (password.length() > 6) {
+        if (password.length() >= 6) {
             return true;
         }
         return false;

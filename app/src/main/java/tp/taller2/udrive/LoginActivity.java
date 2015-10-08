@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,16 +15,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.HttpGet;
 import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.Console;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.StatusLine;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,6 +40,49 @@ public class LoginActivity extends AppCompatActivity {
     TextView errorMsg;
     EditText emailET;
     EditText passwordET;
+
+    public String getUserLogin(String URL) {
+        StringBuilder stringBuilder = new StringBuilder();
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet httpGet = new HttpGet(URL);
+        try {
+            HttpResponse response = httpClient.execute(httpGet);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+                InputStream inputStream = entity.getContent();
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                inputStream.close();
+            } else {
+                Log.d("JSON", "Failed to download file");
+            }
+        } catch (Exception e) {
+            Log.d("readJSONFeed", e.getLocalizedMessage());
+        }
+        return stringBuilder.toString();
+    }
+
+    private class getUserLoginService extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... urls) {
+            return getUserLogin(urls[0]);
+        }
+
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                Toast.makeText(getApplicationContext(), R.string.success_login, Toast.LENGTH_LONG).show();
+                navigatetoHomeActivity();
+            } catch (Exception e) {
+                Log.d("ReadJSONTask", e.getLocalizedMessage());
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,21 +124,18 @@ public class LoginActivity extends AppCompatActivity {
     public void loginMessage(View view) {
         String email = emailET.getText().toString();
         String password = passwordET.getText().toString();
-        RequestParams params = new RequestParams();
         if(Utility.isNotNull(email) && Utility.isNotNull(password)){
-            if(Utility.validateEmail(email)){
-                params.put("username", email);
-            }
-            else{
+            if(!Utility.validateEmail(email)){
                 emailET.requestFocus();
                 emailET.setError(getString(R.string.email_error));
-            }
-            if(Utility.validatePassword(password)){
-                params.put("password", password);
-                invokeWS(params);
-            } else {
-                passwordET.requestFocus();
-                passwordET.setError(getString(R.string.password_error));
+            }else{
+                if(Utility.validatePassword(password)){
+                    new getUserLoginService().execute("http://192.168.0.14:8080/user/login?email=" + email + "&password=" +
+                            password);
+                }else{
+                    passwordET.requestFocus();
+                    passwordET.setError(getString(R.string.password_error));
+                }
             }
         } else{
             Toast.makeText(getApplicationContext(), R.string.error_emptyFields, Toast.LENGTH_LONG).show();
@@ -106,59 +155,10 @@ public class LoginActivity extends AppCompatActivity {
                 (ip >> 24 & 0xff));
     }
 
-    //Method that performs RESTful webservice invocations
-    public void invokeWS(RequestParams params){
-        prgDialog.show();
-        // Make RESTful webservice call using AsyncHttpClient object
-        AsyncHttpClient client = new AsyncHttpClient();
-        String ipAddress = getIpAddress();
-        Log.d("ip", ipAddress);
-        client.put("http://192.168.0.14:8080/useraccount/login/dologin", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                prgDialog.hide();
-
-                if (statusCode == 200) {
-
-                    /*try {
-
-                        String response = responseBody.toString();
-                        JSONObject obj = new JSONObject(response);
-                        if (obj.getBoolean("status")) {*/
-                        if(true) {
-                            Toast.makeText(getApplicationContext(), R.string.success_login, Toast.LENGTH_LONG).show();
-                            navigatetoHomeActivity();
-                        }
-                        /*} else {
-                            errorMsg.setText(obj.getString("error_msg"));
-                            Toast.makeText(getApplicationContext(), obj.getString("error_msg"), Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        // TODO Auto-generated catch block
-                        Toast.makeText(getApplicationContext(), R.string.invalidJsonResponse, Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-
-                    }*/
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                prgDialog.hide();
-                if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), R.string.resourceNotFound, Toast.LENGTH_LONG).show();
-                } else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), R.string.error_serverEnd, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.unexpected_error, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-    }
 
     //Method which navigates from Login Activity toHome Activity
     public void navigatetoHomeActivity(){
-        Intent homeIntent = new Intent(this,UsersActivity.class);
+        Intent homeIntent = new Intent(this,MainActivity.class);
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeIntent);
     }
