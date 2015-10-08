@@ -105,7 +105,7 @@ void rocks_db::set_options(Options opt){
 Status rocks_db::put(string column, Slice key, Slice value){
 	DB* db = this->get_db();
 	int id  = this->getIdCF(column);
-	printf("%p\n", db);
+	//printf("%p\n", db);
 	Status s = db->Put(WriteOptions(), this->handles[id], key , value);
 	if(s.ok()){
 		cout << "Put OK" << endl;

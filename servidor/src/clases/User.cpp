@@ -16,6 +16,7 @@ User::User(string firstName, string lastName, string nickName, string email, str
 	this->email = email;
 	this->pathProf = pathProf;
 	this->location = location;
+	this->colName = "user";
 }
 User::~User(){
 
@@ -93,6 +94,25 @@ Status User::get(Slice key, string* value){
 	//Clase amiga? o ver como tener instancia de la db
 	//return rocks_db::get(this->colName, key, value);
 
+}
+
+Status User::add(rocks_db* rocks){
+	//key alguna unique key generada con los datos del user
+	//Clase amiga? o ver como tener instancia de la db
+	string json = this->toJson();
+	cout << "JSON add: " << json << endl;
+	Slice json_key = Slice("1");// test
+	return rocks->put(this->colName, json_key, this->toJson());
+
+}
+
+//Method to log in
+Status User::signIn(){
+
+} 
+//Method to register
+Status User::signUp(){
+	
 }
 
 	

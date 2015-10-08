@@ -71,6 +71,22 @@ namespace Utiles
 		
 	}
 
+//muy villero,no va. Solo para test r´apido
+static string parseQuery(string query){
+	static vector<string> sp = split(query, '&');
+	int i ;
+	stringstream out;
+	
+	out << "{\"";
+	static vector<string> e ;
+	for(i = 0; i < sp.size() ; i++){
+		e = split(sp[i], '=');
+		out << "{\"" << e[0] << "\":\"" << e[1] << "\"},{";
+	}
+	out << "\"}";
+	return out.str();
+}
+
 	// string getHashValue(void* obj){
 
 	// }

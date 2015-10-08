@@ -40,6 +40,9 @@ class User{
 		void setStatus(bool st);
 		bool getStatus();
 		Status get(Slice key, string* value);
+		Status add(rocks_db* rocks);
+		Status signIn();
+		Status signUp();
 		
 	private:
 		string firstName;
