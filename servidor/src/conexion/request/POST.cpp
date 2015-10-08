@@ -8,6 +8,7 @@
 #include "POST.h"
 
 using namespace ConexionServidor::Request;
+using namespace std;
 
 POST::POST() {}
 
@@ -15,6 +16,7 @@ POST::~POST() {}
 
 void POST::ejecutar(std::string entidad, std::string contenido)
 {
+	cout << "POST {entidad:"<<entidad << " contenido: " <<contenido << "}" << endl;
 
 }
 

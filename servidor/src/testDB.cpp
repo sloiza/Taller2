@@ -36,41 +36,25 @@ namespace test{
   	cout << user->toJson() << endl;
     rocks_db* rocks = new rocks_db();
     Status s;
-    // Put key-value
-    s = rocks->put("user", Slice("1"),user->getName());
-    s = rocks->put("user", Slice("2"),user->toJson());
-    s = rocks->put("file", Slice("2"),"user->toJson()FS");
-    s = rocks->put("file", Slice("cat_2"),"user->toJson()");
-    if(s.ok()){
+    s = user->add(rocks);
+    if(!s.ok()){
+        cerr << s.ToString() << endl;
     }
+    //assert(s.ok());
+    // Put key-value
+    // s = rocks->put("user", Slice("1"),user->getName());
+    // s = rocks->put("user", Slice("json"),user->toJson());
+    // s = rocks->put("file", Slice("2"),"user->toJson()FS");
+    // s = rocks->put("file", Slice("cat_2"),"user->toJson()");
+    
 
      string value1, value2;
     // get value
     //s = user->get(Slice("2"), &value1);
-    s = rocks->get("user", Slice("2"), &value1);
+    s = rocks->get("user", Slice("1"), &value1);
     printf("VALUE1 : %s \n",value1.c_str());
      s = rocks->get("file", Slice("2"), &value2);
     printf("VALUE2 : %s \n",value2.c_str());
-
-
-
-
-
-   
-
-   // rocks->iterate_db();
-    // cout << "Only user " << endl;
-    // rocks->search(Slice("user"));
-    // cout << "Only file " << endl;
-    // rocks->search(Slice("file"));
-
-    //std::string str = "1,2,3,4,5,6";
-    //string sep = string(",");
-    
-
-   
-
-
 
 
   }

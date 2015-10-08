@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 	using namespace test;
 	ConexionServidor::LectorParametros lector;
 	//test_db();
-	testUser();
+//testUser();
 
 	lector.leerParametros(argc, argv);
 

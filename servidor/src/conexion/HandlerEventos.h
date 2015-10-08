@@ -17,6 +17,9 @@
 #include "mongoose.h"
 #include "../utiles/Log.h"
 
+#include "../database/rocks_db.h"
+
+using namespace std;
 namespace ConexionServidor
 {
 

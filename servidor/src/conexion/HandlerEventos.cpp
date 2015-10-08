@@ -8,6 +8,7 @@
 #include "HandlerEventos.h"
 
 using namespace ConexionServidor;
+using namespace Utiles;
 
 HandlerEventos::HandlerEventos()
 {
@@ -24,10 +25,23 @@ int HandlerEventos::handler(struct mg_connection* conn, enum mg_event ev)
 		case MG_REQUEST:
 		{
 			Conexion* conexion = new Conexion();
+			rocks_db* rocks = new rocks_db();
 			conexion->inicializar(conn);
-			conexion->sendData(conn);
 
-			//mg_printf_data(conn, conexion->impresion().c_str());
+			string json = "{\"firstName\":\"Samanta\",\"lastName\":\"Loiza\",\"nickName\":\"\",\"email\":\"samiloiza@gmail.com\",\"location\":\"Argentina\",\"id\":\"0\"}";
+			int le = json.length();	
+			const void * data = json.c_str();
+			conexion->sendData(conn, data, le);
+
+			conexion->procesarRequest();
+			/* Test insert in db params from get */
+			// string que= Utiles::parseQuery(conexion->getQuery());
+			// cout <<  que << endl;
+			// rocks->put("user", Slice("p"), que);
+			// string val;
+			// rocks->get("user", Slice("p"), &val);
+			// cout << "value: " << val << endl;
+			/* Test insert in db params from get */
 
 			Utiles::Log::instancia()->info( std::string("\nConexion recibida:\n") + conexion->impresion(), std::string("HandlerEventos"));
 
