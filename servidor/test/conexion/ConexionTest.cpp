@@ -52,7 +52,7 @@ void ConexionTest::TearDown() {}
 
 void ConexionTest::testConexionEstable()
 {
-	int numConexiones = servidor->correr(1000);
+	int numConexiones = servidor->escuchar(1000);
 	bool estaCorriendo = servidor->estaCorriendo();
 
 	EXPECT_NE(0, numConexiones);
