@@ -12,10 +12,17 @@ file(GLOB SRC src/main.cpp)
 file(GLOB SRC_CONEXION "src/conexion/*.cpp" src/conexion/mongoose.c)
 file(GLOB SRC_CONEXION_REQUEST "src/conexion/request/*.cpp")
 file(GLOB SRC_UTILES "src/utiles/*.cpp")
+file(GLOB SRC_BD "src/bd/*.cpp")
+file(GLOB SRC_BD_ENTIDADES "src/bd/entidades/*.cpp")
 
-file(GLOB SRC_COMPLETO ${SRC} ${SRC_CONEXION} ${SRC_CONEXION_REQUEST} ${SRC_UTILES})
+file(GLOB SRC_COMPLETO ${SRC} ${SRC_CONEXION} ${SRC_CONEXION_REQUEST} ${SRC_UTILES} ${SRC_BD} ${SRC_BD_ENTIDADES})
 
 add_executable(servidor ${SRC_COMPLETO})
+
+target_link_libraries(servidor /usr/local/lib/librocksdb.a)
+target_link_libraries(servidor /usr/lib/x86_64-linux-gnu/libz.so)
+target_link_libraries(servidor /usr/lib/libsnappy.so)
+target_link_libraries(servidor /usr/lib/x86_64-linux-gnu/libbz2.so)
 
 if(INCLUIR_TEST)
 	add_subdirectory(test)

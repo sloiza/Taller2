@@ -14,6 +14,7 @@
 #include <sstream>
 #include <map>
 #include <iostream>
+#include <vector>
 
 
 namespace Utiles
@@ -50,6 +51,20 @@ namespace Utiles
 			std::cout << "No se encontro el texto de ayuda \"ayuda.txt\".\n";
 		}
 		std::cout << archivo.rdbuf();
+	}
+
+	static std::vector<std::string> split(std::string str, char sep){
+
+		std::vector<std::string> vect;
+		std::stringstream ss(str);
+
+		while (ss.good())
+		{
+			std::string substr;
+			getline( ss, substr, sep);
+		    vect.push_back(substr);
+		}
+		return vect;
 	}
 };
 

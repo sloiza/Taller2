@@ -3,3 +3,4 @@ servidor/build
 .project
 servidor/dbTest
 *.log
+*.json

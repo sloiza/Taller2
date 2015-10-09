@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 
 	while( servidor.estaCorriendo() )
 	{
-		servidor.correr(1000);
+		servidor.escuchar(1000);
 	}
 	std::cout << "\nServidor cerrado. Saliendo...\n";
 	Utiles::Log::instancia()->info("Servidor cerrado.", "main.cpp");
