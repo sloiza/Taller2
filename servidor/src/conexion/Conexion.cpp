@@ -52,7 +52,8 @@ void Conexion::inicializar(struct mg_connection* mg_conexion)
 
 int Conexion::procesarRequest()
 {
-	std::string entidad = this->uri->getEntidadAManejar();
+	//std::string entidad = this->uri->getEntidadAManejar();
+	ConexionServidor::BaseDeDatos::EntidadDB* entidad = this->uri->getEntidadAManejar();
 
 	this->metodo->ejecutar(entidad, this->contenido);
 

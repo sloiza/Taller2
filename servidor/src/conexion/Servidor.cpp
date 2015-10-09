@@ -49,7 +49,7 @@ bool Servidor::estaCorriendo()
 	return corriendo;
 }
 
-int Servidor::correr(int milisegs)
+int Servidor::escuchar(int milisegs)
 {
 	return mg_poll_server(this->servidorMG, milisegs);
 }

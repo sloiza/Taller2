@@ -30,7 +30,7 @@ public:
 	void crear(int puerto);
 	void setPuerto(int);
 	void setOpcion(std::string nombre, std::string valor);
-	int correr(int);
+	int escuchar(int);
 	bool estaCorriendo();
 	void destruir();
 

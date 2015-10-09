@@ -24,6 +24,9 @@
 // Utiles
 #include "../utiles/Log.h"
 
+// Base de datos
+#include "../bd/entidades/EntidadBD.h"
+
 namespace ConexionServidor
 {
 
