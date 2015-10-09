@@ -13,7 +13,7 @@ DELETE::DELETE() {}
 
 DELETE::~DELETE() {}
 
-void DELETE::ejecutar(std::string entidad, std::string contenido)
+void DELETE::ejecutar(ConexionServidor::BaseDeDatos::EntidadDB* entidad, std::string contenido)
 {
 
 }

@@ -25,7 +25,7 @@ public:
 	POST();
 	virtual ~POST();
 
-	virtual void ejecutar(std::string entidad, std::string contenido);
+	virtual void ejecutar(ConexionServidor::BaseDeDatos::EntidadDB* entidad, std::string contenido);
 
 	virtual std::string impresion();
 };

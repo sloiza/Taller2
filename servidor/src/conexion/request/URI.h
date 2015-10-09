@@ -11,6 +11,9 @@
 // STL
 #include <string>
 
+// Base de datos
+#include "../../bd/entidades/EntidadBD.h"
+
 namespace ConexionServidor
 {
 namespace Request
@@ -22,9 +25,11 @@ public:
 	URI(std::string);
 	virtual ~URI();
 
+	//std::string getURI();
 	std::string getURI();
 
-	std::string getEntidadAManejar();
+	//std::string getEntidadAManejar();
+	ConexionServidor::BaseDeDatos::EntidadDB* getEntidadAManejar();
 
 private:
 	std::string uri;

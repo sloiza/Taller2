@@ -13,9 +13,9 @@ PUT::PUT() {}
 
 PUT::~PUT() {}
 
-void PUT::ejecutar(std::string entidad, std::string contenido)
+void PUT::ejecutar(ConexionServidor::BaseDeDatos::EntidadDB* entidad, std::string contenido)
 {
-
+	//entidad->crear(contenido);
 }
 
 std::string PUT::impresion()

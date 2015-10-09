@@ -13,7 +13,7 @@ GET::GET() {}
 
 GET::~GET() {}
 
-void GET::ejecutar(std::string entidad, std::string contenido)
+void GET::ejecutar(ConexionServidor::BaseDeDatos::EntidadDB* entidad, std::string contenido)
 {
 
 }

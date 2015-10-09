@@ -13,9 +13,11 @@ POST::POST() {}
 
 POST::~POST() {}
 
-void POST::ejecutar(std::string entidad, std::string contenido)
+void POST::ejecutar(ConexionServidor::BaseDeDatos::EntidadDB* entidad, std::string contenido)
 {
-
+//	ManagerBD::instancia()->modificar(this->entidad, contenido);
+//
+//	delete manager;
 }
 
 std::string POST::impresion()

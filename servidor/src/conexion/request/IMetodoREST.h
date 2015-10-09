@@ -8,6 +8,9 @@
 #ifndef IMETODOREST_H_
 #define IMETODOREST_H_
 
+// BaseDeDatos
+#include "../../bd/entidades/EntidadBD.h"
+
 namespace ConexionServidor
 {
 
@@ -16,10 +19,10 @@ namespace Request
 
 class IMetodoREST {
 public:
-	IMetodoREST(){}
-	virtual ~IMetodoREST(){}
+	IMetodoREST() {}
+	virtual ~IMetodoREST() {}
 
-	virtual void ejecutar(std::string entidad, std::string contenido) = 0;
+	virtual void ejecutar(ConexionServidor::BaseDeDatos::EntidadDB* entidad, std::string contenido) = 0;
 	virtual std::string impresion() = 0;
 };
 };
