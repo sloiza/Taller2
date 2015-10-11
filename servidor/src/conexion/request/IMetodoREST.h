@@ -8,8 +8,9 @@
 #ifndef IMETODOREST_H_
 #define IMETODOREST_H_
 
-// BaseDeDatos
+// Base de datos
 #include "../../bd/entidades/EntidadBD.h"
+#include "../../bd/JsonInfo.h"
 
 namespace ConexionServidor
 {

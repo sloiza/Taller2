@@ -41,7 +41,7 @@ void Log::info(const std::string& mensaje, const std::string& autor)
 	log.open("info.log", std::fstream::out | std::fstream::app);
 
 	std::string mensaje_completo =
-			Utiles::fechaYhora() +" "+ autor +": " + mensaje + "\n";
+			Utiles::Metodos::fechaYhora() +" "+ autor +": " + mensaje + "\n";
 
 	log.write(mensaje_completo.c_str(), mensaje_completo.size());
 

@@ -35,7 +35,7 @@ void Servidor::crear(int puerto)
 
 void Servidor::setPuerto(int numero)
 {
-	mg_set_option(this->servidorMG, "listening_port", Utiles::toString(numero).c_str());
+	mg_set_option(this->servidorMG, "listening_port", Utiles::Metodos::toString(numero).c_str());
 	this->puerto = numero;
 }
 

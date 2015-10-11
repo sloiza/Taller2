@@ -76,7 +76,7 @@ const std::string LectorParametros::getPuerto()
 
 const int LectorParametros::getPuertoInt()
 {
-	return Utiles::toInt( parametros[PARAM_PUERTO] );
+	return Utiles::Metodos::toInt( parametros[PARAM_PUERTO] );
 }
 
 const bool LectorParametros::getAyuda()

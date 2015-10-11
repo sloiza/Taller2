@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 
 	if( lector.getAyuda() )
 	{
-		Utiles::imprimirAyuda();
+		Utiles::Metodos::imprimirAyuda();
 		return 0;
 	}
 

@@ -19,6 +19,10 @@
 
 namespace Utiles
 {
+
+class Metodos
+{
+public:
 	static std::string toString(int i){
 		std::stringstream ss;
 		ss << i;
@@ -66,6 +70,7 @@ namespace Utiles
 		}
 		return vect;
 	}
+};
 };
 
 
