@@ -1,5 +1,6 @@
-
 #include "User.h"
+
+using namespace ConexionServidor::BaseDeDatos;
 
 User::User(){
 	this->firstName = "";
@@ -81,7 +82,7 @@ string User::toJson(){
 }
 void User::fromJson(string json){
 	json = "{\"firstName\":\"Samanta\",\"lastName\":\"Loiza\",\"nickName\":\"\",\"email\":\"samiloiza@gmail.com\",\"location\":\"Argentina\",\"id\":\"0\"}}";
-	vector<string> vec = split(json.c_str(), ',');
+	vector<string> vec = Utiles::Metodos::split(json.c_str(), ',');
 	 for (size_t i = 0; i< vec.size(); i++){
         cout << vec[i] << endl;
     }
@@ -115,4 +116,20 @@ Status User::signUp(){
 	
 }
 
+// Metodos de EntidadDB
+std::string User::getValor()
+{
+	//return this->toJson();
+	return this->info->getContenido();
+}
+
+std::string User::getColumnaDeFamilia()
+{
+	return "user";
+}
+
+std::string User::getClave()
+{
+	return this->info->getAtributo("nombre", "matori");
+}
 	

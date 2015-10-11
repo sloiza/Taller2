@@ -9,9 +9,15 @@
 
 using namespace ConexionServidor::BaseDeDatos;
 
-EntidadDB::EntidadDB() {}
+EntidadDB::EntidadDB() : info(NULL) {}
 
-EntidadDB::~EntidadDB() {}
+EntidadDB::~EntidadDB()
+{
+	if( this->info != NULL )
+	{
+		delete this->info;
+	}
+}
 
 void EntidadDB::crear()
 {
@@ -53,4 +59,9 @@ ClaveRocksDB EntidadDB::getClaveRocksDB()
 	clave.clave = this->getClave();
 
 	return clave;
+}
+
+void EntidadDB::setJsonInfo(JsonInfo* info)
+{
+	this->info = info;
 }

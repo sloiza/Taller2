@@ -9,8 +9,9 @@
 #define ENTIDAD_H_
 
 // Base de datos
-#include "ClaveRocksDB.h"
+#include "../ClaveRocksDB.h"
 #include "../ManagerBD.h"
+#include "../JsonInfo.h"
 
 namespace ConexionServidor
 {
@@ -22,6 +23,8 @@ public:
 	EntidadDB();
 	virtual ~EntidadDB();
 
+	void setJsonInfo(JsonInfo* info);
+
 	virtual ClaveRocksDB getClaveRocksDB();
 	virtual std::string getValor() = 0;
 
@@ -30,9 +33,11 @@ public:
 	virtual void eliminar(); 	// DELETE
 	virtual std::string recuperar(); 	// GET
 
-private:
+protected:
 	virtual std::string getColumnaDeFamilia() = 0;
 	virtual std::string getClave() = 0;
+
+	JsonInfo* info;
 };
 };
 };

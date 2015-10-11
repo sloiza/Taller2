@@ -9,7 +9,7 @@
 #define MANAGERBD_H_
 
 // Base de datos
-#include "entidades/ClaveRocksDB.h"
+#include "ClaveRocksDB.h"
 #include "rocks_db.h"
 
 namespace ConexionServidor
@@ -23,6 +23,7 @@ public:
 	virtual ~ManagerBD();
 
 	void inicializar();
+	void cerrar();
 
 	static void insertar(ClaveRocksDB clave, std::string valor);
 	static void eliminar(ClaveRocksDB clave);

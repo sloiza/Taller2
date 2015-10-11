@@ -15,18 +15,34 @@ ManagerBD::ManagerBD() {}
 
 ManagerBD::~ManagerBD() {}
 
+void ManagerBD::inicializar()
+{
+	db = new rocks_db();
+}
+
+void ManagerBD::cerrar()
+{
+	if ( db != NULL )
+	{
+		delete db;
+	}
+}
+
 void ManagerBD::insertar(ClaveRocksDB clave, std::string valor)
 {
-
+	db->put(clave.columna, clave.clave, valor);
 }
 
 void ManagerBD::eliminar(ClaveRocksDB clave)
 {
-
+	//db->delet(clave.columna, clave.clave);
 }
 
 std::string ManagerBD::recuperar(ClaveRocksDB clave)
 {
-	return std::string("valor_recuperado");
+	std::string valorRecuperado;
+	db->get(clave.columna, clave.clave, &valorRecuperado);
+
+	return valorRecuperado;
 }
 

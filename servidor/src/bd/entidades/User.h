@@ -8,14 +8,15 @@
 
 #include "../../utiles/utiles.h"
 #include "../rocks_db.h"
+#include "EntidadBD.h"
 
-
-
-using namespace std;
-using namespace Utiles;
-using namespace rocksdb;
+namespace ConexionServidor
+{
+namespace BaseDeDatos
+{
 	
-class User{
+class User : public EntidadDB
+{
 
 	public:
 			
@@ -44,6 +45,14 @@ class User{
 		Status signIn();
 		Status signUp();
 		
+		// Metodos de EntidadDB
+		virtual std::string getValor();
+
+	protected:
+		// Metodos de EntidadDB
+		virtual std::string getColumnaDeFamilia();
+		virtual std::string getClave();
+
 	private:
 		string firstName;
 		bool status;
@@ -54,11 +63,8 @@ class User{
 		string location;
 		double id; //id static o key para buscar en rocks VER
 		string colName;
-
-		
-};	
-	
-
-
+};
+};
+};
 
 #endif /* USER_H_ */

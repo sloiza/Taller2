@@ -171,8 +171,7 @@ int rocks_db::getIdCF(string name){
 	}else if(strcmp(name.c_str(), this->CF_name[2].c_str()) == 0){
 		return 2;
 	}
-		
-
+	return -1;
 }
 
 void rocks_db::ListColumnFamilies(){
