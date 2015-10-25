@@ -30,6 +30,7 @@ public:
 	void setContenido();
 	std::string getContenido();
 	void setContenido(std::string contenido);
+	void limpiar();
 
 	bool estadoOk();
 	void imprimir();

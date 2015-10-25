@@ -68,6 +68,21 @@ void JsonInfoTest::testGetValorPorDefaultCorrecto()
 	EXPECT_EQ(true, this->info->estadoOk());
 }
 
+void JsonInfoTest::testCambiarContenidoCorrectamente()
+{
+	std::string nuevoContenido("{ \"unCampo\": \"unValor\" }");
+	//nuevoContenido = "{ \"unCampo\": \unValor\" }"
+
+	this->info->setContenido(nuevoContenido);
+
+	std::string unValor = this->info->getAtributo("unCampo", "default");
+	std::string nombre = this->info->getAtributo("nombre", "default");
+
+	EXPECT_STREQ("unValor", unValor.c_str());
+	EXPECT_STREQ("default", nombre.c_str());
+	EXPECT_EQ(true, this->info->estadoOk());
+}
+
 void JsonInfoTest::setUp()
 {
 	this->info = new ConexionServidor::BaseDeDatos::JsonInfo(jsonEjemplo);

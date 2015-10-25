@@ -29,6 +29,7 @@ public:
 	void testGetCampoBien();
 	void testSettearYRecuperarCampoCorrectamente();
 	void testGetValorPorDefaultCorrecto();
+	void testCambiarContenidoCorrectamente();
 
 	void TestBody() {};
 protected:
@@ -71,6 +72,12 @@ TEST_F(JsonInfoTest, valorPorDefaultCorrecto)
 {
 	JsonInfoTest test;
 	test.testGetValorPorDefaultCorrecto();
+}
+
+TEST_F(JsonInfoTest, cambiarContenidoCorrectamente)
+{
+	JsonInfoTest test;
+	test.testCambiarContenidoCorrectamente();
 }
 
 };
