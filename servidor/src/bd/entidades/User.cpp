@@ -2,124 +2,91 @@
 
 using namespace ConexionServidor::BaseDeDatos;
 
-User::User(){
-	this->firstName = "";
-	this->lastName = "";
-	this->email = "";
-	this->pathProf = "";
-	this->location = "";
-		
+const std::string User::etiquetas[] = {"nombre", "apellido", "mail", "foto", "lugar", "nick", "id" };
+
+User::User(std::string contenido)
+{
+	this->info->setContenido(contenido);
 }
-User::User(string firstName, string lastName, string nickName, string email, string pathProf,string location) : status(true) {
-	this->firstName = firstName;
-	this->lastName = lastName;
-	this->nickName = nickName;
-	this->email = email;
-	this->pathProf = pathProf;
-	this->location = location;
-	this->colName = "user";
+
+User::User() {}
+
+User::User(string firstName, string lastName, string nickName, string email, string pathProf,string location) {
+	this->setName(firstName);
+	this->setLastName(lastName);
+	this->setNickName(nickName);
+	this->setEmail(email);
+	this->setProfilePhoto(pathProf);
+	this->setLocation(location);
 }
-User::~User(){
+
+User::~User()
+{
 
 }
+
 string User::getName(){
-	return this->firstName;
-
+	//return this->firstName;
+	return this->info->getAtributo(etiquetas[NOMBRE], "nombreDefault");
 }
-void User::setName(string name){
-	this->firstName = firstName;
-
+void User::setName(string nombre){
+	//this->firstName = firstName;
+	this->info->setAtributo(etiquetas[NOMBRE], nombre);
 }
 string User::getLastName(){
-	return this->lastName;
+	//return this->lastName;
+	return this->info->getAtributo(etiquetas[APELLIDO], "apellidoDefault");
 }
 void User::setLastName(string lastName){
-	this->lastName = lastName;
+	//this->lastName = lastName;
+	this->info->setAtributo(etiquetas[APELLIDO], lastName);
 }
 
 string User::getNickName(){
-	return this->nickName;
+	//return this->nickName;
+	return this->info->getAtributo(etiquetas[NICK], "nickDefault");
 }
 
 void User::setNickName(string nickName){
-	this->nickName = nickName;
+	//this->nickName = nickName;
+	this->info->setAtributo(etiquetas[NICK], nickName);
 }
 
 string User::getEmail(){
-	return this->email;
+	//return this->email;
+	return this->info->getAtributo(etiquetas[MAIL], "mailDefault");
 }
 void User::setEmail(string email){
-	this->email = email;
+	//this->email = email;
+	this->info->setAtributo(etiquetas[MAIL], email);
 }
 string User::getProfilePhoto(){
-	return this->pathProf;
+	//return this->pathProf;
+	return this->info->getAtributo(etiquetas[FOTO], "fotoDefault");
 }
 void User::setProfilePhoto(string pathProf){
-	this->pathProf = pathProf;
+	//this->pathProf = pathProf;
+	this->info->setAtributo(etiquetas[FOTO], pathProf);
 }
 string User::getLocation(){
-	return this->location;
+	//return this->location;
+	return this->info->getAtributo(etiquetas[LUGAR], "lugarDefault");
 }
 void User::setLocation(string location){
-	this->location = location;
+	//this->location = location;
+	this->info->setAtributo(etiquetas[LUGAR], location);
 }
 
-void User::setStatus(bool st){
-	this->status = st;
-}
-bool User::getStatus(){
-	return this->status;
-}
-
-string User::toJson(){
-
-	//VER SI ES VACIO 
-	stringstream out;
-
-	out << "{\"firstName\":\"" << this->firstName << "\",\"lastName\":\"" << this->lastName << "\",\"nickName\":\"" << this->nickName
-		<< "\",\"email\":\"" << this->email << "\",\"location\":\"" << this->location << "\",\"id\":\"" << this->id << "\",\"status\":\""<< this->status << "\"}";
-	return out.str();
-}
-void User::fromJson(string json){
-	json = "{\"firstName\":\"Samanta\",\"lastName\":\"Loiza\",\"nickName\":\"\",\"email\":\"samiloiza@gmail.com\",\"location\":\"Argentina\",\"id\":\"0\"}}";
-	vector<string> vec = Utiles::Metodos::split(json.c_str(), ',');
-	 for (size_t i = 0; i< vec.size(); i++){
-        cout << vec[i] << endl;
-    }
-
-
-}
-
-Status User::get(Slice key, string* value){
-	//key alguna unique key generada con los datos del user
-	//Clase amiga? o ver como tener instancia de la db
-	//return rocks_db::get(this->colName, key, value);
-
-}
-
-Status User::add(rocks_db* rocks){
-	//key alguna unique key generada con los datos del user
-	//Clase amiga? o ver como tener instancia de la db
-	string json = this->toJson();
-	cout << "JSON add: " << json << endl;
-	Slice json_key = Slice("1");// test
-	return rocks->put(this->colName, json_key, this->toJson());
-
-}
-
-//Method to log in
-Status User::signIn(){
-
-} 
-//Method to register
-Status User::signUp(){
-	
-}
+//void User::setStatus(bool st){
+//	this->status = st;
+//}
+//bool User::getStatus(){
+//	return this->status;
+//}
 
 // Metodos de EntidadDB
 std::string User::getValor()
 {
-	//return this->toJson();
 	return this->info->getContenido();
 }
 
@@ -130,6 +97,6 @@ std::string User::getColumnaDeFamilia()
 
 std::string User::getClave()
 {
-	return this->info->getAtributo("nombre", "matori");
+	return this->getName();
 }
 	

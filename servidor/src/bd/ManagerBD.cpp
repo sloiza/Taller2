@@ -46,6 +46,11 @@ bool ManagerBD::estaAbierta()
 
 void ManagerBD::insertar(ClaveRocksDB clave, std::string valor)
 {
+	if ( estaAbierta() == false)
+	{
+		inicializar();
+	}
+
 	db->put(clave.columna, Slice(clave.clave), Slice(valor));
 }
 

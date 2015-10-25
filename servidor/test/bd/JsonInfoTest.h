@@ -38,7 +38,7 @@ protected:
 	virtual void TearDown() {};
 
 	void setUp();
-	void finishing();
+	void terminando();
 
 	ConexionServidor::BaseDeDatos::JsonInfo* info;
 

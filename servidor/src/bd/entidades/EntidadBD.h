@@ -23,7 +23,9 @@ public:
 	EntidadDB();
 	virtual ~EntidadDB();
 
-	void setJsonInfo(JsonInfo* info);
+	void setContenido(JsonInfo* contenido);
+	void setContenido(std::string contenido);
+	std::string getContenido();
 
 	virtual ClaveRocksDB getClaveRocksDB();
 	virtual std::string getValor() = 0;

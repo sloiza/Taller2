@@ -19,7 +19,7 @@ JsonInfoTest::JsonInfoTest() : info(NULL)
 
 JsonInfoTest::~JsonInfoTest()
 {
-	this->finishing();
+	this->terminando();
 }
 
 void JsonInfoTest::testContenidoNoValido()
@@ -88,7 +88,7 @@ void JsonInfoTest::setUp()
 	this->info = new ConexionServidor::BaseDeDatos::JsonInfo(jsonEjemplo);
 }
 
-void JsonInfoTest::finishing()
+void JsonInfoTest::terminando()
 {
 	if (info != NULL)
 	{

@@ -11,13 +11,14 @@ find_package(GTest REQUIRED)
 file(GLOB TEST correrTests.cpp)
 file(GLOB TEST_CONEXION "conexion/*.cpp" conexion/mongoose.c)
 file(GLOB TEST_BD "bd/*.cpp")
+file(GLOB TEST_BD_ENTIDADES "bd/entidades/*.cpp")
 file(GLOB SRC_CONEXION "../src/conexion/*.cpp" ../src/conexion/mongoose.c)
 file(GLOB SRC_CONEXION_REQUEST "../src/conexion/request/*.cpp" )
 file(GLOB SRC_UTILES "../src/utiles/*.cpp")
 file(GLOB SRC_BD "../src/bd/*.cpp")
 file(GLOB SRC_BD_ENTIDADES "../src/bd/entidades/*.cpp")
 
-file(GLOB TEST_COMPLETO ${TEST} ${TEST_CONEXION} ${TEST_BD} ${SRC_CONEXION} ${SRC_CONEXION_REQUEST} ${SRC_UTILES} ${SRC_BD} ${SRC_BD_ENTIDADES})
+file(GLOB TEST_COMPLETO ${TEST} ${TEST_CONEXION} ${TEST_BD} ${TEST_BD_ENTIDADES} ${SRC_CONEXION} ${SRC_CONEXION_REQUEST} ${SRC_UTILES} ${SRC_BD} ${SRC_BD_ENTIDADES})
 
 add_executable(tests ${TEST_COMPLETO})
 

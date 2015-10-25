@@ -22,9 +22,9 @@ public:
 	ManagerBD();
 	virtual ~ManagerBD();
 
-	void inicializar();
-	bool estaAbierta();
-	void cerrar();
+	static void inicializar();
+	static bool estaAbierta();
+	static void cerrar();
 
 	static void insertar(ClaveRocksDB clave, std::string valor);
 	static void eliminar(ClaveRocksDB clave);

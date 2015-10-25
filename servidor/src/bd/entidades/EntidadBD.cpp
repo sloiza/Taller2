@@ -9,7 +9,10 @@
 
 using namespace ConexionServidor::BaseDeDatos;
 
-EntidadDB::EntidadDB() : info(NULL) {}
+EntidadDB::EntidadDB() : info(NULL)
+{
+	this->info = new JsonInfo();
+}
 
 EntidadDB::~EntidadDB()
 {
@@ -61,7 +64,17 @@ ClaveRocksDB EntidadDB::getClaveRocksDB()
 	return clave;
 }
 
-void EntidadDB::setJsonInfo(JsonInfo* info)
+void EntidadDB::setContenido(JsonInfo* contenido)
 {
-	this->info = info;
+	this->info = contenido;
+}
+
+void EntidadDB::setContenido(std::string info)
+{
+	this->info->setContenido(info);
+}
+
+std::string EntidadDB::getContenido()
+{
+	return this->info->getContenido();
 }
