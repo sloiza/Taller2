@@ -6,12 +6,12 @@ using namespace rocksdb;
 rocks_db::rocks_db(){
 	Status s = this->create_db();
 	if(s.ok()){
-		cout << "open OK" << endl;
+		//cout << "open OK" << endl;
 		this->open_db();
 	}else{
 		//ya fue creada, s´olo se abre
 		cerr << s.ToString() << endl;
-		cout << "only open" << endl;
+		//cout << "only open" << endl;
 		this->open_db();
 	}
 	
@@ -20,17 +20,17 @@ Status rocks_db::create_db(){
 	Status s;
  	Options options;
 	DB* _db;
-	options.error_if_exists = true;
+	options.error_if_exists = false	;
 	options.create_if_missing = true;
 	
 	s = DB::Open(options, this->dbpath, &_db);
 	if(s.ok()){
 		this->createCF(_db);
-		cout << "DB created \n";
+		//cout << "DB created \n";
 		//this->handles = handles;
 
 	}else{
-		cout << "DB couldn't be created. DB Error " ;
+		//cout << "DB couldn't be created. DB Error " ;
 		cerr << s.ToString() << endl;	
 	}
 	delete _db;
@@ -44,7 +44,7 @@ void rocks_db::createCF(DB* db){
 		ColumnFamilyHandle* cf = NULL;
   		s = db->CreateColumnFamily(ColumnFamilyOptions(), this->CF_name[i], &cf);
   		if(s.ok()){
-  			cout << "Created column OK "<< endl;
+  			//cout << "Created column OK "<< endl;
   		}else{
   			cerr << s.ToString() << endl;
   		}
@@ -78,11 +78,11 @@ Status rocks_db::open_db(){
 	//s = DB::Open(options, this->dbpath, &_db);
 	if(s.ok()){
 		this->set_db(_db);
-		cout << "DB opened \n";
+		//cout << "DB opened \n";
 		this->handles = handles;
 
 	}else{
-		cout << "DB couldn't be opened. DB Error " ;
+		//cout << "DB couldn't be opened. DB Error " ;
 		cerr << s.ToString() << endl;
 	}
 
@@ -108,10 +108,10 @@ Status rocks_db::put(string column, Slice key, Slice value){
 	//printf("%p\n", db);
 	Status s = db->Put(WriteOptions(), this->handles[id], key , value);
 	if(s.ok()){
-		cout << "Put OK" << endl;
+		//cout << "Put OK" << endl;
 		return s;
 	}else{
-		cout << "Failed insert in db. DB Error" << endl;
+		//cout << "Failed insert in db. DB Error" << endl;
 		cerr << s.ToString() << endl;
 		return s;
 	}
@@ -122,9 +122,9 @@ Status rocks_db::get(string column, Slice key, string* value){
 	int id = this->getIdCF(column);
 	Status s = db->Get(ReadOptions(), this->handles[id], key, value);
 	if(s.ok()){
-		cout << "Get OK: "<< *value << "\n";
+		//cout << "Get OK: "<< *value << "\n";
 	}else{
-		cerr << "DB Error " << s.ToString() << endl;
+		//cerr << "DB Error " << s.ToString() << endl;
 	}
 	return s;
 
@@ -133,9 +133,10 @@ Status rocks_db::get(string column, Slice key, string* value){
 rocks_db::~rocks_db()
 {
 	if(this->db != NULL){
-		cout << "closing db " << endl;
+		//cout << "closing db " << endl;
 		delete this->db;		
 	}
+	this->db = NULL;
 }
 
 DB* rocks_db::get_db(){

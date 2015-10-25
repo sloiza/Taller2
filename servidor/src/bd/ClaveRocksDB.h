@@ -11,10 +11,17 @@
 // STL
 #include <string>
 
+namespace ConexionServidor
+{
+
+namespace BaseDeDatos
+{
 struct ClaveRocksDB
 {
 	std::string columna;
 	std::string clave;
+};
+};
 };
 
 #endif /* CLAVEROCKSDB_H_ */

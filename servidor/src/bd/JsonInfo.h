@@ -26,11 +26,18 @@ public:
 	virtual ~JsonInfo();
 
 	std::string getAtributo(std::string campo, std::string valorDefault);
+	void setAtributo(std::string campo, std::string valorNuevo);
+	void setContenido();
 	std::string getContenido();
+	void setContenido(std::string contenido);
+
+	bool estadoOk();
+	void imprimir();
 
 private:
 	Json::Value raiz;
 	std::string contenido;
+	bool error;
 
 };
 };

@@ -23,6 +23,7 @@ public:
 	virtual ~ManagerBD();
 
 	void inicializar();
+	bool estaAbierta();
 	void cerrar();
 
 	static void insertar(ClaveRocksDB clave, std::string valor);
