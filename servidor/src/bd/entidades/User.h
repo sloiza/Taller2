@@ -6,14 +6,11 @@
 #include <sstream>
 #include <assert.h>
 
-
 // utiles
 #include "../../utiles/utiles.h"
 
 // Base de datos
 #include "EntidadBD.h"
-#include "../JsonInfo.h"
-#include "../rocks_db.h"
 
 namespace ConexionServidor
 {
