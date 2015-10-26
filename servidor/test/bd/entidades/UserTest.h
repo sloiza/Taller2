@@ -14,7 +14,8 @@
 // User
 #include "../../../src/bd/entidades/User.h"
 
-namespace Test {
+namespace Test
+{
 
 class UserTest : public testing::Test {
 public:

@@ -24,7 +24,7 @@ UserTest::~UserTest()
 
 void UserTest::testCrearYRecuperarEnBDCorrectamente()
 {
-	this->user->crear();
+	this->user->guardar();
 
 	std::string contenidoRecuperado = this->user->recuperar();
 
@@ -36,7 +36,7 @@ void UserTest::testCrearYRecuperarEnBDCorrectamente()
 
 void UserTest::testModificarEnBDCorrectamente()
 {
-	this->user->crear();
+	this->user->guardar();
 
 	EXPECT_STREQ("Arturo", this->user->getName().c_str());
 	EXPECT_STREQ("Perez", this->user->getLastName().c_str());

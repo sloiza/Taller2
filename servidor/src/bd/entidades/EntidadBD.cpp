@@ -22,7 +22,7 @@ EntidadDB::~EntidadDB()
 	}
 }
 
-void EntidadDB::crear()
+void EntidadDB::guardar()
 {
 	ClaveRocksDB clave = getClaveRocksDB();
 	std::string valor = getValor();

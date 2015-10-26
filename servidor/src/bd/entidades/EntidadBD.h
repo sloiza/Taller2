@@ -30,7 +30,7 @@ public:
 	virtual ClaveRocksDB getClaveRocksDB();
 	virtual std::string getValor() = 0;
 
-	virtual void crear(); 		// PUT
+	virtual void guardar(); 		// PUT
 	virtual void modificar(); 	// POST
 	virtual void eliminar(); 	// DELETE
 	virtual std::string recuperar(); 	// GET
