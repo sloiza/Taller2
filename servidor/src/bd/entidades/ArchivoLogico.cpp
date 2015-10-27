@@ -78,6 +78,11 @@ std::string ArchivoLogico::getBajaLogica()
 	return this->info->getAtributo(etiquetas[BAJA_LOGICA], "bajaDefault");
 }
 
+std::string ArchivoLogico::getPath()
+{
+	return this->getNombre() + "." + this->getExtension();
+}
+
 // Metodos de EntidadDB
 std::string ArchivoLogico::getValor()
 {
@@ -93,3 +98,5 @@ std::string ArchivoLogico::getClave()
 {
 	return this->getNombre() + this->getExtension();
 }
+
+

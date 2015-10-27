@@ -5,8 +5,8 @@
  *      Author: manuel
  */
 
-#ifndef ARCHIVO_H_
-#define ARCHIVO_H_
+#ifndef ARCHIVOLOGICO_H_
+#define ARCHIVOLOGICO_H_
 
 // utiles
 #include "../../utiles/utiles.h"
@@ -47,6 +47,8 @@ public:
 	std::string getNombre(), getExtension(), getEtiqueta(), getUltimaFechaModif(),
 			getUltimoUsuarioModif(), getPropietario(), getBajaLogica();
 
+	std::string getPath();
+
 	// Metodos de EntidadDB
 	virtual std::string getValor();
 
@@ -59,4 +61,4 @@ protected:
 };
 };
 
-#endif /* ARCHIVO_H_ */
+#endif /* ARCHIVOLOGICO_H_ */
