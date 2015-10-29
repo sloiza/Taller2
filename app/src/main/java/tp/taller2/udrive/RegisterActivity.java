@@ -2,8 +2,10 @@ package tp.taller2.udrive;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,42 +16,51 @@ import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.HttpGet;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.StatusLine;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 public class RegisterActivity extends AppCompatActivity {
-    // Progress Dialog Object
     ProgressDialog prgDialog;
-    // Error Msg TextView Object
     TextView errorMsg;
-    // Name Edit View Object
     EditText nameET;
-    // Email Edit View Object
     EditText emailET;
-    // Passwprd Edit View Object
     EditText pwdET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        // Find Error Msg Text View control by ID
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(myToolbar);
+
         errorMsg = (TextView)findViewById(R.id.register_error);
-        // Find Name Edit View control by ID
         nameET = (EditText)findViewById(R.id.username_message);
-        // Find Email Edit View control by ID
         emailET = (EditText)findViewById(R.id.newEmail_message);
-        // Find Password Edit View control by ID
         pwdET = (EditText)findViewById(R.id.newPassword_message);
-        // Instantiate Progress Dialog object
+
         prgDialog = new ProgressDialog(this);
-        // Set Progress Dialog Text
-        prgDialog.setMessage("Please wait...");
-        // Set Cancelable as False
+        prgDialog.setMessage(getString(R.string.wait));
         prgDialog.setCancelable(false);
     }
 
@@ -80,110 +91,88 @@ public class RegisterActivity extends AppCompatActivity {
         String name = nameET.getText().toString();
         String email = emailET.getText().toString();
         String password = pwdET.getText().toString();
-        RequestParams params = new RequestParams();
-        // When Name Edit View, Email Edit View and Password Edit View have values other than Null
         if(Utility.isNotNull(name) && Utility.isNotNull(email) && Utility.isNotNull(password)){
-            // When Email entered is Valid
-            if(Utility.validate(email)){
-                // Put Http parameter name with value of Name Edit View control
-                params.put("name", name);
-                // Put Http parameter username with value of Email Edit View control
-                params.put("username", email);
-                // Put Http parameter password with value of Password Edit View control
-                params.put("password", password);
-                // Invoke RESTful Web Service with Http parameters
-                invokeWS(params);
+            if(!Utility.validateEmail(email)){
+                emailET.requestFocus();
+                emailET.setError(getString(R.string.email_error));
+            }else{
+                if(Utility.validatePassword(password)){
+                    new getUserSignUpService().execute("http://192.168.0.13:8080/user/signup?");
+                } else {
+                    pwdET.requestFocus();
+                    pwdET.setError(getString(R.string.password_error));
+                }
             }
-            // When Email is invalid
-            else{
-                Toast.makeText(getApplicationContext(), "Please enter valid email", Toast.LENGTH_LONG).show();
-            }
-        }
-        // When any of the Edit View control left blank
-        else{
-            Toast.makeText(getApplicationContext(), "Please fill the form, don't leave any field blank", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(getApplicationContext(), R.string.error_emptyFields, Toast.LENGTH_LONG).show();
         }
     }
 
-    /**
-     * Method that performs RESTful webservice invocations
-     *
-     * @param params
-     */
-    public void invokeWS(RequestParams params){
-        // Show Progress Dialog
-        prgDialog.show();
-        // Make RESTful webservice call using AsyncHttpClient object
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://192.168.2.2:9999/useraccount/register/doregister",params ,new AsyncHttpResponseHandler() {
-            // When the response returned by REST has Http response code '200'
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                // Hide Progress Dialog
-                prgDialog.hide();
-
-                if(statusCode == 200) {
-
-                    try {
-
-                        String response = responseBody.toString();
-                        Log.i("Tag", "content http://192.168.2.2:9999/useraccount/register/doregister " + response);
-                        // JSON Object
-                        JSONObject obj = new JSONObject(response);
-                        // When the JSON response has status boolean value assigned with true
-                        if(obj.getBoolean("status")){
-                            // Set Default Values for Edit View controls
-                            setDefaultValues();
-                            // Display successfully registered message using Toast
-                            Toast.makeText(getApplicationContext(), "You are successfully registered!", Toast.LENGTH_LONG).show();
-                        }
-                        // Else display error message
-                        else{
-                            errorMsg.setText(obj.getString("error_msg"));
-                            Toast.makeText(getApplicationContext(), obj.getString("error_msg"), Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        // TODO Auto-generated catch block
-                        Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-
-                    }
+    public String getUserSignUp(String URL) {
+        String name = nameET.getText().toString();
+        String email = emailET.getText().toString();
+        String password = pwdET.getText().toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(URL);
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("name", name));
+        params.add(new BasicNameValuePair("username", email));
+        params.add(new BasicNameValuePair("password", password));
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(params));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        try {
+            HttpResponse response = httpClient.execute(httpPost);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+                InputStream inputStream = entity.getContent();
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
                 }
+                inputStream.close();
+            } else {
+                Log.d("JSON", "Failed to download file");
             }
+        } catch (Exception e) {
+            Log.d("readJSONFeed", e.getLocalizedMessage());
+        }
+        return stringBuilder.toString();
+    }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                // Hide Progress Dialog
-                prgDialog.hide();
-                // When Http response code is '404'
-                if(statusCode == 404){
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
-                }
-                // When Http response code is '500'
-                else if(statusCode == 500){
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
-                }
-                // When Http response code other than 404, 500
-                else{
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
-                }
+    private class getUserSignUpService extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... urls) {
+            return getUserSignUp(urls[0]);
+        }
+
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                setDefaultValues();
+                Toast.makeText(getApplicationContext(), R.string.success_login, Toast.LENGTH_LONG).show();
+                navigatetoLoginActivity();
+            } catch (Exception e) {
+                Log.d("ReadJSONTask", e.getLocalizedMessage());
             }
-        });
+        }
     }
 
     /**
      * Method which navigates from Register Activity to Login Activity
      */
-    public void navigatetoLoginActivity(View view){
+    public void navigatetoLoginActivity(){
         Intent loginIntent = new Intent(getApplicationContext(),LoginActivity.class);
-        // Clears History of Activity
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(loginIntent);
     }
 
-    /**
-     * Set degault values for Edit View controls
-     */
     public void setDefaultValues(){
         nameET.setText("");
         emailET.setText("");

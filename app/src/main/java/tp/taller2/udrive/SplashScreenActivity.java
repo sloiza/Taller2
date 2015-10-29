@@ -20,11 +20,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            // Set portrait orientation
-            //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            // Hide title bar
-           // requestWindowFeature(Window.FEATURE_NO_TITLE);
-
             setContentView(R.layout.activity_splash_screen);
 
             TimerTask task = new TimerTask() {
@@ -36,8 +31,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                             SplashScreenActivity.this, LoginActivity.class);
                     startActivity(mainIntent);
 
-                    // Close the activity so the user won't able to go back this
-                    // activity pressing Back borderbutton
                     finish();
                 }
             };

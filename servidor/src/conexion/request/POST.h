@@ -10,6 +10,7 @@
 
 // STL
 #include <string>
+ #include <iostream> 
 
 // Request
 #include "IMetodoREST.h"

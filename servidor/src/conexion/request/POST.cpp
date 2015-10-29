@@ -8,6 +8,7 @@
 #include "POST.h"
 
 using namespace ConexionServidor::Request;
+using namespace std;
 
 POST::POST() {}
 
