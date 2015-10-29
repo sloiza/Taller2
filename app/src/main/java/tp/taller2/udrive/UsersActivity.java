@@ -116,7 +116,7 @@ public class UsersActivity extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItemFromDrawer(position);
+               // selectItemFromDrawer(position);
             }
         });
 
@@ -145,7 +145,7 @@ public class UsersActivity extends AppCompatActivity {
 * Called when a particular item from the navigation drawer
 * is selected.
 * */
-    private void selectItemFromDrawer(int position) {
+   /* private void selectItemFromDrawer(int position) {
             // update the main content by replacing fragments
             Fragment fragment = null;
             switch (position) {
@@ -176,7 +176,7 @@ public class UsersActivity extends AppCompatActivity {
                 // error in creating fragment
                 Log.e("MainActivity", "Error in creating fragment");
             }
-    }
+    }*/
 
     // Called when invalidateOptionsMenu() is invoked
     public boolean onPrepareOptionsMenu(Menu menu) {

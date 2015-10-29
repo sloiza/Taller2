@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,12 +36,13 @@ import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends ActionBarActivity {
 
     ProgressDialog prgDialog;
     TextView errorMsg;
     EditText emailET;
     EditText passwordET;
+    private Toolbar toolbar;
 
     public String getUserLogin(String URL) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -88,6 +91,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(myToolbar);
 
         errorMsg = (TextView)findViewById(R.id.login_error);
         emailET = (EditText)findViewById(R.id.email_message);
@@ -130,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                 emailET.setError(getString(R.string.email_error));
             }else{
                 if(Utility.validatePassword(password)){
-                    new getUserLoginService().execute("http://192.168.0.14:8080/user/login?email=" + email + "&password=" +
+                    new getUserLoginService().execute("http://192.168.0.13:8080/user/login?email=" + email + "&password=" +
                             password);
                 }else{
                     passwordET.requestFocus();
@@ -142,23 +147,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public String getIpAddress() {
-        WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        int ip = wifiInfo.getIpAddress();
-
-        return String.format(
-                "%d.%d.%d.%d",
-                (ip & 0xff),
-                (ip >> 8 & 0xff),
-                (ip >> 16 & 0xff),
-                (ip >> 24 & 0xff));
-    }
-
 
     //Method which navigates from Login Activity toHome Activity
     public void navigatetoHomeActivity(){
-        Intent homeIntent = new Intent(this,MainActivity.class);
+        Intent homeIntent = new Intent(this,Main2Activity.class);
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeIntent);
     }

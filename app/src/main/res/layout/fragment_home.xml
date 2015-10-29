@@ -8,8 +8,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/fondohome">
+        android:background="#ffffff">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="holaaaaaa"/>
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="wrap_content"
@@ -17,20 +21,8 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="60dp"
-            android:src="@drawable/bienvenido" />
+            android:src="@drawable/background" />
 
     </RelativeLayout>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/myFAB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/plus_white"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        app:elevation="6dp"
-        app:pressedTranslationZ="12dp"
-        app:backgroundTint="#0D7694"/>
-
 
 </LinearLayout>

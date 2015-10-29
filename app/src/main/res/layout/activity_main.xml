@@ -1,24 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <android.support.v4.widget.DrawerLayout
+
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/DrawerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <!-- The main content view -->
-    <FrameLayout
-        android:id="@+id/container"
+    android:layout_height="match_parent"
+    android:elevation="7dp">
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/toolbar">
+        </include>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:id="@+id/frameLayout">
+
+            <TextView
+                android:id="@+id/TextAct1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:text="This is the first Activity, Say Hi"
+                android:textSize="25dp" />
+
+            <ImageButton
+                android:layout_margin="15dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/plus_white"
+                android:background="@drawable/circle"
+                android:id="@+id/imageButton"
+                android:layout_gravity="right|bottom" />
+
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/RecyclerView"
+        android:layout_width="320dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+
         android:background="#ffffff"
-        />
-    <!-- The navigation drawer -->
-    <ListView android:id="@+id/navigation_drawer_list"
-        android:layout_width="@dimen/navigation_drawer_width"
-        android:layout_height="fill_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:divider="#2e2e2e"
-        android:dividerHeight="2dp"
-        android:background="#424242"
-        android:textColor="#424242"
-        />
+        android:scrollbars="vertical">
+
+    </android.support.v7.widget.RecyclerView>
+
+
 </android.support.v4.widget.DrawerLayout>

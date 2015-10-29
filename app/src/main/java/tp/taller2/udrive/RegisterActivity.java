@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +51,8 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(myToolbar);
 
         errorMsg = (TextView)findViewById(R.id.register_error);
         nameET = (EditText)findViewById(R.id.username_message);
@@ -94,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
                 emailET.setError(getString(R.string.email_error));
             }else{
                 if(Utility.validatePassword(password)){
-                    new getUserSignUpService().execute("http://192.168.0.14:8080/user/signup?");
+                    new getUserSignUpService().execute("http://192.168.0.13:8080/user/signup?");
                 } else {
                     pwdET.requestFocus();
                     pwdET.setError(getString(R.string.password_error));
