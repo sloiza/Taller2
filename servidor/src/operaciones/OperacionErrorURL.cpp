@@ -32,5 +32,5 @@ void OperacionErrorURL::put(std::string contenido)
 
 std::string OperacionErrorURL::impresion()
 {
-
+	return "error";
 }

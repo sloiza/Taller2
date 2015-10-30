@@ -26,15 +26,15 @@ void CreadorDeOperaciones::crearArbolDeRecursos()
 {
 	Recurso* principal = new Recurso();
 	principal->nombre = "principal";
-	//principal->operacion = new OperacionPrincipal();
+	principal->operacion = new OperacionPrincipal();
 
 	Recurso* usuarios = new Recurso();
 	usuarios->nombre = "usuario";
 	usuarios->operacion = new OperacionesUsuario();
 
-	Recurso* perfil = new Recurso();
-	perfil->nombre = "miPerfil";
-	//perifl->operacion = new OperacionPerfil();
+//	Recurso* perfil = new Recurso();
+//	perfil->nombre = "miPerfil";
+//	perifl->operacion = new OperacionPerfil();
 
 	Recurso* baul = new Recurso();
 	baul->nombre = "miBaul";
@@ -42,23 +42,23 @@ void CreadorDeOperaciones::crearArbolDeRecursos()
 
 	Recurso* carpetas = new Recurso();
 	carpetas->nombre = "misCarpetas";
-	//archivos->operacion = new OperacionesCarpetas();
+	carpetas->operacion = new OperacionesCarpetas();
 
 	Recurso* compartirArchivo = new Recurso();
 	compartirArchivo->nombre = "compartirArchivo";
-	//compartirArchivo->operacion = new OperacionCompartirArchivo();
+	compartirArchivo->operacion = new OperacionCompartirArchivo();
 
 	Recurso* compartirCarpeta = new Recurso();
 	compartirCarpeta->nombre = "compartirCarpeta";
-	//compartirCarpeta->operacion = new OperacionCompartirCarpeta();
+	compartirCarpeta->operacion = new OperacionCompartirCarpeta();
 
 	Recurso* descargarArchivo = new Recurso();
 	descargarArchivo->nombre = "descargar";
-	//descargarArchivo->operacion = new OperacionDescargarArchivo();
+	descargarArchivo->operacion = new OperacionDescargarArchivo();
 
 	principal->hijos.push_back(usuarios);
 	usuarios->hijos.push_back(baul);
-	usuarios->hijos.push_back(perfil);
+	//usuarios->hijos.push_back(perfil);
 	baul->hijos.push_back(carpetas);
 	baul->hijos.push_back(compartirArchivo);
 	baul->hijos.push_back(compartirCarpeta);
@@ -70,44 +70,6 @@ void CreadorDeOperaciones::crearArbolDeRecursos()
 void CreadorDeOperaciones::liberarArbolDeRecursos()
 {
 	liberarRecusivamente(raiz);
-}
-
-void CreadorDeOperaciones::dividirRecursos(std::string uri)
-{
-	campos.clear();
-
-	if ( uri == "" )
-	{
-		return;
-	}
-
-    std::istringstream streamUri(uri);
-    std::string campo;
-    while (std::getline(streamUri, campo, '/'))
-    {
-        campos.push_back(campo);
-    }
-    if ( campos.back().find('?') == std::string::npos )
-    {// si no hay query entonces ya termine.
-    	return;
-    }
-
-    std::string ultimoRecursoYQuery = campos.back();
-    campos.pop_back();
-
-    std::istringstream streamUltimoRecursoYQuery(ultimoRecursoYQuery);
-    std::string ultimaRecurso;
-    std::string query;
-    std::getline(streamUltimoRecursoYQuery, ultimaRecurso, '?');
-    std::getline(streamUltimoRecursoYQuery, query, '?');
-
-    campos.push_back(ultimaRecurso);
-
-    std::istringstream streamQuery(query);
-    std::string parametroQuery;
-    std::getline(streamQuery, parametroQuery, '=');
-
-    campos.push_back(parametroQuery);
 }
 
 std::vector<std::string> CreadorDeOperaciones::getCampos()

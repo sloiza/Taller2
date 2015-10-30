@@ -9,66 +9,108 @@
 
 using namespace Test;
 
-CreadorDeOperacionesTest::CreadorDeOperacionesTest() : creador(NULL)
+CreadorDeOperacionesTest::CreadorDeOperacionesTest() : creador(NULL), uri(NULL)
 {
-	this->setUp();
+//	this->setUp();
 }
 
 CreadorDeOperacionesTest::~CreadorDeOperacionesTest()
 {
-	this->terminando();
+//	this->terminando();
 }
 
-void CreadorDeOperacionesTest::testDividirUriVacia()
+void CreadorDeOperacionesTest::testReconocerOperacionPrincipalCorrectamente()
 {
-	std::string uriVacia = "";
-	this->creador->dividirRecursos(uriVacia);
+	std::string uriPrincipal = "";
+	this->uri->setURI(uriPrincipal);
 
-	EXPECT_EQ(0, this->creador->getCampos().size());
+	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);
+
+	EXPECT_STREQ("principal", operacion->impresion().c_str());
 }
-void CreadorDeOperacionesTest::testDividirUriSinQuery()
+void CreadorDeOperacionesTest::testReconocerOperacionUsuariosCorrectamente()
 {
-	std::string uriSinQuery = "usuario/miBaul";
+	std::string uriUsuarios = "/usuario";
+	this->uri->setURI(uriUsuarios);
 
-	this->creador->dividirRecursos(uriSinQuery);
+	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);
 
-	EXPECT_STREQ("usuario", this->creador->getCampos()[0].c_str());
-	EXPECT_STREQ("miBaul", this->creador->getCampos()[1].c_str());
-
-	EXPECT_EQ(2, this->creador->getCampos().size());
-
+	EXPECT_STREQ("usuarios", operacion->impresion().c_str());
 }
-void CreadorDeOperacionesTest::testDividirUriConQuery()
+void CreadorDeOperacionesTest::testReconocerOperacionArchivosCorrectamente()
 {
-	std::string uriConQuery = "usuario/miBaul?descargar=unArchivo.txt";
+	std::string uriArchivos = "/usuario/miBaul";
+	this->uri->setURI(uriArchivos);
 
-	this->creador->dividirRecursos(uriConQuery);
+	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);
 
-	EXPECT_STREQ("usuario", this->creador->getCampos()[0].c_str());
-	EXPECT_STREQ("miBaul", this->creador->getCampos()[1].c_str());
-	EXPECT_STREQ("descargar", this->creador->getCampos()[2].c_str());
-
-	EXPECT_EQ(3, this->creador->getCampos().size());
-
+	EXPECT_STREQ("archivos", operacion->impresion().c_str());
 }
-void CreadorDeOperacionesTest::testReconocerOperacionesCorrectamente()
+void CreadorDeOperacionesTest::testReconocerOperacionCarpetasCorrectamente()
 {
+	std::string uriCarpeta = "/usuario/misCarpetas";
+	this->uri->setURI(uriCarpeta);
 
+	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);
+
+	EXPECT_STREQ("carpetas", operacion->impresion().c_str());
 }
-void CreadorDeOperacionesTest::testDevolverErrorCuandoNoSeEncuentraRecurso()
+void CreadorDeOperacionesTest::testReconocerOperacionCompartirArchivoCorrectamente()
 {
+	std::string uriCompartirArchivo = "/usuario/miBaul?compartirArchivo=archivo.txt";
+	this->uri->setURI(uriCompartirArchivo);
 
+	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);
+
+	EXPECT_STREQ("compartirArchivo", operacion->impresion().c_str());
+}
+void CreadorDeOperacionesTest::testReconocerOperacionCompartirCarpetaCorrectamente()
+{
+	std::string uriCompartirCarpeta = "/usuario/miBaul?compartirCarpeta=carpeta";
+	this->uri->setURI(uriCompartirCarpeta);
+
+	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);
+
+	EXPECT_STREQ("compartirCarpeta", operacion->impresion().c_str());
+}
+void CreadorDeOperacionesTest::testReconocerOperacionDescargarCorrectamente()
+{
+	std::string uriDescarga = "/usuario/miBaul?descargar=archivo.txt";
+	this->uri->setURI(uriDescarga);
+
+	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);
+
+	EXPECT_STREQ("descargar", operacion->impresion().c_str());
+}
+void CreadorDeOperacionesTest::testDevolverOperacionErrorCuandoNoSeEncuentraRecurso()
+{
+	std::string uriError = "/uri/no/mapeada";
+	this->uri->setURI(uriError);
+
+	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);
+
+	EXPECT_STREQ("error", operacion->impresion().c_str());
 }
 
-void CreadorDeOperacionesTest::setUp()
+void CreadorDeOperacionesTest::SetUp()
 {
 	this->creador = new ConexionServidor::Operaciones::CreadorDeOperaciones();
+	this->creador->crearArbolDeRecursos();
+
+	this->uri = new ConexionServidor::Request::URI();
 }
-void CreadorDeOperacionesTest::terminando()
+void CreadorDeOperacionesTest::TearDown()
 {
 	if ( this->creador != NULL )
 	{
+		this->creador->liberarArbolDeRecursos();
 		delete this->creador;
 		this->creador = NULL;
+	}
+
+	if ( this->uri != NULL )
+	{
+		delete this->uri;
+		this->uri = NULL;
 	}
 }

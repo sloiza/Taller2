@@ -32,6 +32,6 @@ void OperacionesArchivos::put(std::string contenido)
 
 std::string OperacionesArchivos::impresion()
 {
-
+	return "archivos";
 }
 

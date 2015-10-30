@@ -10,7 +10,7 @@ rocks_db::rocks_db(){
 		this->open_db();
 	}else{
 		//ya fue creada, s´olo se abre
-		cerr << s.ToString() << endl;
+		//cerr << s.ToString() << endl;
 		//cout << "only open" << endl;
 		this->open_db();
 	}
@@ -31,7 +31,7 @@ Status rocks_db::create_db(){
 
 	}else{
 		//cout << "DB couldn't be created. DB Error " ;
-		cerr << s.ToString() << endl;	
+		//cerr << s.ToString() << endl;
 	}
 	delete _db;
 	return s;
@@ -46,7 +46,7 @@ void rocks_db::createCF(DB* db){
   		if(s.ok()){
   			//cout << "Created column OK "<< endl;
   		}else{
-  			cerr << s.ToString() << endl;
+  			//cerr << s.ToString() << endl;
   		}
   		delete cf;
 	}
@@ -83,7 +83,7 @@ Status rocks_db::open_db(){
 
 	}else{
 		//cout << "DB couldn't be opened. DB Error " ;
-		cerr << s.ToString() << endl;
+		//cerr << s.ToString() << endl;
 	}
 
 	return s;

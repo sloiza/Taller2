@@ -14,8 +14,6 @@
 // operaciones
 #include "../../src/operaciones/CreadorDeOperaciones.h"
 
-// STL
-
 namespace Test
 {
 
@@ -26,49 +24,68 @@ public:
 	CreadorDeOperacionesTest();
 	virtual ~CreadorDeOperacionesTest();
 
-	void testDividirUriVacia();
-	void testDividirUriSinQuery();
-	void testDividirUriConQuery();
-	void testReconocerOperacionesCorrectamente();
-	void testDevolverErrorCuandoNoSeEncuentraRecurso();
+	void testReconocerOperacionPrincipalCorrectamente();
+	void testReconocerOperacionUsuariosCorrectamente();
+	void testReconocerOperacionArchivosCorrectamente();
+	void testReconocerOperacionCarpetasCorrectamente();
+	void testReconocerOperacionCompartirArchivoCorrectamente();
+	void testReconocerOperacionCompartirCarpetaCorrectamente();
+	void testReconocerOperacionDescargarCorrectamente();
+	void testDevolverOperacionErrorCuandoNoSeEncuentraRecurso();
 
 	void TestBody() {};
 
 protected:
 
-	virtual void SetUp() {};
-	virtual void TearDown() {};
+	virtual void SetUp();
+	virtual void TearDown();
 
-	void setUp();
-	void terminando();
+	void setUp() {};
+	void terminando() {};
 
 	ConexionServidor::Operaciones::CreadorDeOperaciones* creador;
+	ConexionServidor::Request::URI* uri;
 };
 
-TEST_F(CreadorDeOperacionesTest, DividirUriVacia)
+TEST_F(CreadorDeOperacionesTest, ReconocerOperacionPrincipal)
 {
 	CreadorDeOperacionesTest test;
-	test.testDividirUriVacia();
+	test.testReconocerOperacionPrincipalCorrectamente();
 }
-TEST_F(CreadorDeOperacionesTest, DividirUriSinQuery)
+TEST_F(CreadorDeOperacionesTest, ReconocerOperacionUsuarios)
 {
 	CreadorDeOperacionesTest test;
-	test.testDividirUriSinQuery();
+	test.testReconocerOperacionUsuariosCorrectamente();
 }
-TEST_F(CreadorDeOperacionesTest, DividirUriConQuery)
+TEST_F(CreadorDeOperacionesTest, ReconocerOperacionArchivos)
 {
 	CreadorDeOperacionesTest test;
-	test.testDividirUriConQuery();
+	test.testReconocerOperacionArchivosCorrectamente();
 }
-TEST_F(CreadorDeOperacionesTest, ReconocerOperaciones)
+TEST_F(CreadorDeOperacionesTest, ReconocerOperacionCarpetas)
 {
 	CreadorDeOperacionesTest test;
-	test.testReconocerOperacionesCorrectamente();
+	test.testReconocerOperacionCarpetasCorrectamente();
+}
+TEST_F(CreadorDeOperacionesTest, ReconocerOperacionCompartirArchivo)
+{
+	CreadorDeOperacionesTest test;
+	test.testReconocerOperacionCompartirArchivoCorrectamente();
+}
+TEST_F(CreadorDeOperacionesTest, ReconocerOperacionCompartirCarpeta)
+{
+	CreadorDeOperacionesTest test;
+	test.testReconocerOperacionCompartirCarpetaCorrectamente();
+}
+TEST_F(CreadorDeOperacionesTest, ReconocerOperacionDescargar)
+{
+	CreadorDeOperacionesTest test;
+	test.testReconocerOperacionDescargarCorrectamente();
 }
 TEST_F(CreadorDeOperacionesTest, DevolverError)
 {
 	CreadorDeOperacionesTest test;
-	test.testDevolverErrorCuandoNoSeEncuentraRecurso();
+	test.testDevolverOperacionErrorCuandoNoSeEncuentraRecurso();
 }
 
 }

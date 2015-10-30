@@ -27,8 +27,8 @@ public:
 	URI(std::string);
 	virtual ~URI();
 
-	//std::string getURI();
 	std::string getURI();
+	void setURI(std::string uri);
 
 	//std::string getEntidadAManejar();
 	ConexionServidor::BaseDeDatos::EntidadDB* getEntidadAManejar();

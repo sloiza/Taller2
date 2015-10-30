@@ -12,9 +12,14 @@
 // request
 #include "../conexion/request/URI.h"
 // operaciones
+#include "OperacionCompartirArchivo.h"
+#include "OperacionCompartirCarpeta.h"
+#include "OperacionDescargarArchivo.h"
 #include "OperacionesArchivos.h"
 #include "OperacionesUsuario.h"
+#include "OperacionesCarpetas.h"
 #include "OperacionErrorURL.h"
+#include "OperacionPrincipal.h"
 
 // STL
 #include <iostream>
@@ -43,7 +48,6 @@ public:
 	static void crearArbolDeRecursos();
 	static void liberarArbolDeRecursos();
 
-	static void dividirRecursos(std::string uri);
 	static IOperable* getOperacion(ConexionServidor::Request::URI* uri);
 	static IOperable* reconocerUriRecursivamente(Recurso* recurso, int nivelArbol);
 	static void liberarRecusivamente(Recurso* recurso);

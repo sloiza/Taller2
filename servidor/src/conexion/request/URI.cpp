@@ -28,15 +28,24 @@ std::string URI::getURI()
 	return this->uri;
 }
 
+void URI::setURI(std::string uri)
+{
+	this->uri = uri;
+}
+
 std::vector<std::string> URI::getRecursosDividos()
 {
+	if ( uri == "" )
+	{
+		return std::vector<std::string>(0);
+	}
+
 	std::vector<std::string> campos;
-	campos.clear();
     std::istringstream streamUri(uri);
     std::string campo;
     while (std::getline(streamUri, campo, '/'))
     {
-        std::cout << campo << std::endl;
+        //std::cout << campo << std::endl;
         campos.push_back(campo);
     }
     if ( campos.back().find('?') == std::string::npos )
@@ -57,7 +66,7 @@ std::vector<std::string> URI::getRecursosDividos()
 
     std::istringstream streamQuery(query);
     std::string parametroQuery;
-    std::getline(streamUltimoRecursoYQuery, parametroQuery, '=');
+    std::getline(streamQuery, parametroQuery, '=');
 
     campos.push_back(parametroQuery);
 
