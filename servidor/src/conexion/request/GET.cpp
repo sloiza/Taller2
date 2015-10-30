@@ -8,7 +8,6 @@
 #include "GET.h"
 
 using namespace ConexionServidor::Request;
-using namespace std;
 
 GET::GET() {}
 
@@ -16,10 +15,11 @@ GET::~GET() {}
 
 void GET::ejecutar(ConexionServidor::BaseDeDatos::EntidadDB* entidad, std::string contenido)
 {
-	cout << "GET {entidad:"<<entidad << " contenido: " <<contenido << "}" << endl;
+
 }
 
 std::string GET::impresion()
 {
 	return std::string("GET");
 }
+

@@ -8,7 +8,6 @@
 #include "POST.h"
 
 using namespace ConexionServidor::Request;
-using namespace std;
 
 POST::POST() {}
 
@@ -25,3 +24,4 @@ std::string POST::impresion()
 {
 	return std::string("POST");
 }
+

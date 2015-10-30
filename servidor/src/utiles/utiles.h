@@ -12,10 +12,9 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <iostream>
 #include <map>
+#include <iostream>
 #include <vector>
-using namespace std;
 
 namespace Utiles
 {
@@ -65,12 +64,12 @@ public:
 		while (ss.good())
 		{
 			std::string substr;
-
 			getline( ss, substr, sep);
 		    vect.push_back(substr);
 		}
 		return vect;
 	}
+};
 };
 
 
