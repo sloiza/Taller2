@@ -8,6 +8,7 @@
 #include "Conexion.h"
 
 using namespace ConexionServidor;
+using namespace std;
 
 Conexion::Conexion() : uri(NULL), metodo(NULL), mapaMetodos(NULL) {}
 
@@ -78,6 +79,38 @@ std::string Conexion::getQuery()
 {
 	return this->query;
 }
+
+void Conexion::sendData(struct mg_connection *conn, const void* data, int length){
+	char* mimeType = "application/json";
+	//cout << "[" << conn->remote_ip << "] " << conn->request_method << " " << conn->uri << " " << conn->query_string << " " << conn->content;
+	cout  << conn->content << endl;
+    mg_printf(conn,
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: %s\r\n"
+        "Content-Length: %d\r\n"
+        "\r\n",
+        mimeType,
+        length);
+    mg_write(conn, data, length);
+  //  mg_send_status(conn, 400);
+	//mg_send_data(conn, data, length);
+}
+
+// void Conexion::getData(struct mg_connection *conn){
+// 	char* mimeType = "application/json";
+// 	//cout << "[" << conn->remote_ip << "] " << conn->request_method << " " << conn->uri << " " << conn->query_string << " " << conn->content;
+// 	cout  << conn->content << endl;
+//     mg_printf(conn,
+//         "HTTP/1.1 200 OK\r\n"
+//         "Content-Type: %s\r\n"
+//         "Content-Length: %d\r\n"
+//         "\r\n",
+//         mimeType,
+//         length);
+//     mg_write(conn, data, length);
+//   //  mg_send_status(conn, 400);
+// 	//mg_send_data(conn, data, length);
+// }
 
 Request::IMetodoREST* Conexion::reconocerMetodo(std::string nombre)
 {
