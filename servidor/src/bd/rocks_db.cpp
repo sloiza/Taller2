@@ -134,6 +134,19 @@ Status rocks_db::get(string column, Slice key, string* value){
 
 }
 
+Status rocks_db::delet(string column, Slice key){
+	DB* db = this->get_db();
+	int id = this->getIdCF(column);
+	Status s = db->Delete(WriteOptions(), this->handles[id], key);
+	if(s.ok()){
+		cout << "Delete OK ";
+	}else{
+		cerr << "DB Error " << s.ToString() << endl;
+	}
+	return s;
+
+}
+
 rocks_db::~rocks_db()
 {
 	if(this->db != NULL){

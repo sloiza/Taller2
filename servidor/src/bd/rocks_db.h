@@ -27,6 +27,7 @@ class rocks_db{
 		Status create_db();
 		Status put(string column, Slice key, Slice value);
 		Status get(string column, Slice key, string* value); //con  prefijo y sin prefijo
+		Status delet(string column, Slice key);
 		void delete_db();
 		DB* get_db();
 		void set_db(DB* db);
@@ -40,10 +41,6 @@ class rocks_db{
 			int user = 1;
 			int file = 2;
 		};
-
-		
-
-
 
 	protected:
 		

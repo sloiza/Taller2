@@ -60,7 +60,7 @@ void ManagerBD::eliminar(ClaveRocksDB clave)
 	{
 		inicializar();
 	}
-	//db->delet(clave.columna, clave.clave);
+	db->delet(clave.columna, clave.clave);
 }
 
 std::string ManagerBD::recuperar(ClaveRocksDB clave)
