@@ -9,7 +9,9 @@
 #define URI_H_
 
 // STL
+#include <iostream>
 #include <string>
+#include <vector>
 
 // Base de datos
 #include "../../bd/entidades/EntidadBD.h"
@@ -25,11 +27,13 @@ public:
 	URI(std::string);
 	virtual ~URI();
 
-	//std::string getURI();
 	std::string getURI();
+	void setURI(std::string uri);
 
 	//std::string getEntidadAManejar();
 	ConexionServidor::BaseDeDatos::EntidadDB* getEntidadAManejar();
+
+	std::vector<std::string> getRecursosDividos();
 
 private:
 	std::string uri;

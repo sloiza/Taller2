@@ -27,6 +27,10 @@
 // Base de datos
 #include "../bd/entidades/EntidadBD.h"
 
+// operaciones
+#include "../operaciones/CreadorDeOperaciones.h"
+#include "../operaciones/IOperable.h"
+
 namespace ConexionServidor
 {
 

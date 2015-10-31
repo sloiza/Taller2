@@ -19,9 +19,12 @@ void DELETE::ejecutar(ConexionServidor::BaseDeDatos::EntidadDB* entidad, std::st
 	entidad->setContenido(contenido);
 
 	entidad->eliminar();
+
+	//operacion->delete(contenido);
 }
 
 std::string DELETE::impresion()
 {
 	return std::string("DELETE");
 }
+

@@ -24,3 +24,4 @@ std::string POST::impresion()
 {
 	return std::string("POST");
 }
+

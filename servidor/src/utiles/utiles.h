@@ -16,7 +16,6 @@
 #include <iostream>
 #include <vector>
 
-
 namespace Utiles
 {
 
