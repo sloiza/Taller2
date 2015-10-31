@@ -26,12 +26,12 @@ public:
 	OperacionErrorURL();
 	virtual ~OperacionErrorURL();
 
-	void delet(std::string contenido);
-	void get(std::string contenido);
-	void post(std::string contenido);
-	void put(std::string contenido);
+	ConexionServidor::Respuesta delet(std::string contenido);
+	ConexionServidor::Respuesta get(std::string contenido);
+	ConexionServidor::Respuesta post(std::string contenido);
+	ConexionServidor::Respuesta put(std::string contenido);
 
-	std::string impresion();
+	void imprimir();
 
 };
 };

@@ -13,25 +13,25 @@ OperacionesArchivos::OperacionesArchivos() {}
 
 OperacionesArchivos::~OperacionesArchivos() {}
 
-void OperacionesArchivos::delet(std::string contenido)
+ConexionServidor::Respuesta OperacionesArchivos::delet(std::string contenido)
 {
 	std::cout << "OperacionesArchivos->delete" << "\n";
 }
-void OperacionesArchivos::get(std::string contenido)
+ConexionServidor::Respuesta OperacionesArchivos::get(std::string contenido)
 {
 	std::cout << "OperacionesArchivos->get" << "\n";
 }
-void OperacionesArchivos::post(std::string contenido)
+ConexionServidor::Respuesta OperacionesArchivos::post(std::string contenido)
 {
 	std::cout << "OperacionesArchivos->post" << "\n";
 }
-void OperacionesArchivos::put(std::string contenido)
+ConexionServidor::Respuesta OperacionesArchivos::put(std::string contenido)
 {
 	std::cout << "OperacionesArchivos->put" << "\n";
 }
 
-std::string OperacionesArchivos::impresion()
+void OperacionesArchivos::imprimir()
 {
-	return "archivos";
+	std::cout << "archivos\n";
 }
 

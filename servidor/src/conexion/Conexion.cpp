@@ -50,16 +50,10 @@ void Conexion::inicializar(struct mg_connection* mg_conexion)
 	this->query = query;
 }
 
-int Conexion::procesarRequest()
+ConexionServidor::Respuesta Conexion::procesarRequest()
 {
-	//std::string entidad = this->uri->getEntidadAManejar();
-	//ConexionServidor::BaseDeDatos::EntidadDB* entidad = this->uri->getEntidadAManejar();
-	//ConexionServidor::Operaciones::IOperacion* operacion = this->uri->getOperacion();
 	ConexionServidor::Operaciones::IOperable* operacion = ConexionServidor::Operaciones::CreadorDeOperaciones::getOperacion(uri);
-	//this->metodo->ejecutar(operacion, this->contenido);
-	//this->metodo->ejecutar(entidad, this->contenido);
-
-	return 0;
+	return this->metodo->ejecutar(operacion, this->contenido);
 }
 
 Request::URI* Conexion::getUri()

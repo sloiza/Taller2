@@ -8,10 +8,6 @@
 #ifndef CONEXION_H_
 #define CONEXION_H_
 
-// STL
-#include <string>
-#include <map>
-
 // Conexion
 #include "request/IMetodoREST.h"
 #include "request/DELETE.h"
@@ -20,6 +16,7 @@
 #include "request/PUT.h"
 #include "request/URI.h"
 #include "mongoose.h"
+#include "Respuesta.h"
 
 // Utiles
 #include "../utiles/Log.h"
@@ -30,6 +27,10 @@
 // operaciones
 #include "../operaciones/CreadorDeOperaciones.h"
 #include "../operaciones/IOperable.h"
+
+// STL
+#include <string>
+#include <map>
 
 namespace ConexionServidor
 {
@@ -49,7 +50,7 @@ public:
 	virtual ~Conexion();
 
 	void inicializar(struct mg_connection*);
-	int procesarRequest();
+	ConexionServidor::Respuesta procesarRequest();
 
 	Request::URI* getUri();
 	Request::IMetodoREST* getMetodo();

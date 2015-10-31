@@ -13,24 +13,66 @@ OperacionesUsuario::OperacionesUsuario() {}
 
 OperacionesUsuario::~OperacionesUsuario() {}
 
-void OperacionesUsuario::delet(std::string contenido)
+ConexionServidor::Respuesta OperacionesUsuario::delet(std::string contenido)
 {
 	std::cout << "OperacionesUsuario->delete" << "\n";
 }
-void OperacionesUsuario::get(std::string contenido)
+ConexionServidor::Respuesta OperacionesUsuario::get(std::string contenido)
 {
 	std::cout << "OperacionesUsuario->get" << "\n";
+
+	std::cout << "contenido q llega: " << contenido << "\n";
+
+	ConexionServidor::BaseDeDatos::User usuario;
+	usuario.setContenido(contenido);
+
+	std::string passwordAChequear = usuario.getPassword();
+
+	std::string valorRecuperado = usuario.recuperar();
+
+	usuario.setContenido(valorRecuperado);
+
+	ConexionServidor::Respuesta respuesta;
+
+	std::cout << "valor recuperado: " << valorRecuperado << "\n";
+
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("Mail de usuario inexistente.");
+		return respuesta;
+	}
+
+	if ( usuario.getPassword().compare(passwordAChequear) != 0 )
+	{
+		respuesta.setEstado("mal-password");
+		respuesta.setMensaje("Password invalido.");
+		return respuesta;
+	}
+
+	respuesta.setEstado("ok");
+	respuesta.setMensaje("Identificado correctamente!");
+
+	return respuesta;
 }
-void OperacionesUsuario::post(std::string contenido)
+ConexionServidor::Respuesta OperacionesUsuario::post(std::string contenido)
 {
+	ConexionServidor::BaseDeDatos::User usuarioNuevo(contenido);
+	usuarioNuevo.guardar();
 	std::cout << "OperacionesUsuario->post" << "\n";
+	ConexionServidor::Respuesta respuesta;
+
+	respuesta.setEstado("ok");
+	respuesta.setMensaje("Identificado correctamente!");
+
+	return respuesta;
 }
-void OperacionesUsuario::put(std::string contenido)
+ConexionServidor::Respuesta OperacionesUsuario::put(std::string contenido)
 {
 	std::cout << "OperacionesUsuario->put" << "\n";
 }
 
-std::string OperacionesUsuario::impresion()
+void OperacionesUsuario::imprimir()
 {
-
+	std::cout << "usuario\n";
 }

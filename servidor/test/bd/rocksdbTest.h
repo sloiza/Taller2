@@ -26,12 +26,16 @@ public:
 
 	void testInsertarYRecuperarRegistro();
 	void testEliminarRegistro();
+	void testRecuperarRegistroInexistente();
 
 	void TestBody() {};
 protected:
 
 	virtual void SetUp() {};
 	virtual void TearDown() {};
+
+	void setUp();
+	void terminando();
 
 	rocks_db* bd;
 };
@@ -42,11 +46,16 @@ TEST_F(rocks_dbTest, InsertarYRecuperarRegistro)
 	test.inicializar();
 	test.testInsertarYRecuperarRegistro();
 }
-
 TEST_F(rocks_dbTest, EliminarRegistro)
 {
 //	rocks_dbTest test;
 //	test.testEliminarRegistro();
+}
+TEST_F(rocks_dbTest, RecuperarInexistente)
+{
+	rocks_dbTest test;
+	test.inicializar();
+	test.testRecuperarRegistroInexistente();
 }
 
 };

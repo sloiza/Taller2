@@ -37,14 +37,16 @@ public:
 
 protected:
 
-	virtual void SetUp();
-	virtual void TearDown();
+	virtual void SetUp() {};
+	virtual void TearDown() {};
 
-	void setUp() {};
-	void terminando() {};
+	void setUp();
+	void terminando();
 
-	ConexionServidor::Operaciones::CreadorDeOperaciones* creador;
+	static ConexionServidor::Operaciones::CreadorDeOperaciones* creador;
 	ConexionServidor::Request::URI* uri;
+
+	static bool testEjecutados;
 };
 
 TEST_F(CreadorDeOperacionesTest, ReconocerOperacionPrincipal)

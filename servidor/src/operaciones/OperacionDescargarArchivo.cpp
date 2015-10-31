@@ -13,24 +13,24 @@ OperacionDescargarArchivo::OperacionDescargarArchivo() {}
 
 OperacionDescargarArchivo::~OperacionDescargarArchivo() {}
 
-void OperacionDescargarArchivo::delet(std::string contenido)
+ConexionServidor::Respuesta OperacionDescargarArchivo::delet(std::string contenido)
 {
 	std::cout << "OperacionDescargarArchivo->delete" << "\n";
 }
-void OperacionDescargarArchivo::get(std::string contenido)
+ConexionServidor::Respuesta OperacionDescargarArchivo::get(std::string contenido)
 {
 	std::cout << "OperacionDescargarArchivo->get" << "\n";
 }
-void OperacionDescargarArchivo::post(std::string contenido)
+ConexionServidor::Respuesta OperacionDescargarArchivo::post(std::string contenido)
 {
 	std::cout << "OperacionDescargarArchivo->post" << "\n";
 }
-void OperacionDescargarArchivo::put(std::string contenido)
+ConexionServidor::Respuesta OperacionDescargarArchivo::put(std::string contenido)
 {
 	std::cout << "OperacionDescargarArchivo->put" << "\n";
 }
 
-std::string OperacionDescargarArchivo::impresion()
+void OperacionDescargarArchivo::imprimir()
 {
-	return "descargar";
+	std::cout << "descargar\n";
 }

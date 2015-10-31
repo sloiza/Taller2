@@ -17,6 +17,9 @@
 #include "mongoose.h"
 #include "../utiles/utiles.h"
 
+// operaciones
+#include "../operaciones/CreadorDeOperaciones.h"
+
 namespace ConexionServidor
 {
 

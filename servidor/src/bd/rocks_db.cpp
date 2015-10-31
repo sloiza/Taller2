@@ -118,12 +118,16 @@ Status rocks_db::put(string column, Slice key, Slice value){
 }
 
 Status rocks_db::get(string column, Slice key, string* value){
+
 	DB* db = this->get_db();
 	int id = this->getIdCF(column);
+
 	Status s = db->Get(ReadOptions(), this->handles[id], key, value);
+
 	if(s.ok()){
 		//cout << "Get OK: "<< *value << "\n";
 	}else{
+		*value = "vacio";
 		//cerr << "DB Error " << s.ToString() << endl;
 	}
 	return s;

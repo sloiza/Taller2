@@ -13,14 +13,9 @@ DELETE::DELETE() {}
 
 DELETE::~DELETE() {}
 
-void DELETE::ejecutar(ConexionServidor::BaseDeDatos::EntidadDB* entidad, std::string contenido)
+ConexionServidor::Respuesta DELETE::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, std::string contenido)
 {
-	//ConexionServidor::BaseDeDatos::JsonInfo* info = new ConexionServidor::BaseDeDatos::JsonInfo(contenido);
-	entidad->setContenido(contenido);
-
-	entidad->eliminar();
-
-	//operacion->delete(contenido);
+	return operacion->delet(contenido);
 }
 
 std::string DELETE::impresion()

@@ -13,26 +13,26 @@ OperacionCompartirArchivo::OperacionCompartirArchivo() {}
 
 OperacionCompartirArchivo::~OperacionCompartirArchivo() {}
 
-void OperacionCompartirArchivo::delet(std::string contenido)
+ConexionServidor::Respuesta OperacionCompartirArchivo::delet(std::string contenido)
 {
 	std::cout << "OperacionCompartirArchivo->delete" << "\n";
 }
-void OperacionCompartirArchivo::get(std::string contenido)
+ConexionServidor::Respuesta OperacionCompartirArchivo::get(std::string contenido)
 {
 	std::cout << "OperacionCompartirArchivo->get" << "\n";
 }
-void OperacionCompartirArchivo::post(std::string contenido)
+ConexionServidor::Respuesta OperacionCompartirArchivo::post(std::string contenido)
 {
 	std::cout << "OperacionCompartirArchivo->post" << "\n";
 }
-void OperacionCompartirArchivo::put(std::string contenido)
+ConexionServidor::Respuesta OperacionCompartirArchivo::put(std::string contenido)
 {
 	std::cout << "OperacionCompartirArchivo->put" << "\n";
 }
 
-std::string OperacionCompartirArchivo::impresion()
+void OperacionCompartirArchivo::imprimir()
 {
-	return "compartirArchivo";
+	std::cout << "compartirArchivo\n";
 }
 
 

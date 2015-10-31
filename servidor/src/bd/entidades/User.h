@@ -26,6 +26,7 @@ public:
 	{
 		NOMBRE,
 		APELLIDO,
+		PASSWORD,
 		MAIL,
 		FOTO,
 		LUGAR,
@@ -51,9 +52,14 @@ public:
 	void setLocation(string location);
 	string getNickName();
 	void setNickName(string nickName);
-	double getID();
 	void setStatus(bool st);
 	bool getStatus();
+
+	std::string getPassword();
+	void setPassword(std::string password);
+
+	std::string getID();
+	void setID(std::string id);
 
 	// Metodos de EntidadDB
 	virtual std::string getValor();

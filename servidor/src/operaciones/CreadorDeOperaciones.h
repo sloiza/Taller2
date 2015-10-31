@@ -20,6 +20,7 @@
 #include "OperacionesCarpetas.h"
 #include "OperacionErrorURL.h"
 #include "OperacionPrincipal.h"
+#include "InfoOperaciones.h"
 
 // STL
 #include <iostream>
@@ -32,16 +33,28 @@ namespace ConexionServidor
 namespace Operaciones
 {
 
-struct Recurso
-{
-	std::string nombre;
-	std::vector<Recurso*> hijos;
-	IOperable* operacion;
-};
-
 class CreadorDeOperaciones
 {
 public:
+	enum OPERACIONES
+	{
+		PRINCIPAL,
+		USUARIOS,
+		ARCHIVOS,
+		CARPETAS,
+		COMPARTIR_ARCHIVO,
+		COMPARTIR_CARPETA,
+		DESCARGAR
+	};
+
+	struct Recurso
+	{
+		std::string nombre;
+		std::vector<Recurso*> hijos;
+		IOperable* operacion;
+		InfoOperaciones::OPERACIONES tipo;
+	};
+
 	CreadorDeOperaciones();
 	virtual ~CreadorDeOperaciones();
 
@@ -53,6 +66,8 @@ public:
 	static void liberarRecusivamente(Recurso* recurso);
 
 	static std::vector<std::string> getCampos();
+
+	static IOperable* crearOperacion(InfoOperaciones::OPERACIONES tipo);
 
 private:
 	static std::vector<std::string> campos;

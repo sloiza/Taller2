@@ -10,7 +10,7 @@
 using namespace ConexionServidor::Operaciones;
 
 std::vector<std::string> CreadorDeOperaciones::campos(0);
-Recurso* CreadorDeOperaciones::raiz = NULL;
+CreadorDeOperaciones::Recurso* CreadorDeOperaciones::raiz = NULL;
 
 CreadorDeOperaciones::CreadorDeOperaciones()
 {
@@ -25,36 +25,37 @@ CreadorDeOperaciones::~CreadorDeOperaciones()
 void CreadorDeOperaciones::crearArbolDeRecursos()
 {
 	Recurso* principal = new Recurso();
-	principal->nombre = "principal";
-	principal->operacion = new OperacionPrincipal();
+	//principal->nombre = "principal";
+	principal->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::PRINCIPAL];
+	principal->tipo = InfoOperaciones::PRINCIPAL;
 
 	Recurso* usuarios = new Recurso();
-	usuarios->nombre = "usuario";
-	usuarios->operacion = new OperacionesUsuario();
+	usuarios->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::USUARIOS];
+	usuarios->tipo = InfoOperaciones::USUARIOS;
 
 //	Recurso* perfil = new Recurso();
 //	perfil->nombre = "miPerfil";
 //	perifl->operacion = new OperacionPerfil();
 
 	Recurso* baul = new Recurso();
-	baul->nombre = "miBaul";
-	baul->operacion = new OperacionesArchivos();
+	baul->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::ARCHIVOS];
+	baul->tipo = InfoOperaciones::ARCHIVOS;
 
 	Recurso* carpetas = new Recurso();
-	carpetas->nombre = "misCarpetas";
-	carpetas->operacion = new OperacionesCarpetas();
+	carpetas->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::CARPETAS];
+	carpetas->tipo = InfoOperaciones::CARPETAS;
 
 	Recurso* compartirArchivo = new Recurso();
-	compartirArchivo->nombre = "compartirArchivo";
-	compartirArchivo->operacion = new OperacionCompartirArchivo();
+	compartirArchivo->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::COMPARTIR_ARCHIVO];
+	compartirArchivo->tipo = InfoOperaciones::COMPARTIR_ARCHIVO;
 
 	Recurso* compartirCarpeta = new Recurso();
-	compartirCarpeta->nombre = "compartirCarpeta";
-	compartirCarpeta->operacion = new OperacionCompartirCarpeta();
+	compartirCarpeta->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::COMPARTIR_CARPETA];
+	compartirCarpeta->tipo = InfoOperaciones::COMPARTIR_CARPETA;
 
 	Recurso* descargarArchivo = new Recurso();
-	descargarArchivo->nombre = "descargar";
-	descargarArchivo->operacion = new OperacionDescargarArchivo();
+	descargarArchivo->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::DESCARGAR];
+	descargarArchivo->tipo = InfoOperaciones::DESCARGAR;
 
 	principal->hijos.push_back(usuarios);
 	usuarios->hijos.push_back(baul);
@@ -64,7 +65,7 @@ void CreadorDeOperaciones::crearArbolDeRecursos()
 	baul->hijos.push_back(compartirCarpeta);
 	baul->hijos.push_back(descargarArchivo);
 
-	raiz = usuarios;
+	raiz = principal;
 }
 
 void CreadorDeOperaciones::liberarArbolDeRecursos()
@@ -81,15 +82,19 @@ IOperable* CreadorDeOperaciones::getOperacion(ConexionServidor::Request::URI* ur
 {
     campos = uri->getRecursosDividos();
 
-    return reconocerUriRecursivamente(raiz, 0);
+    std::cout << "uri: " << uri->getURI() << "\n";
+    //std::cout << "campos.size(): " << campos.size() << "\n";
+
+    return reconocerUriRecursivamente(raiz, 1);
 }
 
 IOperable* CreadorDeOperaciones::reconocerUriRecursivamente(Recurso* recurso, int nivel)
 {
     if ( campos.size() == nivel )
     {
-    	return recurso->operacion;
+    	return crearOperacion( recurso->tipo );
     }
+
 
 	for ( std::vector<Recurso*>::iterator hijo = recurso->hijos.begin(); hijo != recurso->hijos.end(); hijo++)
 	{
@@ -101,6 +106,21 @@ IOperable* CreadorDeOperaciones::reconocerUriRecursivamente(Recurso* recurso, in
 	}
 
 	return new OperacionErrorURL();
+}
+
+IOperable* CreadorDeOperaciones::crearOperacion(InfoOperaciones::OPERACIONES tipo)
+{
+	switch (tipo)
+	{
+		case InfoOperaciones::PRINCIPAL: return new OperacionPrincipal();
+		case InfoOperaciones::USUARIOS: return new OperacionesUsuario();
+		case InfoOperaciones::ARCHIVOS: return new OperacionesArchivos();
+		case InfoOperaciones::CARPETAS: return new OperacionesCarpetas();
+		case InfoOperaciones::COMPARTIR_ARCHIVO: return new OperacionCompartirArchivo();
+		case InfoOperaciones::COMPARTIR_CARPETA: return new OperacionCompartirCarpeta();
+		case InfoOperaciones::DESCARGAR: return new OperacionDescargarArchivo();
+		default: return new OperacionErrorURL();
+	}
 }
 
 void CreadorDeOperaciones::liberarRecusivamente(Recurso* recurso)
@@ -122,4 +142,5 @@ void CreadorDeOperaciones::liberarRecusivamente(Recurso* recurso)
 		}
 	}
 }
+
 

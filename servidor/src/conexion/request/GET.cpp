@@ -13,9 +13,9 @@ GET::GET() {}
 
 GET::~GET() {}
 
-void GET::ejecutar(ConexionServidor::BaseDeDatos::EntidadDB* entidad, std::string contenido)
+ConexionServidor::Respuesta GET::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, std::string contenido)
 {
-
+	return operacion->get(contenido);
 }
 
 std::string GET::impresion()
