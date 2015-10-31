@@ -4,3 +4,4 @@ servidor/build
 servidor/dbTest
 *.log
 *.json
+.idea/*
