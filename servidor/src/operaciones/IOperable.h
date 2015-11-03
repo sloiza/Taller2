@@ -11,6 +11,9 @@
 // respuesta
 #include "../conexion/Respuesta.h"
 
+// utiles
+#include "../utiles/Bytes.h"
+
 // STL
 #include <string>
 
@@ -25,10 +28,10 @@ public:
 	IOperable() {}
 	virtual ~IOperable() {}
 
-	virtual ConexionServidor::Respuesta delet(std::string contenido) = 0;
-	virtual ConexionServidor::Respuesta get(std::string contenido) = 0;
-	virtual ConexionServidor::Respuesta post(std::string contenido) = 0;
-	virtual ConexionServidor::Respuesta put(std::string contenido) = 0;
+	virtual ConexionServidor::Respuesta delet(Utiles::Bytes* contenido) = 0;
+	virtual ConexionServidor::Respuesta get(Utiles::Bytes* contenido) = 0;
+	virtual ConexionServidor::Respuesta post(Utiles::Bytes* contenido) = 0;
+	virtual ConexionServidor::Respuesta put(Utiles::Bytes* contenido) = 0;
 
 	virtual void imprimir() = 0;
 };

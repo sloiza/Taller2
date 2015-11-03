@@ -13,7 +13,7 @@ GET::GET() {}
 
 GET::~GET() {}
 
-ConexionServidor::Respuesta GET::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, std::string contenido)
+ConexionServidor::Respuesta GET::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, Utiles::Bytes* contenido)
 {
 	return operacion->get(contenido);
 }

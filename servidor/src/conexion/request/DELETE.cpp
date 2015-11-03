@@ -13,10 +13,11 @@ DELETE::DELETE() {}
 
 DELETE::~DELETE() {}
 
-ConexionServidor::Respuesta DELETE::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, std::string contenido)
+ConexionServidor::Respuesta DELETE::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, Utiles::Bytes* contenido)
 {
 	return operacion->delet(contenido);
 }
+
 
 std::string DELETE::impresion()
 {

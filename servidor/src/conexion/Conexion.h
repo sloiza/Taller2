@@ -57,6 +57,8 @@ public:
 	std::string getContenido();
 	std::string getQuery();
 
+	Utiles::Bytes* getContenidoBytes();
+
 	std::string impresion();
 
 private:
@@ -64,6 +66,8 @@ private:
 	Request::IMetodoREST* metodo;
 	std::string contenido;
 	std::string query;
+
+	Utiles::Bytes* contenidoBytes;
 
 	std::map<std::string, METODOS>* mapaMetodos;
 

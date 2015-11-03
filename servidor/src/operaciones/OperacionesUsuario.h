@@ -31,10 +31,10 @@ public:
 	OperacionesUsuario();
 	virtual ~OperacionesUsuario();
 
-	ConexionServidor::Respuesta delet(std::string contenido);
-	ConexionServidor::Respuesta get(std::string contenido);
-	ConexionServidor::Respuesta post(std::string contenido);
-	ConexionServidor::Respuesta put(std::string contenido);
+	ConexionServidor::Respuesta delet(Utiles::Bytes* contenido);
+	ConexionServidor::Respuesta get(Utiles::Bytes* contenido);
+	ConexionServidor::Respuesta post(Utiles::Bytes* contenido);
+	ConexionServidor::Respuesta put(Utiles::Bytes* contenido);
 
 	void imprimir();
 

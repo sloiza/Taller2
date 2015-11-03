@@ -16,30 +16,44 @@ OperacionesArchivos::OperacionesArchivos() {}
 
 OperacionesArchivos::~OperacionesArchivos() {}
 
-ConexionServidor::Respuesta OperacionesArchivos::delet(std::string contenido)
+ConexionServidor::Respuesta OperacionesArchivos::delet(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionesArchivos->delete" << "\n";
 }
-ConexionServidor::Respuesta OperacionesArchivos::get(std::string contenido)
+ConexionServidor::Respuesta OperacionesArchivos::get(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionesArchivos->get" << "\n";
+	ConexionServidor::BaseDeDatos::ArchivoLogico archivoLogico( contenido->getStringDeBytes() );
+
+	std::string valorRecuperado = archivoLogico.recuperar();
+
+	ConexionServidor::Respuesta respuesta;
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("Archivo inexistente.");
+		return respuesta;
+	}
+
+	respuesta.setContenido(valorRecuperado);
+	respuesta.setEstado("ok");
+	respuesta.setMensaje("Archivo recuperado correctamente!");
+
+	return respuesta;
 }
-ConexionServidor::Respuesta OperacionesArchivos::post(std::string contenido)
+ConexionServidor::Respuesta OperacionesArchivos::post(Utiles::Bytes* contenido)
 {
 	settearContenidoSegunFlag(contenido);
 
 	cambiarFlag();
 
+	Respuesta respuesta = respuestaSegunFlag();
+
 	resettearArchivoTemporalSegunFlag();
 
-	std::cout << "OperacionesArchivos->post" << "\n";
-	std::cout << "contenido: " << contenido << "\n";
-	Respuesta respuesta;
-	respuesta.setEstado("no-existe");
-	respuesta.setMensaje("Mail de usuario inexistente.");
 	return respuesta;
 }
-ConexionServidor::Respuesta OperacionesArchivos::put(std::string contenido)
+ConexionServidor::Respuesta OperacionesArchivos::put(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionesArchivos->put" << "\n";
 }
@@ -61,17 +75,16 @@ void OperacionesArchivos::cambiarFlag()
 	}
 }
 
-void OperacionesArchivos::settearContenidoSegunFlag(std::string contenido)
+void OperacionesArchivos::settearContenidoSegunFlag(Utiles::Bytes* contenido)
 {
 	if ( estoyEsperandoLosBytes )
 	{
-		std::cout << "ESTOY ESPERANDO LOS BYTES\n";
-		archivoTemporal->setBytes( new Utiles::Bytes( (char*)contenido.c_str(), contenido.size() ) );
+		archivoTemporal->setBytes( contenido );
+		archivoTemporal->guardar();
 	}
 	else
 	{
-		std::cout << "NOO ESTOY ESPERANDO LOS BYTES\n";
-		archivoTemporal = new ConexionServidor::BaseDeDatos::Archivo(contenido);
+		archivoTemporal = new ConexionServidor::BaseDeDatos::Archivo(contenido->getStringDeBytes());
 	}
 }
 void OperacionesArchivos::resettearArchivoTemporalSegunFlag()
@@ -82,7 +95,52 @@ void OperacionesArchivos::resettearArchivoTemporalSegunFlag()
 	}
 	else
 	{
-		archivoTemporal->guardar();
 		delete archivoTemporal;
 	}
+}
+ConexionServidor::Respuesta OperacionesArchivos::respuestaSegunFlag()
+{
+	static bool error = false;
+	ConexionServidor::Respuesta respuesta;
+	if ( estoyEsperandoLosBytes )
+	{
+		if ( archivoTemporal->existeFisicamente() )
+		{
+			respuesta.setEstado("archivo-existente");
+			respuesta.setMensaje("Ya existe el archivo.");
+			error = true;
+			return respuesta;
+		}
+		else
+		{
+			error = false;
+		}
+
+		if ( archivoTemporal->contenidoValido() )
+		{
+			respuesta.setEstado("ok");
+			respuesta.setMensaje("Metadatos de archivo reconocidos correctamente!");
+			error = false;
+		}
+		else
+		{
+			respuesta.setEstado("datos-no-validos");
+			respuesta.setMensaje("Metadatos no validos.");
+			error = true;
+		}
+	}
+	else
+	{
+		if ( archivoTemporal->existeFisicamente() && archivoTemporal->contenidoValido() && error == false )
+		{
+			respuesta.setEstado("ok");
+			respuesta.setMensaje("Bytes de archivo escritos correctamente!");
+		}
+		else
+		{
+			respuesta.setEstado("error");
+			respuesta.setMensaje("No se guardo fisicamente el archivo.");
+		}
+	}
+	return respuesta;
 }

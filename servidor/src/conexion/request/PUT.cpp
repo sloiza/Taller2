@@ -13,7 +13,7 @@ PUT::PUT() {}
 
 PUT::~PUT() {}
 
-ConexionServidor::Respuesta PUT::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, std::string contenido)
+ConexionServidor::Respuesta PUT::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, Utiles::Bytes* contenido)
 {
 	return operacion->put(contenido);
 }

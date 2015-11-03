@@ -32,18 +32,19 @@ public:
 	OperacionesArchivos();
 	virtual ~OperacionesArchivos();
 
-	ConexionServidor::Respuesta delet(std::string contenido);
-	ConexionServidor::Respuesta get(std::string contenido);
-	ConexionServidor::Respuesta post(std::string contenido);
-	ConexionServidor::Respuesta put(std::string contenido);
+	ConexionServidor::Respuesta delet(Utiles::Bytes* contenido);
+	ConexionServidor::Respuesta get(Utiles::Bytes* contenido);
+	ConexionServidor::Respuesta post(Utiles::Bytes* contenido);
+	ConexionServidor::Respuesta put(Utiles::Bytes* contenido);
 
 	void imprimir();
 
 	static ConexionServidor::BaseDeDatos::Archivo* archivoTemporal;
 	static bool estoyEsperandoLosBytes;
 	static void cambiarFlag();
-	static void settearContenidoSegunFlag(std::string);
+	static void settearContenidoSegunFlag(Utiles::Bytes*);
 	static void resettearArchivoTemporalSegunFlag();
+	static ConexionServidor::Respuesta respuestaSegunFlag();
 
 };
 };

@@ -27,14 +27,13 @@ int HandlerEventos::handler(struct mg_connection* conn, enum mg_event ev)
 			Conexion* conexion = new Conexion();
 			conexion->inicializar(conn);
 
-			//mg_printf_data(conn, conexion->impresion().c_str());
-
 			Utiles::Log::instancia()->info( std::string("\nConexion recibida:\n") + conexion->impresion(), std::string("HandlerEventos"));
 
 			ConexionServidor::Respuesta respuesta = conexion->procesarRequest();
 			std::cout << "respuesta:\n" << respuesta.getContenido() << "\n";
 
 			mg_printf_data(conn, respuesta.getContenido().c_str());
+
 //			Respuesta rta = procesarRequest(conexion);
 //			switch( rta.getResultado() )
 //			  {
@@ -46,6 +45,7 @@ int HandlerEventos::handler(struct mg_connection* conn, enum mg_event ev)
 			delete conexion;
 		  return MG_TRUE;
 		}
+		case MG_CLOSE: return MG_TRUE;
 
 		default: return MG_FALSE;
 	}

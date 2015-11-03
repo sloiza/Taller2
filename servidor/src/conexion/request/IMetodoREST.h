@@ -14,6 +14,9 @@
 #include "../../operaciones/IOperable.h"
 #include "../../bd/JsonInfo.h"
 
+// utiles
+#include "../../utiles/Bytes.h"
+
 namespace ConexionServidor
 {
 
@@ -25,7 +28,8 @@ public:
 	IMetodoREST() {}
 	virtual ~IMetodoREST() {}
 
-	virtual ConexionServidor::Respuesta ejecutar(ConexionServidor::Operaciones::IOperable* operacion, std::string contenido) = 0;
+	virtual ConexionServidor::Respuesta ejecutar(ConexionServidor::Operaciones::IOperable* operacion, Utiles::Bytes* contenidoBytes) = 0;
+
 	virtual std::string impresion() = 0;
 };
 };

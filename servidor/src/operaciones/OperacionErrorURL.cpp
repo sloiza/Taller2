@@ -13,19 +13,19 @@ OperacionErrorURL::OperacionErrorURL() {}
 
 OperacionErrorURL::~OperacionErrorURL() {}
 
-ConexionServidor::Respuesta OperacionErrorURL::delet(std::string contenido)
+ConexionServidor::Respuesta OperacionErrorURL::delet(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionErrorURL->delete" << "\n";
 }
-ConexionServidor::Respuesta OperacionErrorURL::get(std::string contenido)
+ConexionServidor::Respuesta OperacionErrorURL::get(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionErrorURL->get" << "\n";
 }
-ConexionServidor::Respuesta OperacionErrorURL::post(std::string contenido)
+ConexionServidor::Respuesta OperacionErrorURL::post(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionErrorURL->post" << "\n";
 }
-ConexionServidor::Respuesta OperacionErrorURL::put(std::string contenido)
+ConexionServidor::Respuesta OperacionErrorURL::put(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionErrorURL->put" << "\n";
 }

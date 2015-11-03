@@ -13,19 +13,19 @@ OperacionPrincipal::OperacionPrincipal() {}
 
 OperacionPrincipal::~OperacionPrincipal() {}
 
-ConexionServidor::Respuesta OperacionPrincipal::delet(std::string contenido)
+ConexionServidor::Respuesta OperacionPrincipal::delet(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionPrincipal->delete" << "\n";
 }
-ConexionServidor::Respuesta OperacionPrincipal::get(std::string contenido)
+ConexionServidor::Respuesta OperacionPrincipal::get(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionPrincipal->get" << "\n";
 }
-ConexionServidor::Respuesta OperacionPrincipal::post(std::string contenido)
+ConexionServidor::Respuesta OperacionPrincipal::post(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionPrincipal->post" << "\n";
 }
-ConexionServidor::Respuesta OperacionPrincipal::put(std::string contenido)
+ConexionServidor::Respuesta OperacionPrincipal::put(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionPrincipal->put" << "\n";
 }

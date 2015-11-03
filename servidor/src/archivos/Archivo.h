@@ -38,6 +38,8 @@ public:
 	std::string getDireccion();
 	std::string getPath();
 
+	bool existeFisicamente();
+
 	// Metodos de EntidadDB
 	virtual std::string getValor();
 

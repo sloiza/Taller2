@@ -13,18 +13,18 @@ OperacionesUsuario::OperacionesUsuario() {}
 
 OperacionesUsuario::~OperacionesUsuario() {}
 
-ConexionServidor::Respuesta OperacionesUsuario::delet(std::string contenido)
+ConexionServidor::Respuesta OperacionesUsuario::delet(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionesUsuario->delete" << "\n";
 }
-ConexionServidor::Respuesta OperacionesUsuario::get(std::string contenido)
+ConexionServidor::Respuesta OperacionesUsuario::get(Utiles::Bytes* contenido)
 {
-	std::cout << "OperacionesUsuario->get" << "\n";
+	//std::cout << "OperacionesUsuario->get" << "\n";
 
-	std::cout << "contenido q llega: " << contenido << "\n";
+	//std::cout << "contenido q llega: " << contenido->getStringDeBytes() << "\n";
 
 	ConexionServidor::BaseDeDatos::User usuario;
-	usuario.setContenido(contenido);
+	usuario.setContenido(contenido->getStringDeBytes());
 
 	std::string passwordAChequear = usuario.getPassword();
 
@@ -34,12 +34,12 @@ ConexionServidor::Respuesta OperacionesUsuario::get(std::string contenido)
 
 	ConexionServidor::Respuesta respuesta;
 
-	std::cout << "valor recuperado: " << valorRecuperado << "\n";
+	//std::cout << "valor recuperado: " << valorRecuperado << "\n";
 
 	if ( valorRecuperado.compare("vacio") == 0 )
 	{
 		respuesta.setEstado("no-existe");
-		respuesta.setMensaje("Mail de usuario inexistente.");
+		respuesta.setMensaje("Usuario inexistente.");
 		return respuesta;
 	}
 
@@ -50,24 +50,26 @@ ConexionServidor::Respuesta OperacionesUsuario::get(std::string contenido)
 		return respuesta;
 	}
 
+	respuesta.setContenido(valorRecuperado);
+
 	respuesta.setEstado("ok");
-	respuesta.setMensaje("Identificado correctamente!");
+	respuesta.setMensaje("Usuario recuperado correctamente!");
 
 	return respuesta;
 }
-ConexionServidor::Respuesta OperacionesUsuario::post(std::string contenido)
+ConexionServidor::Respuesta OperacionesUsuario::post(Utiles::Bytes* contenido)
 {
-	ConexionServidor::BaseDeDatos::User usuarioNuevo(contenido);
+	ConexionServidor::BaseDeDatos::User usuarioNuevo(contenido->getStringDeBytes());
 	usuarioNuevo.guardar();
-	std::cout << "OperacionesUsuario->post" << "\n";
+	//std::cout << "OperacionesUsuario->post" << "\n";
 	ConexionServidor::Respuesta respuesta;
 
 	respuesta.setEstado("ok");
-	respuesta.setMensaje("Identificado correctamente!");
+	respuesta.setMensaje("Registrado correctamente!");
 
 	return respuesta;
 }
-ConexionServidor::Respuesta OperacionesUsuario::put(std::string contenido)
+ConexionServidor::Respuesta OperacionesUsuario::put(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionesUsuario->put" << "\n";
 }

@@ -13,19 +13,19 @@ OperacionDescargarArchivo::OperacionDescargarArchivo() {}
 
 OperacionDescargarArchivo::~OperacionDescargarArchivo() {}
 
-ConexionServidor::Respuesta OperacionDescargarArchivo::delet(std::string contenido)
+ConexionServidor::Respuesta OperacionDescargarArchivo::delet(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionDescargarArchivo->delete" << "\n";
 }
-ConexionServidor::Respuesta OperacionDescargarArchivo::get(std::string contenido)
+ConexionServidor::Respuesta OperacionDescargarArchivo::get(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionDescargarArchivo->get" << "\n";
 }
-ConexionServidor::Respuesta OperacionDescargarArchivo::post(std::string contenido)
+ConexionServidor::Respuesta OperacionDescargarArchivo::post(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionDescargarArchivo->post" << "\n";
 }
-ConexionServidor::Respuesta OperacionDescargarArchivo::put(std::string contenido)
+ConexionServidor::Respuesta OperacionDescargarArchivo::put(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionDescargarArchivo->put" << "\n";
 }

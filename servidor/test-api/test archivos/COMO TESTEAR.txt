@@ -1,0 +1,62 @@
+para probar la subida de un archivo, ejecutar desde consola:
+
+$ bash subirArchivo.sh <nombrearchivo>
+
+este comando devuelve:
+1) si se guardo correctamente tanto logica (en la base de datos) como fisicamente (en el servidor):
+{
+   "estado" : "ok",
+   "mensaje" : "Metadatos de archivo reconocidos correctamente!"
+}
+{
+   "estado" : "ok",
+   "mensaje" : "Bytes de archivo escritos correctamente!"
+}
+
+2) si ya existe el archivo en el servidor:
+{
+   "estado" : "archivo-existente",
+   "mensaje" : "Ya existe el archivo."
+}
+{
+   "estado" : "error",
+   "mensaje" : "No se guardo el archivo fisicamente."
+}
+
+3) si los datos del json estan con mal formato:
+{
+   "estado" : "datos-no-validos",
+   "mensaje" : "Metadatos no validos."
+}
+{
+   "estado" : "error",
+   "mensaje" : "No se guardo el archivo fisicamente."
+}
+
+-----
+
+para probar la recuperacion de los metadatos de un archivo, ejecutar desde consola:
+
+$ bash recuperarArchivo.sh
+
+este comando devuelve:
+1) si se lo encontro correctamente, devuelve los metadatos del archivo, agregandole los campos "ok" y "mensaje":
+{
+   "baja_logica" : "no",
+   "direccion" : "tmp/usuario/",
+   "estado" : "ok",
+   "etiqueta" : "imagen",
+   "extension" : "test",
+   "fecha_ulti_modi" : "26102015",
+   "mensaje" : "Archivo recuperado correctamente!",
+   "nombre" : "archivoSubido",
+   "propietario" : "1234",
+   "usuario_ulti_modi" : "1234"
+}
+
+2) si no encontro los metadatos del archivo:
+{
+   "estado" : "no-existe",
+   "mensaje" : "Archivo inexistente."
+}
+

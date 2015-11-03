@@ -91,6 +91,11 @@ std::string Archivo::getPath()
 	//return this->getDireccion() + "/" + this->archivoLogico->getPath();
 	return this->archivoLogico->getPath();
 }
+bool Archivo::existeFisicamente()
+{
+	ManagerArchivos manager;
+	return manager.existe( this->getPath() );
+}
 
 // Metodos de EntidadBD
 std::string Archivo::getValor()

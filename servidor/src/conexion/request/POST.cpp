@@ -13,7 +13,7 @@ POST::POST() {}
 
 POST::~POST() {}
 
-ConexionServidor::Respuesta POST::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, std::string contenido)
+ConexionServidor::Respuesta POST::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, Utiles::Bytes* contenido)
 {
 	return operacion->post(contenido);
 }
