@@ -44,7 +44,7 @@ void CreadorDeOperacionesTest::testReconocerOperacionUsuariosCorrectamente()
 }
 void CreadorDeOperacionesTest::testReconocerOperacionArchivosCorrectamente()
 {
-	std::string uriArchivos = "/usuario/miBaul";
+	std::string uriArchivos = "/archivos";
 	this->uri->setURI(uriArchivos);
 
 	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);
@@ -53,7 +53,7 @@ void CreadorDeOperacionesTest::testReconocerOperacionArchivosCorrectamente()
 }
 void CreadorDeOperacionesTest::testReconocerOperacionCarpetasCorrectamente()
 {
-	std::string uriCarpeta = "/usuario/miBaul/misCarpetas";
+	std::string uriCarpeta = "/carpetas";
 	this->uri->setURI(uriCarpeta);
 
 	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);
@@ -62,7 +62,8 @@ void CreadorDeOperacionesTest::testReconocerOperacionCarpetasCorrectamente()
 }
 void CreadorDeOperacionesTest::testReconocerOperacionCompartirArchivoCorrectamente()
 {
-	std::string uriCompartirArchivo = "/usuario/miBaul?compartirArchivo=archivo.txt";
+	//std::string uriCompartirArchivo = "/usuario/miBaul?compartirArchivo=archivo.txt";
+	std::string uriCompartirArchivo = "/compartirArchivo";
 	this->uri->setURI(uriCompartirArchivo);
 
 	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);
@@ -71,7 +72,8 @@ void CreadorDeOperacionesTest::testReconocerOperacionCompartirArchivoCorrectamen
 }
 void CreadorDeOperacionesTest::testReconocerOperacionCompartirCarpetaCorrectamente()
 {
-	std::string uriCompartirCarpeta = "/usuario/miBaul?compartirCarpeta=carpeta";
+	//std::string uriCompartirCarpeta = "/usuario/miBaul?compartirCarpeta=carpeta";
+	std::string uriCompartirCarpeta = "/compartirCarpeta";
 	this->uri->setURI(uriCompartirCarpeta);
 
 	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);
@@ -80,7 +82,8 @@ void CreadorDeOperacionesTest::testReconocerOperacionCompartirCarpetaCorrectamen
 }
 void CreadorDeOperacionesTest::testReconocerOperacionDescargarCorrectamente()
 {
-	std::string uriDescarga = "/usuario/miBaul?descargar=archivo.txt";
+	//std::string uriDescarga = "/usuario/miBaul?descargar=archivo.txt";
+	std::string uriDescarga = "/descargar";
 	this->uri->setURI(uriDescarga);
 
 	ConexionServidor::Operaciones::IOperable* operacion = this->creador->getOperacion(this->uri);

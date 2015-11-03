@@ -72,3 +72,16 @@ void ManagerArchivos::modificar(std::string path, Utiles::Bytes* bytes)
 	this->eliminar(path);
 	this->escribir(path, bytes);
 }
+
+bool ManagerArchivos::existe(std::string path)
+{
+	struct stat buffer;
+	if (stat(path.c_str(), &buffer) == 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

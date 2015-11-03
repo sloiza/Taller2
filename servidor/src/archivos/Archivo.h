@@ -16,6 +16,9 @@
 #include "../bd/entidades/EntidadBD.h"
 #include "../bd/entidades/ArchivoLogico.h"
 
+// manager archivos
+#include "../archivos/ManagerArchivos.h"
+
 namespace ConexionServidor
 {
 namespace BaseDeDatos
@@ -31,6 +34,7 @@ public:
 	void setDireccion(std::string);
 
 	Utiles::Bytes* getBytes();
+	const char* getTiraDeBytes();
 	std::string getDireccion();
 	std::string getPath();
 

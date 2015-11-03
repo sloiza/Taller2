@@ -9,7 +9,7 @@
 
 using namespace ConexionServidor::Operaciones;
 
-const std::string InfoOperaciones::nombresRecursos[] = { "principal", "usuario", "miBaul", "misCarpetas", "compartirArchivo", "compartirCarpeta", "descargar" };
+const std::string InfoOperaciones::nombresRecursos[] = { "principal", "usuario", "archivos", "carpetas", "compartirArchivo", "compartirCarpeta", "descargar" };
 
 InfoOperaciones::InfoOperaciones() {}
 

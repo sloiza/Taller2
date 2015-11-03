@@ -139,9 +139,9 @@ Status rocks_db::delet(string column, Slice key){
 	int id = this->getIdCF(column);
 	Status s = db->Delete(WriteOptions(), this->handles[id], key);
 	if(s.ok()){
-		cout << "Delete OK ";
+		//cout << "Delete OK ";
 	}else{
-		cerr << "DB Error " << s.ToString() << endl;
+		//cerr << "DB Error " << s.ToString() << endl;
 	}
 	return s;
 

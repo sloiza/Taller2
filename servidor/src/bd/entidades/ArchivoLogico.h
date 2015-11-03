@@ -32,7 +32,8 @@ public:
 		FECHA_ULTIMA_MODI,
 		USUARIO_ULTIMA_MODI,
 		PROPIETARIO,
-		BAJA_LOGICA
+		BAJA_LOGICA,
+		DIRECCION,
 	};
 
 	static const std::string etiquetas[];
@@ -42,10 +43,10 @@ public:
 	virtual ~ArchivoLogico();
 
 	void setNombre(std::string), setExtension(std::string), setEtiqueta(std::string), setUltimaFechaModif(std::string),
-			setUltimoUsuarioModif(std::string), setPropietario(std::string), setBajaLogica(std::string);
+			setUltimoUsuarioModif(std::string), setPropietario(std::string), setBajaLogica(std::string), setDireccion(std::string);
 
 	std::string getNombre(), getExtension(), getEtiqueta(), getUltimaFechaModif(),
-			getUltimoUsuarioModif(), getPropietario(), getBajaLogica();
+			getUltimoUsuarioModif(), getPropietario(), getBajaLogica(), getDireccion();
 
 	std::string getPath();
 

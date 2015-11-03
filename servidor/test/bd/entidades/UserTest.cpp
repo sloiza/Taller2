@@ -31,7 +31,7 @@ void UserTest::testCrearYRecuperarEnBDCorrectamente()
 	ConexionServidor::BaseDeDatos::User usuarioRecuperado;
 	usuarioRecuperado.setContenido(contenidoRecuperado);
 
-	std::cout << contenidoRecuperado << "\n";
+	//std::cout << contenidoRecuperado << "\n";
 
 	EXPECT_STREQ(this->user->getContenido().c_str(), usuarioRecuperado.getContenido().c_str());
 }

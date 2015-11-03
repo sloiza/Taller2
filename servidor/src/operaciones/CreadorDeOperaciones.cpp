@@ -58,12 +58,12 @@ void CreadorDeOperaciones::crearArbolDeRecursos()
 	descargarArchivo->tipo = InfoOperaciones::DESCARGAR;
 
 	principal->hijos.push_back(usuarios);
-	usuarios->hijos.push_back(baul);
+	principal->hijos.push_back(baul);
 	//usuarios->hijos.push_back(perfil);
-	baul->hijos.push_back(carpetas);
-	baul->hijos.push_back(compartirArchivo);
-	baul->hijos.push_back(compartirCarpeta);
-	baul->hijos.push_back(descargarArchivo);
+	principal->hijos.push_back(carpetas);
+	principal->hijos.push_back(compartirArchivo);
+	principal->hijos.push_back(compartirCarpeta);
+	principal->hijos.push_back(descargarArchivo);
 
 	raiz = principal;
 }

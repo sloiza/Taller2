@@ -8,8 +8,13 @@
 #ifndef OPERACIONESARCHIVOS_H_
 #define OPERACIONESARCHIVOS_H_
 
+// conexion
+#include "../conexion/Respuesta.h"
 // Operaciones
 #include "IOperable.h"
+
+// base de datos
+#include "../archivos/Archivo.h"
 
 // STL
 #include <iostream>
@@ -33,6 +38,13 @@ public:
 	ConexionServidor::Respuesta put(std::string contenido);
 
 	void imprimir();
+
+	static ConexionServidor::BaseDeDatos::Archivo* archivoTemporal;
+	static bool estoyEsperandoLosBytes;
+	static void cambiarFlag();
+	static void settearContenidoSegunFlag(std::string);
+	static void resettearArchivoTemporalSegunFlag();
+
 };
 };
 };

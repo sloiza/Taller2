@@ -35,28 +35,33 @@ void Archivo::guardar()
 {
 	this->archivoLogico->guardar();
 
-
+	ManagerArchivos manager;
+	manager.escribir( archivoLogico->getPath(), this->getBytes() );
 }
 
 void Archivo::modificar() 	// POST
 {
 	this->archivoLogico->modificar();
 
-	//TODO reemplazarEnDisco: this->eliminar(); this->escribir(bytes);
+	this->eliminar();
+	this->guardar();
 }
 void Archivo::eliminar() 	// DELETE
 {
 	this->archivoLogico->eliminar();
 
-	//TODO eliminarEnDisco: borrar(this->direccion + this->archivoLogico->getPath);
+	ManagerArchivos manager;
+	manager.eliminar( archivoLogico->getPath() );
 }
 std::string Archivo::recuperar() 	// GET
 {
-	std::string contenido = this->archivoLogico->recuperar();
+	this->archivoLogico->recuperar();
+	ManagerArchivos manager;
+	this->bytes = manager.leer( this->archivoLogico->getPath() );
 
 	//TODO recuperarDeDisco: this->bytes = bytesRecuperados();
 
-	return contenido;
+	return this->bytes->getStringDeBytes();
 }
 
 void Archivo::setBytes(Utiles::Bytes* bytes)
@@ -68,6 +73,11 @@ void Archivo::setDireccion(std::string direccion)
 	this->direccion = direccion;
 }
 
+const char* Archivo::getTiraDeBytes()
+{
+	//return this->bytes->getBytes();
+	return this->bytes->getStringDeBytes().c_str();
+}
 Utiles::Bytes* Archivo::getBytes()
 {
 	return this->bytes;
@@ -78,7 +88,8 @@ std::string Archivo::getDireccion()
 }
 std::string Archivo::getPath()
 {
-	return this->getDireccion() + "/" + this->archivoLogico->getPath();
+	//return this->getDireccion() + "/" + this->archivoLogico->getPath();
+	return this->archivoLogico->getPath();
 }
 
 // Metodos de EntidadBD

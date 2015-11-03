@@ -33,6 +33,7 @@ public:
 	void modificar(std::string path, Utiles::Bytes* bytes);
 	void eliminar(std::string path);
 	Utiles::Bytes* leer(std::string path);
+	bool existe(std::string path);
 };
 };
 };
