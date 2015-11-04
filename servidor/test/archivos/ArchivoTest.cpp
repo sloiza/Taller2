@@ -11,15 +11,15 @@ using namespace Test;
 
 const std::string ArchivoTest::archivoEjemplo1 =
 "{\"nombre\":\"test1\",\"extension\":\"jpg\",\"etiqueta\":\"imagen\", \"fecha_ulti_modi\":\"26102015\","
-"\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\", \"direccion\":\"tmp/usuario/\"}";
+"\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\", \"direccion\":\"tmp/\"}";
 
 const std::string ArchivoTest::archivoEjemplo2 =
 "{\"nombre\":\"test2\",\"extension\":\"jpg\",\"etiqueta\":\"imagen\", \"fecha_ulti_modi\":\"26102015\","
-"\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\", \"direccion\":\"tmp/usuario/\"}";
+"\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\", \"direccion\":\"tmp/\"}";
 
 const std::string ArchivoTest::archivoEjemplo3 =
 "{\"nombre\":\"test3\",\"extension\":\"jpg\",\"etiqueta\":\"imagen\", \"fecha_ulti_modi\":\"26102015\","
-"\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\", \"direccion\":\"tmp/usuario/\"}";
+"\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\", \"direccion\":\"tmp/\"}";
 
 char ArchivoTest::bytes[] = "estosSonUnosBytesDePrueba";
 //int ArchivoTest::tamanio = 21;

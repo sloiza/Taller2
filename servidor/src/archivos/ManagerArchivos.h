@@ -18,6 +18,9 @@
 #include <fstream>
 #include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <dirent.h>
 
 namespace ConexionServidor
 {
@@ -34,6 +37,17 @@ public:
 	void eliminar(std::string path);
 	Utiles::Bytes* leer(std::string path);
 	bool existe(std::string path);
+	void crearCarpeta(std::string direccion, std::string nombre);
+	void crearCarpeta(std::string path);
+	void eliminarCarpetaVacia(std::string direccion, std::string nombre);
+	void eliminarCarpetaVacia(std::string path);
+
+	bool pathEsCarpeta(std::string path);
+
+private:
+
+	void delete_folder_tree(const char*);
+	int path_is_directory(const char*);
 };
 };
 };

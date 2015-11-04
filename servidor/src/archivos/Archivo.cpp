@@ -59,8 +59,6 @@ std::string Archivo::recuperar() 	// GET
 	ManagerArchivos manager;
 	this->bytes = manager.leer( this->archivoLogico->getPath() );
 
-	//TODO recuperarDeDisco: this->bytes = bytesRecuperados();
-
 	return this->bytes->getStringDeBytes();
 }
 

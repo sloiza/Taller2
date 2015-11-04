@@ -28,6 +28,9 @@ public:
 	void testContenidoNoValido();
 	void testGetCampoBien();
 	void testSettearYRecuperarCampoCorrectamente();
+	void testAgregarValoresYRecuperarListaDeValoresCorrectamente();
+	void testBorrarValorDeListaCorrectamente();
+
 	void testGetValorPorDefaultCorrecto();
 	void testCambiarContenidoCorrectamente();
 
@@ -49,31 +52,36 @@ TEST_F(JsonInfoTest, creacionCorrecta)
 	JsonInfoTest test;
 	test.testCrearCorrectamente();
 }
-
 TEST_F(JsonInfoTest, contenidoNoValido)
 {
 	JsonInfoTest test;
 	test.testContenidoNoValido();
 }
-
 TEST_F(JsonInfoTest, getCampoBien)
 {
 	JsonInfoTest test;
 	test.testGetCampoBien();
 }
-
 TEST_F(JsonInfoTest, settearYRecuperarBien)
 {
 	JsonInfoTest test;
 	test.testSettearYRecuperarCampoCorrectamente();
 }
-
+TEST_F(JsonInfoTest, agregarValoresYRecuperarListaDeValores)
+{
+	JsonInfoTest test;
+	test.testAgregarValoresYRecuperarListaDeValoresCorrectamente();
+}
+TEST_F(JsonInfoTest, borrarValorDeListaDeValores)
+{
+	JsonInfoTest test;
+	test.testBorrarValorDeListaCorrectamente();
+}
 TEST_F(JsonInfoTest, valorPorDefaultCorrecto)
 {
 	JsonInfoTest test;
 	test.testGetValorPorDefaultCorrecto();
 }
-
 TEST_F(JsonInfoTest, cambiarContenidoCorrectamente)
 {
 	JsonInfoTest test;

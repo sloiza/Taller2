@@ -24,7 +24,8 @@ namespace ConexionServidor
 namespace BaseDeDatos
 {
 
-class Archivo: public EntidadDB {
+class Archivo: public EntidadDB
+{
 public:
 	Archivo();
 	Archivo(std::string datosLogicos);

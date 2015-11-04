@@ -27,6 +27,11 @@ public:
 
 	std::string getAtributo(std::string campo, std::string valorDefault);
 	void setAtributo(std::string campo, std::string valorNuevo);
+
+	void agregarValorAAtributo(std::string campo, std::string valorAAgregar);
+	void borrarValorDeAtributo(std::string campo, std::string valorABorrar);
+	std::vector<std::string> getListaDeValorDeAtributo(std::string campo, std::string valorDefault);
+
 	void setContenido();
 	std::string getContenido();
 	void setContenido(std::string contenido);

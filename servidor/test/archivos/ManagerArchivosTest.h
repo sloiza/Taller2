@@ -32,6 +32,9 @@ public:
 	void testModificarEnDiscoCorrectamente();
 	void testEliminarDeDiscoCorrectamente();
 
+	void testCrearYEliminarCarpetaEnDiscoCorrectamente();
+	void testEliminarCarpetaDeDiscoCorrectamente();
+
 	void TestBody() {};
 
 protected:
@@ -50,18 +53,22 @@ TEST_F(ManagerArchivosTest, escribirYLeerEnDisco)
 	ManagerArchivosTest test;
 	test.testEscribirYLeerEnDiscoCorrectamente();
 }
-
 TEST_F(ManagerArchivosTest, modificarEnDisco)
 {
 	ManagerArchivosTest test;
 	test.testModificarEnDiscoCorrectamente();
 }
-
 TEST_F(ManagerArchivosTest, eliminarDeDisco)
 {
 	ManagerArchivosTest test;
 	test.testEliminarDeDiscoCorrectamente();
 }
+TEST_F(ManagerArchivosTest, crearYEliminarCarpeta)
+{
+	ManagerArchivosTest test;
+	test.testCrearYEliminarCarpetaEnDiscoCorrectamente();
+}
+
 
 };
 
