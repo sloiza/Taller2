@@ -9,7 +9,7 @@
 
 using namespace ConexionServidor::BaseDeDatos;
 
-const std::string ContenidoPorCarpeta::etiquetas[] = {"path", "archivos", "carpetas" };
+const std::string ContenidoPorCarpeta::etiquetas[] = {"nombre", "direccion", "archivos", "carpetas" };
 
 ContenidoPorCarpeta::ContenidoPorCarpeta() {}
 
@@ -22,7 +22,41 @@ ContenidoPorCarpeta::~ContenidoPorCarpeta() {}
 
 void ContenidoPorCarpeta::setPath(std::string path)
 {
-	this->info->setAtributo(etiquetas[PATH], path);
+	std::vector<std::string> campos = Utiles::Metodos::split(path , '/');
+
+	int tamanio = campos.size();
+
+	if ( campos[tamanio-1].compare("") == 0 )
+	{// si el ultimo camio es vacio, entonces quiere decir q el path me llego con una '/' al final.
+	 //	entonces le resto 1 a 'tamanio' para no tener esa barra en cuenta.
+		tamanio--;
+	}
+
+	if ( tamanio == 1 )
+	{ // si el tamanio q me qeda es 1, entonces solo tengo el nombre de la carpeta, en la direccion raiz.
+		this->setNombre( campos[0] );
+		this->setDireccion("");
+		return;
+	}
+
+	std::string direccion = "";
+	for ( int i = 0; i < tamanio-1 ;  i++)
+	{
+		direccion += campos[i] + "/";
+	}
+
+	std::string nombre = campos[tamanio-1];
+
+	this->setNombre( nombre );
+	this->setDireccion( direccion );
+}
+void ContenidoPorCarpeta::setNombre(std::string nombre)
+{
+	this->info->setAtributo(etiquetas[NOMBRE], nombre);
+}
+void ContenidoPorCarpeta::setDireccion(std::string direccion)
+{
+	this->info->setAtributo(etiquetas[DIRECCION], direccion);
 }
 void ContenidoPorCarpeta::agregarArchivo(std::string archivoNuevo)
 {
@@ -43,7 +77,15 @@ void ContenidoPorCarpeta::eliminarCarpeta(std::string carpetaAEliminar)
 
 std::string ContenidoPorCarpeta::getPath()
 {
-	return this->info->getAtributo(etiquetas[PATH], "pathDefault");
+	return this->getDireccion() + this->getNombre();
+}
+std::string ContenidoPorCarpeta::getNombre()
+{
+	return this->info->getAtributo(etiquetas[NOMBRE], "nombreDefault");
+}
+std::string ContenidoPorCarpeta::getDireccion()
+{
+	return this->info->getAtributo(etiquetas[DIRECCION], "direccionDefault");
 }
 std::vector<std::string> ContenidoPorCarpeta::getArchivos()
 {

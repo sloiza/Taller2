@@ -28,6 +28,7 @@ public:
 	void testCrearYRecuperarEnBDCorrectamente();
 	void testModificarEnBDCorrectamente();
 	void testEliminarEnBDCorrectamente();
+	void testSetearPathCorrectamente();
 	void testDevolvePathCorrecto();
 
 	void TestBody() {};
@@ -57,6 +58,11 @@ TEST_F(ContenidoPorCarpetaTest, eliminarEnBD)
 {
 	ContenidoPorCarpetaTest test;
 	test.testEliminarEnBDCorrectamente();
+}
+TEST_F(ContenidoPorCarpetaTest, setearPath)
+{
+	ContenidoPorCarpetaTest test;
+	test.testSetearPathCorrectamente();
 }
 TEST_F(ContenidoPorCarpetaTest, devolverPath)
 {

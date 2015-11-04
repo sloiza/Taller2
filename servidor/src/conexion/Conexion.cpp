@@ -55,7 +55,6 @@ void Conexion::inicializar(struct mg_connection* mg_conexion)
 ConexionServidor::Respuesta Conexion::procesarRequest()
 {
 	ConexionServidor::Operaciones::IOperable* operacion = ConexionServidor::Operaciones::CreadorDeOperaciones::getOperacion(uri);
-	//return this->metodo->ejecutar(operacion, this->contenido);
 	return this->metodo->ejecutar(operacion, this->contenidoBytes);
 }
 

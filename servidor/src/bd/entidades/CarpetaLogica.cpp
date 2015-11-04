@@ -20,7 +20,6 @@ CarpetaLogica::CarpetaLogica(std::string contenido)
 
 CarpetaLogica::~CarpetaLogica() {}
 
-
 void CarpetaLogica::setNombre(std::string nombre)
 {
 	this->info->setAtributo(etiquetas[NOMBRE], nombre);

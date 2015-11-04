@@ -1,3 +1,3 @@
 #!#bin/bash
 
-curl --data-binary "@mailypassword.json" -X GET "http://localhost:8080/usuario"
+curl --data-binary "@$1" -X GET "http://localhost:8080/usuario"

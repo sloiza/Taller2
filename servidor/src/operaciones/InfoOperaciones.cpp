@@ -11,6 +11,8 @@ using namespace ConexionServidor::Operaciones;
 
 const std::string InfoOperaciones::nombresRecursos[] = { "principal", "usuario", "archivos", "carpetas", "compartirArchivo", "compartirCarpeta", "descargar" };
 
+const std::string InfoOperaciones::carpetaRaiz = "tmp/";
+
 InfoOperaciones::InfoOperaciones() {}
 
 InfoOperaciones::~InfoOperaciones() {}

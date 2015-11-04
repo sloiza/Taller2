@@ -11,6 +11,7 @@
 // entidades
 #include "../bd/entidades/EntidadBD.h"
 #include "../bd/entidades/CarpetaLogica.h"
+#include "../bd/entidades/ContenidoPorCarpeta.h"
 
 // manager archivos
 #include "../archivos/ManagerArchivos.h"
@@ -32,6 +33,12 @@ public:
 	virtual void eliminar(); 	// DELETE
 	virtual std::string recuperar(); 	// GET
 
+	void setNombre(std::string), setEtiqueta(std::string), setUltimaFechaModif(std::string),
+			setUltimoUsuarioModif(std::string), setPropietario(std::string), setBajaLogica(std::string), setDireccion(std::string);
+
+	std::string getNombre(), getEtiqueta(), getUltimaFechaModif(),
+			getUltimoUsuarioModif(), getPropietario(), getBajaLogica(), getDireccion();
+
 	std::string getPath();
 
 	// Metodos de EntidadDB
@@ -45,7 +52,7 @@ protected:
 private:
 
 	CarpetaLogica* carpetaLogica;
-	//ContenidoPorCarpeta* contenido;
+	ContenidoPorCarpeta* contenido;
 
 };
 };

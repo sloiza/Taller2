@@ -19,39 +19,26 @@ ConexionServidor::Respuesta OperacionesUsuario::delet(Utiles::Bytes* contenido)
 }
 ConexionServidor::Respuesta OperacionesUsuario::get(Utiles::Bytes* contenido)
 {
-	//std::cout << "OperacionesUsuario->get" << "\n";
-
-	//std::cout << "contenido q llega: " << contenido->getStringDeBytes() << "\n";
-
-	ConexionServidor::BaseDeDatos::User usuario;
-	usuario.setContenido(contenido->getStringDeBytes());
-
-	std::string passwordAChequear = usuario.getPassword();
-
-	std::string valorRecuperado = usuario.recuperar();
-
-	usuario.setContenido(valorRecuperado);
-
+	ConexionServidor::BaseDeDatos::User usuario(contenido->getStringDeBytes());
 	ConexionServidor::Respuesta respuesta;
 
-	//std::cout << "valor recuperado: " << valorRecuperado << "\n";
-
-	if ( valorRecuperado.compare("vacio") == 0 )
+	if ( existeUsuarioConLosMismosDatos(contenido->getStringDeBytes()) == false )
 	{
 		respuesta.setEstado("no-existe");
 		respuesta.setMensaje("Usuario inexistente.");
 		return respuesta;
 	}
 
-	if ( usuario.getPassword().compare(passwordAChequear) != 0 )
+	if ( passwordValido(contenido->getStringDeBytes()) == false )
 	{
 		respuesta.setEstado("mal-password");
 		respuesta.setMensaje("Password invalido.");
 		return respuesta;
 	}
 
-	respuesta.setContenido(valorRecuperado);
+	std::string valorRecuperado = usuario.recuperar();
 
+	respuesta.setContenido(valorRecuperado);
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Usuario recuperado correctamente!");
 
@@ -60,9 +47,24 @@ ConexionServidor::Respuesta OperacionesUsuario::get(Utiles::Bytes* contenido)
 ConexionServidor::Respuesta OperacionesUsuario::post(Utiles::Bytes* contenido)
 {
 	ConexionServidor::BaseDeDatos::User usuarioNuevo(contenido->getStringDeBytes());
-	usuarioNuevo.guardar();
-	//std::cout << "OperacionesUsuario->post" << "\n";
+
 	ConexionServidor::Respuesta respuesta;
+	if ( existeUsuarioConLosMismosDatos(contenido->getStringDeBytes() ) )
+	{
+		respuesta.setEstado("ya-existe");
+		respuesta.setMensaje("Mail no disponible.");
+		return respuesta;
+	}
+
+	// guardo datos del usuario.
+	usuarioNuevo.guardar();
+
+	// creo la carpeta en el disco + creo y guardo los datos logicos de la carpeta.
+	ConexionServidor::BaseDeDatos::Carpeta carpetaNueva;
+	carpetaNueva.setNombre( usuarioNuevo.getEmail() );
+	carpetaNueva.setDireccion( InfoOperaciones::carpetaRaiz );
+	carpetaNueva.setPropietario( usuarioNuevo.getEmail() );
+	carpetaNueva.guardar();
 
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Registrado correctamente!");
@@ -77,4 +79,24 @@ ConexionServidor::Respuesta OperacionesUsuario::put(Utiles::Bytes* contenido)
 void OperacionesUsuario::imprimir()
 {
 	std::cout << "usuario\n";
+}
+
+bool OperacionesUsuario::existeUsuarioConLosMismosDatos(std::string contenido)
+{
+	ConexionServidor::BaseDeDatos::User usuario(contenido);
+	std::string valorRecuperado = usuario.recuperar();
+
+	std::cout <<"valor recupeardo: " << valorRecuperado << "\n";
+
+	return ( valorRecuperado.compare("vacio") == 0) ? false : true;
+}
+bool OperacionesUsuario::passwordValido(std::string contenido)
+{
+	ConexionServidor::BaseDeDatos::User usuario(contenido);
+	std::string passwordAChequear = usuario.getPassword();
+	std::string valorRecuperado = usuario.recuperar();
+
+	usuario.setContenido(valorRecuperado);
+
+	return ( usuario.getPassword().compare(passwordAChequear) == 0 ) ? true :  false;
 }

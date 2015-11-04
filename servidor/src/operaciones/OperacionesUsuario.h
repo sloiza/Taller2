@@ -12,8 +12,11 @@
 #include "../conexion/Respuesta.h"
 // entidades
 #include "../bd/entidades/User.h"
+// carpetas
+#include "../archivos/Carpeta.h"
 // Operaciones
 #include "IOperable.h"
+#include "InfoOperaciones.h"
 
 // STL
 #include <iostream>
@@ -38,6 +41,9 @@ public:
 
 	void imprimir();
 
+private:
+	bool existeUsuarioConLosMismosDatos(std::string);
+	bool passwordValido(std::string);
 };
 };
 };

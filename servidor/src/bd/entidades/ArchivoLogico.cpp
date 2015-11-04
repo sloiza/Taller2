@@ -86,6 +86,10 @@ std::string ArchivoLogico::getDireccion()
 	return this->info->getAtributo(etiquetas[DIRECCION], "direccionDefault");
 }
 
+std::string ArchivoLogico::getNombreYExtension()
+{
+	return this->getNombre() + "." + this->getExtension();
+}
 std::string ArchivoLogico::getPath()
 {
 	return this->getDireccion() + this->getNombre() + "." + this->getExtension();

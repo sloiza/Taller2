@@ -46,7 +46,7 @@ public:
 			setUltimoUsuarioModif(std::string), setPropietario(std::string), setBajaLogica(std::string), setDireccion(std::string);
 
 	std::string getNombre(), getExtension(), getEtiqueta(), getUltimaFechaModif(),
-			getUltimoUsuarioModif(), getPropietario(), getBajaLogica(), getDireccion();
+			getUltimoUsuarioModif(), getPropietario(), getBajaLogica(), getDireccion(), getNombreYExtension();
 
 	std::string getPath();
 

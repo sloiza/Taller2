@@ -25,7 +25,8 @@ public:
 
 	enum enumEtiquetas
 	{
-		PATH,
+		NOMBRE,
+		DIRECCION,
 		ARCHIVOS,
 		CARPETAS
 	};
@@ -35,10 +36,10 @@ public:
 	ContenidoPorCarpeta(std::string contenido);
 	virtual ~ContenidoPorCarpeta();
 
-	void setPath(std::string), agregarArchivo(std::string), agregarCarpeta(std::string);
+	void setPath(std::string), setNombre(std::string), setDireccion(std::string), agregarArchivo(std::string), agregarCarpeta(std::string);
 	void eliminarArchivo(std::string), eliminarCarpeta(std::string);
 
-	std::string getPath();
+	std::string getPath(), getNombre(), getDireccion();
 	std::vector<std::string> getArchivos(), getCarpetas();
 
 	// Metodos de EntidadDB

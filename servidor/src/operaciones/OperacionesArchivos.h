@@ -10,11 +10,13 @@
 
 // conexion
 #include "../conexion/Respuesta.h"
-// Operaciones
-#include "IOperable.h"
-
 // base de datos
 #include "../archivos/Archivo.h"
+// entidades
+#include "../bd/entidades/ArchivoLogico.h"
+#include "../bd/entidades/ContenidoPorCarpeta.h"
+// Operaciones
+#include "IOperable.h"
 
 // STL
 #include <iostream>
@@ -45,6 +47,8 @@ public:
 	static void settearContenidoSegunFlag(Utiles::Bytes*);
 	static void resettearArchivoTemporalSegunFlag();
 	static ConexionServidor::Respuesta respuestaSegunFlag();
+	static bool error;
+	static void agregarArchivoALaListaDeArchivosPorCarpeta(std::string);
 
 };
 };
