@@ -4,19 +4,43 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/txtLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textSize="16dp"
-        android:text="Home View"/>
+        android:id="@+id/lastWeekLabel"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#eeeeee"
+        android:layout_marginTop="60dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="5dp"
+        android:textSize="16sp"
+        android:text="Last week"
+        android:textColor="#000000"/>
 
-    <ImageView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtLabel"
-        android:src="@drawable/settings"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/actualMonthLabel"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#eeeeee"
+        android:layout_marginTop="120dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="5dp"
+        android:textSize="16sp"
+        android:text="This month"
+        android:textColor="#000000"/>
+
+    <TextView
+        android:id="@+id/lastMonthLabel"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#eeeeee"
+        android:layout_marginTop="180dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="5dp"
+        android:textSize="16sp"
+        android:text="September"
+        android:textColor="#000000"/>
 
 
 </RelativeLayout>

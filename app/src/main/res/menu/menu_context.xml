@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/item_delete"
+        android:icon="@android:drawable/ic_menu_delete"
+        app:showAsAction="ifRoom|withText"
+        android:title="Delete"
+        android:titleCondensed="Delete">
+    </item>
+    <item
+        android:id="@+id/item_share"
+        android:icon="@android:drawable/ic_menu_share"
+        app:showAsAction="ifRoom|withText"
+        android:title="Share"
+        android:titleCondensed="Share">
+    </item>
+    <item
+        android:id="@+id/item_download"
+        android:icon="@android:drawable/ic_menu_save"
+        app:showAsAction="ifRoom|withText"
+        android:title="Download"
+        android:titleCondensed="Download">
+    </item>
+
+</menu>

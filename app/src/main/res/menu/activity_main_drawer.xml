@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_home" android:icon="@drawable/ic_folder_share"
+            android:title="My Unity" />
+        <item android:id="@+id/nav_shareWithMe" android:icon="@drawable/ic_group"
+            android:title="Share with me" />
+        <item android:id="@+id/nav_settings" android:icon="@drawable/ic_settings"
+            android:title="Preferences" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item android:id="@+id/nav_end_session" android:icon="@drawable/ic_power_settings"
+                android:title="Log out" />
+        </menu>
+    </item>
+
+</menu>

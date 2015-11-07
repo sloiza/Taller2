@@ -1,0 +1,156 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="tp.taller2.udrive.ProfileActivity">
+    <Button
+        android:id="@+id/buttonChangePicture"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_weight="1"
+        android:onClick="changePicture"
+        android:background="@drawable/borderbutton"
+        android:text="Change picture"
+        android:textSize="10sp"
+        android:textColor="#0D7694"
+        android:layout_gravity="center_vertical"/>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_marginTop="50dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/profile_pic"
+        android:layout_marginLeft="220dp"
+        android:id="@+id/imgView"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="150dp">
+        <TextView android:id="@+id/username"
+            android:layout_marginLeft="30dp"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif"
+            android:theme="@style/EditTextTheme"
+            android:text="@string/username_message" />
+        <EditText android:id="@+id/username_text"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif"
+            android:theme="@style/EditTextTheme"
+            android:text="Matias" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="200dp">
+        <TextView android:id="@+id/surname"
+            android:layout_marginLeft="30dp"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif"
+            android:theme="@style/EditTextTheme"
+            android:text="@string/surname_message" />
+        <EditText android:id="@+id/surname_text"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif"
+            android:theme="@style/EditTextTheme"
+            android:text="Carreras" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="250dp">
+        <TextView android:id="@+id/email"
+            android:layout_width="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_height="wrap_content"
+            android:text="@string/email_message"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif"
+            android:theme="@style/EditTextTheme"/>
+        <EditText android:id="@+id/email_text"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="30dp"
+            android:layout_height="wrap_content"
+            android:text="mncarreras@gmailasdadsadsdada.com"
+            android:textSize="17sp"
+            android:fontFamily="sans-serif"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="310dp">
+        <TextView android:id="@+id/password"
+            android:layout_marginLeft="30dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textSize="20sp"
+            android:theme="@style/EditTextTheme"
+            android:text="@string/password_message" />
+        <EditText android:id="@+id/password_text"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="180dp"
+            android:inputType= "textPassword"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textSize="20sp"
+            android:theme="@style/EditTextTheme"
+            android:text="riverplate" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="360dp"
+        android:id="@+id/linearLayout">
+        <TextView android:id="@+id/place"
+            android:layout_marginLeft="30dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textSize="20sp"
+            android:theme="@style/EditTextTheme"
+            android:text="@string/place_message" />
+        <EditText android:id="@+id/place_text"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textSize="20sp"
+            android:theme="@style/EditTextTheme"
+            android:text="Buenos Aires" />
+    </LinearLayout>
+    <Button
+        android:layout_width="100dp"
+        android:layout_marginLeft="250dp"
+        android:layout_marginRight="30dp"
+        android:layout_height="50dp"
+        android:onClick="saveProfile"
+        android:layout_marginTop="420dp"
+        android:text="Save"
+        android:background="@drawable/radioussolidbutton"
+        android:textColor="#ffffff"/>
+
+</RelativeLayout>
+
