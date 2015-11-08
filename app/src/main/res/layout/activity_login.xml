@@ -4,10 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="tp.taller2.udrive.LoginActivity">
-    <include
-        android:id="@+id/tool_bar"
-        layout="@layout/toolbar"
-        ></include>
+
     <ImageView
         android:id="@+id/imageView1"
         android:paddingTop="50dp"

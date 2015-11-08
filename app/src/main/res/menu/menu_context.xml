@@ -18,7 +18,7 @@
     </item>
     <item
         android:id="@+id/item_download"
-        android:icon="@android:drawable/ic_menu_save"
+        android:icon="@drawable/ic_action_download"
         app:showAsAction="ifRoom|withText"
         android:title="Download"
         android:titleCondensed="Download">

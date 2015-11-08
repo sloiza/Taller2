@@ -2,19 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_home" android:icon="@drawable/ic_folder_share"
+        <item android:id="@+id/nav_home" android:icon="@drawable/ic_menu_home"
             android:title="My Unity" />
-        <item android:id="@+id/nav_shareWithMe" android:icon="@drawable/ic_group"
+        <item android:id="@+id/nav_shareWithMe" android:icon="@drawable/ic_share_with_me"
             android:title="Share with me" />
-        <item android:id="@+id/nav_settings" android:icon="@drawable/ic_settings"
+        <item android:id="@+id/nav_settings" android:icon="@android:drawable/ic_menu_preferences"
             android:title="Preferences" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item android:id="@+id/nav_end_session" android:icon="@drawable/ic_power_settings"
+    <group>
+            <item android:id="@+id/nav_end_session" android:icon="@android:drawable/ic_menu_close_clear_cancel"
                 android:title="Log out" />
-        </menu>
-    </item>
+    </group>
 
 </menu>

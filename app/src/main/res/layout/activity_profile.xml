@@ -24,8 +24,7 @@
             android:textColor="#ffffff"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
-            android:theme="@style/EditTextTheme"
-            android:text="Matias" />
+            android:theme="@style/EditTextTheme"/>
         <TextView android:id="@+id/surname_text"
             android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
@@ -34,8 +33,7 @@
             android:textStyle="bold"
             android:textColor="#ffffff"
             android:fontFamily="sans-serif"
-            android:theme="@style/EditTextTheme"
-            android:text="Carreras" />
+            android:theme="@style/EditTextTheme"/>
     </LinearLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -66,7 +64,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="60dp"
                     android:layout_marginLeft="50dp"
-                    android:text="mncarreras@gmail.com"
                     android:textSize="20sp"
                     android:textStyle="italic"
                     android:fontFamily="sans-serif"/>
@@ -94,8 +91,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:textSize="20sp"
-                    android:theme="@style/EditTextTheme"
-                    android:text="@string/place_message" />
+                    android:text="City"
+                    android:theme="@style/EditTextTheme"/>
                 <TextView android:id="@+id/place_text"
                     android:layout_marginLeft="50dp"
                     android:layout_marginTop="60dp"
@@ -104,8 +101,7 @@
                     android:fontFamily="sans-serif"
                     android:textSize="20sp"
                     android:textStyle="italic"
-                    android:theme="@style/EditTextTheme"
-                    android:text="Buenos Aires" />
+                    android:theme="@style/EditTextTheme"/>
             </RelativeLayout>
     </RelativeLayout>
 

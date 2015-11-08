@@ -48,8 +48,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
 
         inputLayoutEmail = (TextInputLayout) findViewById(R.id.input_layout_email);
         inputLayoutPassword = (TextInputLayout) findViewById(R.id.input_layout_password);
@@ -106,9 +104,13 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
-                String email = emailET.getText().toString();
+                Object name = jsonObject.get("nombre");
+                Object surname = jsonObject.get("apellido");
+                Object email = jsonObject.get("mail");
+                Object password = jsonObject.get("password");
+                Object city = jsonObject.get("lugar");
                 if(status.equals("ok")) {
-                    session.createLoginSession(email, "Matias", "Carreras");
+                    session.createLoginSession(email.toString(), name.toString(), surname.toString(), city.toString(), password.toString());
                     Toast.makeText(getApplicationContext(), R.string.success_login, Toast.LENGTH_LONG).show();
                     navigatetoHomeActivity();
                 } else {
@@ -148,13 +150,13 @@ public class LoginActivity extends AppCompatActivity {
         if(Utility.isNotNull(email) && Utility.isNotNull(password)){
             if(!Utility.validateEmail(email)){
                 emailET.requestFocus();
-                inputLayoutEmail.setError(getString(R.string.email_error));
+                emailET.setError(getString(R.string.email_error));
             }else{
                 if(Utility.validatePassword(password)){
-                    new getUserLoginService().execute("http://192.168.0.16:8080/usuario?");
+                    new getUserLoginService().execute("http://192.168.0.14:8080/usuario?");
                 }else{
                     passwordET.requestFocus();
-                    inputLayoutPassword.setError(getString(R.string.password_error));
+                    passwordET.setError(getString(R.string.password_error));
                 }
             }
         } else{

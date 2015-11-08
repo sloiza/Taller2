@@ -52,10 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.udrive);
 
         inputLayoutEmail = (TextInputLayout) findViewById(R.id.input_layout_newEmail);
         inputLayoutPassword = (TextInputLayout) findViewById(R.id.input_layout_newPassword);
@@ -109,13 +106,13 @@ public class RegisterActivity extends AppCompatActivity {
                 && Utility.isNotNull(surname) && Utility.isNotNull(city)){
             if(!Utility.validateEmail(email)){
                 emailET.requestFocus();
-                inputLayoutEmail.setError(getString(R.string.email_error));
+                emailET.setError(getString(R.string.email_error));
             }else{
                 if(Utility.validatePassword(password)){
                     new getUserSignUpService().execute("http://192.168.0.14:8080/usuario?");
                 } else {
                     pwdET.requestFocus();
-                    inputLayoutPassword.setError(getString(R.string.password_error));
+                    pwdET.setError(getString(R.string.password_error));
                 }
             }
         }else{
