@@ -114,6 +114,25 @@ bool ManagerArchivos::pathEsCarpeta(std::string path)
 	return this->path_is_directory( path.c_str() );
 }
 
+bool ManagerArchivos::carpetaEstaVacia(std::string path)
+{
+
+	DIR*            dp = opendir(path.c_str());
+	struct dirent*  ep = readdir(dp);
+	struct dirent*  entry = readdir(dp);
+	readdir_r(dp, entry, &ep);
+	if ( ep == NULL ) // si el nombre del directorio es ".", entonces no tiene archivos.
+	{
+		closedir(dp);
+		return true;
+	}
+	else
+	{
+		closedir(dp);
+		return false;
+	}
+}
+
 void ManagerArchivos::delete_folder_tree (const char* directory_name)
 {
     DIR*            dp;

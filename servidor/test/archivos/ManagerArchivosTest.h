@@ -35,6 +35,8 @@ public:
 	void testCrearYEliminarCarpetaEnDiscoCorrectamente();
 	void testEliminarCarpetaDeDiscoCorrectamente();
 
+	void testChequeaQueHayContenidoEnCarpetaCorrecamente();
+
 	void TestBody() {};
 
 protected:
@@ -68,7 +70,11 @@ TEST_F(ManagerArchivosTest, crearYEliminarCarpeta)
 	ManagerArchivosTest test;
 	test.testCrearYEliminarCarpetaEnDiscoCorrectamente();
 }
-
+TEST_F(ManagerArchivosTest, chequearContenidoEnCarpeta)
+{
+	ManagerArchivosTest test;
+	test.testChequeaQueHayContenidoEnCarpetaCorrecamente();
+}
 
 };
 

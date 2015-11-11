@@ -8,6 +8,10 @@
 #ifndef OPERACIONESCARPETAS_H_
 #define OPERACIONESCARPETAS_H_
 
+
+// carpetas
+#include "../archivos/Carpeta.h"
+
 // Operaciones
 #include "IOperable.h"
 

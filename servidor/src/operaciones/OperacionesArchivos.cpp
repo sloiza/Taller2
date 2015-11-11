@@ -157,7 +157,7 @@ void OperacionesArchivos::agregarArchivoALaListaDeArchivosPorCarpeta(std::string
 	ConexionServidor::BaseDeDatos::ArchivoLogico archivoLogico(contenido);
 
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoEnCarpeta;
-	contenidoEnCarpeta.setPath( archivoLogico.getPath() );
+	contenidoEnCarpeta.setPath( archivoLogico.getDireccion() );
 
 	std::string valorRecuperado = contenidoEnCarpeta.recuperar();
 

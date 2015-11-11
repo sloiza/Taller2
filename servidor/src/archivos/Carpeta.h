@@ -41,6 +41,9 @@ public:
 
 	std::string getPath();
 
+	bool existeFisicamente();
+	bool estaVacia();
+
 	// Metodos de EntidadDB
 	virtual std::string getValor();
 

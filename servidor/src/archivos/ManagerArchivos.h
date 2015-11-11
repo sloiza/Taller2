@@ -43,6 +43,7 @@ public:
 	void eliminarCarpetaVacia(std::string path);
 
 	bool pathEsCarpeta(std::string path);
+	bool carpetaEstaVacia(std::string path);
 
 private:
 
