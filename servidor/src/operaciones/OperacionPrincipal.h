@@ -10,6 +10,9 @@
 
 // Operaciones
 #include "IOperable.h"
+// entidades
+#include "../bd/entidades/User.h"
+#include "../bd/entidades/ContenidoPorCarpeta.h"
 
 // STL
 #include <iostream>

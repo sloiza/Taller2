@@ -1,0 +1,10 @@
+{
+	"nombre": "Manuel",
+	"apellido": "Iglesias",
+	"password": "contrasenia",
+	"nick": "Manu",
+	"mail": "manu@gmail.com",
+	"foto": "imagenes/profile.jpg",
+	"lugar": "caba",
+	"id": "1234"
+}

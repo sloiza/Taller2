@@ -49,6 +49,8 @@ public:
 	virtual void eliminar(); 	// DELETE
 	virtual std::string recuperar(); 	// GET
 
+	virtual std::string getContenido();
+
 protected:
 	// Metodos de EntidadDB
 	virtual std::string getColumnaDeFamilia();

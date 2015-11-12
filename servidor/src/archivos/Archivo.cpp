@@ -109,3 +109,7 @@ std::string Archivo::getClave()
 {
 	return this->getPath();
 }
+std::string Archivo::getContenido()
+{
+	return this->archivoLogico->getContenido();
+}
