@@ -3,6 +3,7 @@ RUN sudo apt-get -y install software-properties-common
 RUN sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
 RUN sudo add-apt-repository -y ppa:george-edison55/cmake-3.x
 RUN sudo apt-get update
+RUN sudo apt-get install -y wget
 RUN sudo apt-get install -y -qq gcc-4.9 g++-4.9 libgtest-dev zlib1g-dev libbz2-dev libsnappy-dev
 RUN sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 50
 RUN sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50
