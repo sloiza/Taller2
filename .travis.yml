@@ -22,7 +22,7 @@ before_install:
    - cd ../..
    - sudo rm master.zip
    - wget https://github.com/open-source-parsers/jsoncpp/archive/master.zip
-   - unzip jsoncpp-master.zip
+   - unzip master.zip
    - cd jsoncpp-master/
    - mkdir -p build/
    - cd build/
