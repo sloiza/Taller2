@@ -1,6 +1,11 @@
+build
 servidor/build
 .cproject
 .project
 servidor/dbTest
 *.log
+*.json
 .idea/*
+servidor/test/dbTest
+servidor/Documentation
+app/Documentation
