@@ -11,17 +11,53 @@ using namespace ConexionServidor::Operaciones;
 
 bool OperacionesArchivos::estoyEsperandoLosBytes = false;
 bool OperacionesArchivos::error = false;
+bool OperacionesArchivos::sobreescribir = false;
 ConexionServidor::BaseDeDatos::Archivo* OperacionesArchivos::archivoTemporal = new ConexionServidor::BaseDeDatos::Archivo();
 
 OperacionesArchivos::OperacionesArchivos() {}
 
 OperacionesArchivos::~OperacionesArchivos() {}
 
-ConexionServidor::Respuesta OperacionesArchivos::delet(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionesArchivos::delet(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionesArchivos->delete" << "\n";
+	// 1) settear baja_logica = si
+	ConexionServidor::BaseDeDatos::ArchivoLogico archivoLogico( contenido->getStringDeBytes() );
+	std::string valorRecuperado = archivoLogico.recuperar();
+	ConexionServidor::Respuesta respuesta;
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("Archivo inexistente.");
+		return respuesta;
+	}
+	archivoLogico.setContenido( valorRecuperado );
+
+	archivoLogico.setBajaLogica("si");
+	archivoLogico.guardar();
+
+	// 2) sacarlo de contenidoPorCarpeta
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoEnCarpeta;
+	contenidoEnCarpeta.setPath( archivoLogico.getDireccion() );
+	valorRecuperado = contenidoEnCarpeta.recuperar();
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("Carpeta inexistente.");
+		return respuesta;
+	}
+	contenidoEnCarpeta.setContenido( valorRecuperado );
+
+	contenidoEnCarpeta.eliminarArchivo( archivoLogico.getNombreYExtension() );
+
+	contenidoEnCarpeta.guardar();
+	// 3) agregarlo a la papelera
+	//ConexionServidor::BaseDeDatos::Papelera agregarArchivo( archivoLogico );
+
+	respuesta.setEstado("ok");
+	respuesta.setMensaje("Archivo dado de baja correctamente!");
+	return respuesta;
 }
-ConexionServidor::Respuesta OperacionesArchivos::get(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionesArchivos::get(Utiles::Bytes* contenido, std::string query)
 {
 	ConexionServidor::BaseDeDatos::ArchivoLogico archivoLogico( contenido->getStringDeBytes() );
 
@@ -41,8 +77,16 @@ ConexionServidor::Respuesta OperacionesArchivos::get(Utiles::Bytes* contenido)
 
 	return respuesta;
 }
-ConexionServidor::Respuesta OperacionesArchivos::post(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionesArchivos::post(Utiles::Bytes* contenido, std::string query)
 {
+	if ( query.compare("modificar") == 0 )
+	{
+		sobreescribir = true;
+	}
+	else
+	{
+		sobreescribir = false;
+	}
 	settearContenidoSegunFlag(contenido);
 
 	Respuesta respuesta = respuestaSegunFlag();
@@ -53,9 +97,11 @@ ConexionServidor::Respuesta OperacionesArchivos::post(Utiles::Bytes* contenido)
 
 	return respuesta;
 }
-ConexionServidor::Respuesta OperacionesArchivos::put(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionesArchivos::put(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionesArchivos->put" << "\n";
+	// si es logica:
+	//		archivoLogico( contenido->getStringBYtes() ).modificar();
+
 }
 
 void OperacionesArchivos::imprimir()
@@ -86,8 +132,17 @@ void OperacionesArchivos::settearContenidoSegunFlag(Utiles::Bytes* contenido)
 			return;
 		}
 
-		archivoTemporal->guardar();
-		agregarArchivoALaListaDeArchivosPorCarpeta( archivoTemporal->getContenido() );
+		if ( sobreescribir )
+		{// si lo voy a sobreescribir, entonces lo elimino y lo guardo solo fisicamente
+			archivoTemporal->eliminarFisicamente();
+			archivoTemporal->guardarFisicamente();
+		}
+		else
+		{// si no estoy sobreescribiendo, lo estoy creando, entonces lo guardo tanto fisica como logicamente.
+			archivoTemporal->guardar();
+			agregarArchivoALaListaDeArchivosPorCarpeta( archivoTemporal->getContenido() );
+		}
+
 	}
 	else
 	{// no estaba esperando bytes, es decir q ahora inicio los datos logicos y me qedo esperando los bytes.
@@ -124,8 +179,8 @@ ConexionServidor::Respuesta OperacionesArchivos::respuestaSegunFlag()
 	}
 	else
 	{// si no estaba esperando los bytes, cheqeo q los datos logicos sean validos.
-		if ( archivoTemporal->existeFisicamente() )
-		{// si ya existe un archivo con el mismo path, aviso q ya existe.
+		if ( archivoTemporal->existeFisicamente() && !sobreescribir )
+		{// si ya existe un archivo con el mismo path y no lo quiero modificar, aviso q ya existe un archivo con esos datos.
 			respuesta.setEstado("archivo-existente");
 			respuesta.setMensaje("Ya existe el archivo.");
 			error = true;

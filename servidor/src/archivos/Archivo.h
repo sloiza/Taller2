@@ -40,6 +40,8 @@ public:
 	std::string getPath();
 
 	bool existeFisicamente();
+	void eliminarFisicamente();
+	void guardarFisicamente();
 
 	// Metodos de EntidadDB
 	virtual std::string getValor();

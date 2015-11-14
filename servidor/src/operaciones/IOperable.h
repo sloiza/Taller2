@@ -28,10 +28,10 @@ public:
 	IOperable() {}
 	virtual ~IOperable() {}
 
-	virtual ConexionServidor::Respuesta delet(Utiles::Bytes* contenido) = 0;
-	virtual ConexionServidor::Respuesta get(Utiles::Bytes* contenido) = 0;
-	virtual ConexionServidor::Respuesta post(Utiles::Bytes* contenido) = 0;
-	virtual ConexionServidor::Respuesta put(Utiles::Bytes* contenido) = 0;
+	virtual ConexionServidor::Respuesta delet(Utiles::Bytes* contenido, std::string query) = 0;
+	virtual ConexionServidor::Respuesta get(Utiles::Bytes* contenido, std::string query) = 0;
+	virtual ConexionServidor::Respuesta post(Utiles::Bytes* contenido, std::string query) = 0;
+	virtual ConexionServidor::Respuesta put(Utiles::Bytes* contenido, std::string query) = 0;
 
 	virtual void imprimir() = 0;
 };

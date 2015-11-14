@@ -13,7 +13,7 @@ OperacionesCarpetas::OperacionesCarpetas() {}
 
 OperacionesCarpetas::~OperacionesCarpetas() {}
 
-ConexionServidor::Respuesta OperacionesCarpetas::delet(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionesCarpetas::delet(Utiles::Bytes* contenido, std::string query)
 {
 	ConexionServidor::BaseDeDatos::Carpeta carpeta( contenido->getStringDeBytes() );
 
@@ -42,11 +42,11 @@ ConexionServidor::Respuesta OperacionesCarpetas::delet(Utiles::Bytes* contenido)
 	respuesta.setMensaje("Carpeta eliminada correctamente!");
 	return respuesta;
 }
-ConexionServidor::Respuesta OperacionesCarpetas::get(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionesCarpetas::get(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionesCarpetas->get" << "\n";
 }
-ConexionServidor::Respuesta OperacionesCarpetas::post(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionesCarpetas::post(Utiles::Bytes* contenido, std::string query)
 {
 	ConexionServidor::BaseDeDatos::Carpeta carpeta( contenido->getStringDeBytes() );
 
@@ -64,7 +64,7 @@ ConexionServidor::Respuesta OperacionesCarpetas::post(Utiles::Bytes* contenido)
 	respuesta.setMensaje("Carpeta creada correctamente!");
 	return respuesta;
 }
-ConexionServidor::Respuesta OperacionesCarpetas::put(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionesCarpetas::put(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionesCarpetas->put" << "\n";
 }
