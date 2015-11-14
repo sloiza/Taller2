@@ -25,7 +25,7 @@ public:
 	DELETE();
 	virtual ~DELETE();
 
-	virtual void ejecutar(ConexionServidor::BaseDeDatos::EntidadDB* entidad, std::string contenido);
+	virtual ConexionServidor::Respuesta ejecutar(ConexionServidor::Operaciones::IOperable* entidad, Utiles::Bytes* contenidoBytes);
 
 	virtual std::string impresion();
 };

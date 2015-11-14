@@ -16,12 +16,16 @@
 #include "../bd/entidades/EntidadBD.h"
 #include "../bd/entidades/ArchivoLogico.h"
 
+// manager archivos
+#include "../archivos/ManagerArchivos.h"
+
 namespace ConexionServidor
 {
 namespace BaseDeDatos
 {
 
-class Archivo: public EntidadDB {
+class Archivo: public EntidadDB
+{
 public:
 	Archivo();
 	Archivo(std::string datosLogicos);
@@ -31,8 +35,11 @@ public:
 	void setDireccion(std::string);
 
 	Utiles::Bytes* getBytes();
+	const char* getTiraDeBytes();
 	std::string getDireccion();
 	std::string getPath();
+
+	bool existeFisicamente();
 
 	// Metodos de EntidadDB
 	virtual std::string getValor();

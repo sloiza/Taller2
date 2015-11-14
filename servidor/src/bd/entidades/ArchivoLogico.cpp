@@ -9,7 +9,7 @@
 
 using namespace ConexionServidor::BaseDeDatos;
 
-const std::string ArchivoLogico::etiquetas[] = {"nombre", "extension", "etiqueta", "fecha_ulti_modi", "usuario_ulti_modi", "propietario", "baja_logica" };
+const std::string ArchivoLogico::etiquetas[] = {"nombre", "extension", "etiqueta", "fecha_ulti_modi", "usuario_ulti_modi", "propietario", "baja_logica", "direccion" };
 
 ArchivoLogico::ArchivoLogico() {}
 
@@ -48,6 +48,10 @@ void ArchivoLogico::setBajaLogica(std::string bajaLogica)
 {
 	this->info->setAtributo(etiquetas[BAJA_LOGICA], bajaLogica);
 }
+void ArchivoLogico::setDireccion(std::string direccion)
+{
+	this->info->setAtributo(etiquetas[DIRECCION], direccion);
+}
 
 std::string ArchivoLogico::getNombre()
 {
@@ -77,10 +81,18 @@ std::string ArchivoLogico::getBajaLogica()
 {
 	return this->info->getAtributo(etiquetas[BAJA_LOGICA], "bajaDefault");
 }
+std::string ArchivoLogico::getDireccion()
+{
+	return this->info->getAtributo(etiquetas[DIRECCION], "direccionDefault");
+}
 
-std::string ArchivoLogico::getPath()
+std::string ArchivoLogico::getNombreYExtension()
 {
 	return this->getNombre() + "." + this->getExtension();
+}
+std::string ArchivoLogico::getPath()
+{
+	return this->getDireccion() + this->getNombre() + "." + this->getExtension();
 }
 
 // Metodos de EntidadDB
@@ -96,7 +108,7 @@ std::string ArchivoLogico::getColumnaDeFamilia()
 
 std::string ArchivoLogico::getClave()
 {
-	return this->getNombre() + this->getExtension();
+	return this->getPath();
 }
 
 

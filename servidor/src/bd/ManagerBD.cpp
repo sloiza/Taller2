@@ -56,11 +56,19 @@ void ManagerBD::insertar(ClaveRocksDB clave, std::string valor)
 
 void ManagerBD::eliminar(ClaveRocksDB clave)
 {
-	db->delete(clave.columna, clave.clave);
+	if ( estaAbierta() == false)
+	{
+		inicializar();
+	}
+	db->delet(clave.columna, clave.clave);
 }
 
 std::string ManagerBD::recuperar(ClaveRocksDB clave)
 {
+	if ( estaAbierta() == false)
+	{
+		inicializar();
+	}
 	std::string valorRecuperado;
 	db->get(clave.columna, Slice(clave.clave), &valorRecuperado);
 

@@ -23,7 +23,7 @@ ManagerArchivosTest::~ManagerArchivosTest()
 
 void ManagerArchivosTest::testEscribirYLeerEnDiscoCorrectamente()
 {
-	std::string path = "prueba1.test";
+	std::string path = "tmp/prueba1.test";
 	this->manager->eliminar(path); // borro archivo generado por previos testeos
 
 	this->manager->escribir(path, bytesEjemplo);
@@ -36,7 +36,7 @@ void ManagerArchivosTest::testEscribirYLeerEnDiscoCorrectamente()
 
 void ManagerArchivosTest::testModificarEnDiscoCorrectamente()
 {
-	std::string path = "prueba2.test";
+	std::string path = "tmp/prueba2.test";
 	this->manager->eliminar(path); // borro archivo generado por previos testeos
 
 	this->manager->escribir(path, bytesEjemplo);
@@ -71,6 +71,26 @@ void ManagerArchivosTest::testEliminarDeDiscoCorrectamente()
 
 	delete bytesLeidos;
 	delete bytesVacios;
+}
+
+void ManagerArchivosTest::testCrearYEliminarCarpetaEnDiscoCorrectamente()
+{
+	std::string path = "tmp/carpetaManagerTest";
+
+	EXPECT_EQ( false, manager->existe( path ));
+
+	manager->crearCarpeta("tmp/", "carpetaManagerTest");
+
+	EXPECT_EQ( true, manager->existe( path ));
+
+	manager->eliminarCarpetaVacia("tmp/", "carpetaManagerTest");
+
+	EXPECT_EQ( false, manager->existe( path ));
+}
+
+void ManagerArchivosTest::testEliminarCarpetaDeDiscoCorrectamente()
+{
+
 }
 
 void ManagerArchivosTest::setUp()

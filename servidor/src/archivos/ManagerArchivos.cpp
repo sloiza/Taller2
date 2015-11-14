@@ -72,3 +72,73 @@ void ManagerArchivos::modificar(std::string path, Utiles::Bytes* bytes)
 	this->eliminar(path);
 	this->escribir(path, bytes);
 }
+
+bool ManagerArchivos::existe(std::string path)
+{
+	struct stat buffer;
+	if (stat(path.c_str(), &buffer) == 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void ManagerArchivos::crearCarpeta(std::string direccion, std::string nombre)
+{
+	std::string path = direccion + nombre;
+	mkdir(path.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+}
+void ManagerArchivos::crearCarpeta(std::string path)
+{
+	mkdir(path.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+}
+
+void ManagerArchivos::eliminarCarpetaVacia(std::string direccion, std::string nombre)
+{
+	std::string path = direccion + nombre;
+	rmdir( path.c_str() );
+	//delete_folder_tree( path.c_str() );
+}
+void ManagerArchivos::eliminarCarpetaVacia(std::string path)
+{
+	rmdir( path.c_str() );
+	//delete_folder_tree( path.c_str() );
+}
+
+
+bool ManagerArchivos::pathEsCarpeta(std::string path)
+{
+	return this->path_is_directory( path.c_str() );
+}
+
+void ManagerArchivos::delete_folder_tree (const char* directory_name)
+{
+    DIR*            dp;
+    struct dirent*  ep;
+    char            p_buf[512] = {0};
+
+    dp = opendir(directory_name);
+
+    while ((ep = readdir(dp)) != NULL) {
+        sprintf(p_buf, "%s/%s", directory_name, ep->d_name);
+        if (path_is_directory(p_buf))
+            this->delete_folder_tree(p_buf);
+        else
+            unlink(p_buf);
+    }
+
+    closedir(dp);
+    rmdir(directory_name);
+}
+
+int ManagerArchivos::path_is_directory (const char* path) {
+    struct stat s_buf;
+
+    if (stat(path, &s_buf))
+        return 0;
+
+    return S_ISDIR(s_buf.st_mode);
+}

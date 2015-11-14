@@ -28,6 +28,38 @@ void JsonInfo::setAtributo(std::string campo, std::string valorNuevo)
 	this->raiz[campo] = valorNuevo;
 }
 
+void JsonInfo::agregarValorAAtributo(std::string campo, std::string valorAAgregar)
+{
+	this->raiz[campo].append(valorAAgregar);
+}
+
+void JsonInfo::borrarValorDeAtributo(std::string campo, std::string valorABorrar)
+{
+	std::vector<std::string> valoresViejos = this->getListaDeValorDeAtributo(campo, "valorDefault");
+
+	this->raiz[campo].clear();
+
+	for ( int i = 0; i < valoresViejos.size() ; i++)
+	{
+		if ( valoresViejos[i].compare(valorABorrar) != 0 )
+		{
+			this->agregarValorAAtributo(campo, valoresViejos[i]);
+		}
+	}
+}
+
+std::vector<std::string> JsonInfo::getListaDeValorDeAtributo(std::string campo, std::string valorDefault)
+{
+	Json::Value valueValores = this->raiz[campo];
+
+	std::vector<std::string> valores;
+	for( int i = 0; i < valueValores.size() ; i++)
+	{
+		valores.push_back( valueValores[i].asString() );
+	}
+	return valores;
+}
+
 std::string JsonInfo::getContenido()
 {
 	Json::StyledWriter writer;

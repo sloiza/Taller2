@@ -8,9 +8,14 @@
 #ifndef IMETODOREST_H_
 #define IMETODOREST_H_
 
+// conexion
+#include "../../conexion/Respuesta.h"
 // Base de datos
-#include "../../bd/entidades/EntidadBD.h"
+#include "../../operaciones/IOperable.h"
 #include "../../bd/JsonInfo.h"
+
+// utiles
+#include "../../utiles/Bytes.h"
 
 namespace ConexionServidor
 {
@@ -23,7 +28,8 @@ public:
 	IMetodoREST() {}
 	virtual ~IMetodoREST() {}
 
-	virtual void ejecutar(ConexionServidor::BaseDeDatos::EntidadDB* entidad, std::string contenido) = 0;
+	virtual ConexionServidor::Respuesta ejecutar(ConexionServidor::Operaciones::IOperable* operacion, Utiles::Bytes* contenidoBytes) = 0;
+
 	virtual std::string impresion() = 0;
 };
 };

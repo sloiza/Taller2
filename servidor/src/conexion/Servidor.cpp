@@ -25,6 +25,7 @@ void Servidor::crear()
 	this->setOpcion("document_root", ".");
 	signal(SIGINT, Servidor::handlerSenial);
 	corriendo = true;
+	Operaciones::CreadorDeOperaciones::crearArbolDeRecursos();
 }
 
 void Servidor::crear(int puerto)
@@ -59,6 +60,7 @@ void Servidor::destruir()
 	if ( this->servidorMG != NULL)
 	{
 		mg_destroy_server(&this->servidorMG);
+		Operaciones::CreadorDeOperaciones::liberarArbolDeRecursos();
 	}
 }
 

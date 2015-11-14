@@ -27,7 +27,7 @@ class rocks_db{
 		Status create_db();
 		Status put(string column, Slice key, Slice value);
 		Status get(string column, Slice key, string* value); //con  prefijo y sin prefijo
-		Status delete(string column, Slice key);
+		Status delet(string column, Slice key);
 		void delete_db();
 		DB* get_db();
 		void set_db(DB* db);

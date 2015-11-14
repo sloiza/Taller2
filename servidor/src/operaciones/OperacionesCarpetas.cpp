@@ -13,24 +13,24 @@ OperacionesCarpetas::OperacionesCarpetas() {}
 
 OperacionesCarpetas::~OperacionesCarpetas() {}
 
-void OperacionesCarpetas::delet(std::string contenido)
+ConexionServidor::Respuesta OperacionesCarpetas::delet(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionesCarpetas->delete" << "\n";
 }
-void OperacionesCarpetas::get(std::string contenido)
+ConexionServidor::Respuesta OperacionesCarpetas::get(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionesCarpetas->get" << "\n";
 }
-void OperacionesCarpetas::post(std::string contenido)
+ConexionServidor::Respuesta OperacionesCarpetas::post(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionesCarpetas->post" << "\n";
 }
-void OperacionesCarpetas::put(std::string contenido)
+ConexionServidor::Respuesta OperacionesCarpetas::put(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionesCarpetas->put" << "\n";
 }
 
-std::string OperacionesCarpetas::impresion()
+void OperacionesCarpetas::imprimir()
 {
-	return "carpetas";
+	std::cout << "carpetas\n";
 }

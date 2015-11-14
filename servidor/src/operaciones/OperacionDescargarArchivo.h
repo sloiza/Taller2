@@ -27,12 +27,12 @@ public:
 	OperacionDescargarArchivo();
 	virtual ~OperacionDescargarArchivo();
 
-	void delet(std::string contenido);
-	void get(std::string contenido);
-	void post(std::string contenido);
-	void put(std::string contenido);
+	ConexionServidor::Respuesta delet(Utiles::Bytes* contenido);
+	ConexionServidor::Respuesta get(Utiles::Bytes* contenido);
+	ConexionServidor::Respuesta post(Utiles::Bytes* contenido);
+	ConexionServidor::Respuesta put(Utiles::Bytes* contenido);
 
-	std::string impresion();
+	void imprimir();
 };
 };
 };

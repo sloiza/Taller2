@@ -60,6 +60,36 @@ void JsonInfoTest::testSettearYRecuperarCampoCorrectamente()
 	EXPECT_EQ(true, this->info->estadoOk());
 }
 
+void JsonInfoTest::testAgregarValoresYRecuperarListaDeValoresCorrectamente()
+{
+	this->info->agregarValorAAtributo("mails", "nuevoMail@tests.com");
+	this->info->agregarValorAAtributo("mails", "otroNuevoMail@test.te.ando");
+
+	std::vector<std::string> valores = this->info->getListaDeValorDeAtributo("mails", "mailPorDefecto");
+
+	EXPECT_EQ( 4, valores.size() );
+
+	EXPECT_STREQ( "arthur@gmail.com", valores[0].c_str() );
+	EXPECT_STREQ( "arturito2000@hotmail.com", valores[1].c_str() );
+	EXPECT_STREQ( "nuevoMail@tests.com", valores[2].c_str() );
+	EXPECT_STREQ( "otroNuevoMail@test.te.ando", valores[3].c_str() );
+}
+
+void JsonInfoTest::testBorrarValorDeListaCorrectamente()
+{
+
+	this->info->agregarValorAAtributo("mails", "nuevoMail@tests.com");
+
+	this->info->borrarValorDeAtributo("mails", "arthur@gmail.com");
+
+	std::vector<std::string> valores = this->info->getListaDeValorDeAtributo("mails", "mailPorDefecto");
+
+	EXPECT_EQ( 2, valores.size() );
+
+	EXPECT_STREQ( "arturito2000@hotmail.com", valores[0].c_str() );
+	EXPECT_STREQ( "nuevoMail@tests.com", valores[1].c_str() );
+}
+
 void JsonInfoTest::testGetValorPorDefaultCorrecto()
 {
 	std::string porDefault = this->info->getAtributo("unCampo", "default");

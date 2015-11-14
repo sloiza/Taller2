@@ -78,3 +78,7 @@ std::string EntidadDB::getContenido()
 {
 	return this->info->getContenido();
 }
+bool EntidadDB::contenidoValido()
+{
+	return this->info->estadoOk();
+}

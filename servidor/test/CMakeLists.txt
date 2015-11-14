@@ -10,6 +10,8 @@ include_directories(${GTEST_INCLUDE_DIR})
 find_package(Threads REQUIRED)
 find_package(GTest REQUIRED)
 
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/tmp)
+
 file(GLOB TEST correrTests.cpp)
 file(GLOB TEST_CONEXION "conexion/*.cpp" conexion/mongoose.c)
 file(GLOB TEST_BD "bd/*.cpp")

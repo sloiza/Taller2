@@ -48,18 +48,14 @@ void Conexion::inicializar(struct mg_connection* mg_conexion)
 	this->uri = new Request::URI(uri);
 	this->contenido = this->reconocerContenido(contenidoTotal, mg_conexion->content_len);
 	this->query = query;
+
+	this->contenidoBytes = new Utiles::Bytes( mg_conexion->content, mg_conexion->content_len  );
 }
 
-int Conexion::procesarRequest()
+ConexionServidor::Respuesta Conexion::procesarRequest()
 {
-	//std::string entidad = this->uri->getEntidadAManejar();
-	//ConexionServidor::BaseDeDatos::EntidadDB* entidad = this->uri->getEntidadAManejar();
-	//ConexionServidor::Operaciones::IOperacion* operacion = this->uri->getOperacion();
 	ConexionServidor::Operaciones::IOperable* operacion = ConexionServidor::Operaciones::CreadorDeOperaciones::getOperacion(uri);
-	//this->metodo->ejecutar(operacion, this->contenido);
-	//this->metodo->ejecutar(entidad, this->contenido);
-
-	return 0;
+	return this->metodo->ejecutar(operacion, this->contenidoBytes);
 }
 
 Request::URI* Conexion::getUri()
@@ -77,6 +73,10 @@ std::string Conexion::getContenido()
 std::string Conexion::getQuery()
 {
 	return this->query;
+}
+Utiles::Bytes* Conexion::getContenidoBytes()
+{
+	return this->contenidoBytes;
 }
 
 Request::IMetodoREST* Conexion::reconocerMetodo(std::string nombre)
@@ -109,3 +109,4 @@ std::string Conexion::impresion()
 
 	return impresion;
 }
+

@@ -13,24 +13,24 @@ OperacionCompartirCarpeta::OperacionCompartirCarpeta() {}
 
 OperacionCompartirCarpeta::~OperacionCompartirCarpeta() {}
 
-void OperacionCompartirCarpeta::delet(std::string contenido)
+ConexionServidor::Respuesta OperacionCompartirCarpeta::delet(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionCompartirCarpeta->delete" << "\n";
 }
-void OperacionCompartirCarpeta::get(std::string contenido)
+ConexionServidor::Respuesta OperacionCompartirCarpeta::get(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionCompartirCarpeta->get" << "\n";
 }
-void OperacionCompartirCarpeta::post(std::string contenido)
+ConexionServidor::Respuesta OperacionCompartirCarpeta::post(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionCompartirCarpeta->post" << "\n";
 }
-void OperacionCompartirCarpeta::put(std::string contenido)
+ConexionServidor::Respuesta OperacionCompartirCarpeta::put(Utiles::Bytes* contenido)
 {
 	std::cout << "OperacionCompartirCarpeta->put" << "\n";
 }
 
-std::string OperacionCompartirCarpeta::impresion()
+void OperacionCompartirCarpeta::imprimir()
 {
-	return "compartirCarpeta";
+	std::cout << "compartirCarpeta\n";
 }

@@ -9,7 +9,10 @@
 
 using namespace Tests;
 
-rocks_dbTest::rocks_dbTest() : bd(NULL) {}
+rocks_dbTest::rocks_dbTest() : bd(NULL)
+{
+	this->setUp();
+}
 
 rocks_dbTest::~rocks_dbTest()
 {
@@ -44,4 +47,21 @@ void rocks_dbTest::testEliminarRegistro()
 	EXPECT_EQ(true, true);
 }
 
+void rocks_dbTest::testRecuperarRegistroInexistente()
+{
+	std::string valorRecuperado;
+	Status estado = this->bd->get("user", Slice("noexiste"), &valorRecuperado);
 
+	EXPECT_STREQ("vacio", valorRecuperado.c_str());
+	EXPECT_EQ(false, estado.ok());
+}
+
+void rocks_dbTest::setUp()
+{
+
+}
+
+void rocks_dbTest::terminando()
+{
+
+}
