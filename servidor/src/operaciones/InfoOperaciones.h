@@ -36,6 +36,8 @@ public:
 	static const std::string nombresRecursos[];
 
 	static const std::string carpetaRaiz;
+
+	static const std::string compartidos;
 };
 };
 };

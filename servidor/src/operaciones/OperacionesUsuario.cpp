@@ -13,11 +13,11 @@ OperacionesUsuario::OperacionesUsuario() {}
 
 OperacionesUsuario::~OperacionesUsuario() {}
 
-ConexionServidor::Respuesta OperacionesUsuario::delet(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionesUsuario::delet(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionesUsuario->delete" << "\n";
 }
-ConexionServidor::Respuesta OperacionesUsuario::get(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionesUsuario::get(Utiles::Bytes* contenido, std::string query)
 {
 	ConexionServidor::BaseDeDatos::User usuario(contenido->getStringDeBytes());
 	ConexionServidor::Respuesta respuesta;
@@ -44,7 +44,7 @@ ConexionServidor::Respuesta OperacionesUsuario::get(Utiles::Bytes* contenido)
 
 	return respuesta;
 }
-ConexionServidor::Respuesta OperacionesUsuario::post(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionesUsuario::post(Utiles::Bytes* contenido, std::string query)
 {
 	ConexionServidor::BaseDeDatos::User usuarioNuevo(contenido->getStringDeBytes());
 
@@ -66,12 +66,16 @@ ConexionServidor::Respuesta OperacionesUsuario::post(Utiles::Bytes* contenido)
 	carpetaNueva.setPropietario( usuarioNuevo.getEmail() );
 	carpetaNueva.guardar();
 
+	// creo la carpeta compartida
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoDeCompartida;
+	contenidoDeCompartida.setPath( usuarioNuevo.getEmail() + "/" + InfoOperaciones::compartidos );
+
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Registrado correctamente!");
 
 	return respuesta;
 }
-ConexionServidor::Respuesta OperacionesUsuario::put(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionesUsuario::put(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionesUsuario->put" << "\n";
 }

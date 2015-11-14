@@ -25,7 +25,7 @@ public:
 	PUT();
 	virtual ~PUT();
 
-	virtual ConexionServidor::Respuesta ejecutar(ConexionServidor::Operaciones::IOperable* entidad, Utiles::Bytes* contenidoBytes);
+	virtual ConexionServidor::Respuesta ejecutar(ConexionServidor::Operaciones::IOperable* entidad, Utiles::Bytes* contenidoBytes, std::string query);
 
 	virtual std::string impresion();
 };

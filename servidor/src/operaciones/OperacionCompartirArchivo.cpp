@@ -13,19 +13,19 @@ OperacionCompartirArchivo::OperacionCompartirArchivo() {}
 
 OperacionCompartirArchivo::~OperacionCompartirArchivo() {}
 
-ConexionServidor::Respuesta OperacionCompartirArchivo::delet(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionCompartirArchivo::delet(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionCompartirArchivo->delete" << "\n";
 }
-ConexionServidor::Respuesta OperacionCompartirArchivo::get(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionCompartirArchivo::get(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionCompartirArchivo->get" << "\n";
 }
-ConexionServidor::Respuesta OperacionCompartirArchivo::post(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionCompartirArchivo::post(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionCompartirArchivo->post" << "\n";
 }
-ConexionServidor::Respuesta OperacionCompartirArchivo::put(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionCompartirArchivo::put(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionCompartirArchivo->put" << "\n";
 }

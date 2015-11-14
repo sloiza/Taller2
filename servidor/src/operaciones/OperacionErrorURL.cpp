@@ -13,19 +13,19 @@ OperacionErrorURL::OperacionErrorURL() {}
 
 OperacionErrorURL::~OperacionErrorURL() {}
 
-ConexionServidor::Respuesta OperacionErrorURL::delet(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionErrorURL::delet(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionErrorURL->delete" << "\n";
 }
-ConexionServidor::Respuesta OperacionErrorURL::get(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionErrorURL::get(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionErrorURL->get" << "\n";
 }
-ConexionServidor::Respuesta OperacionErrorURL::post(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionErrorURL::post(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionErrorURL->post" << "\n";
 }
-ConexionServidor::Respuesta OperacionErrorURL::put(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionErrorURL::put(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionErrorURL->put" << "\n";
 }

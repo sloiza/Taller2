@@ -13,6 +13,8 @@ const std::string InfoOperaciones::nombresRecursos[] = { "principal", "usuario",
 
 const std::string InfoOperaciones::carpetaRaiz = "tmp/";
 
+const std::string InfoOperaciones::compartidos = "compartido";
+
 InfoOperaciones::InfoOperaciones() {}
 
 InfoOperaciones::~InfoOperaciones() {}

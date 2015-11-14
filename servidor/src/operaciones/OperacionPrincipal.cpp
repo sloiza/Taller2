@@ -13,19 +13,38 @@ OperacionPrincipal::OperacionPrincipal() {}
 
 OperacionPrincipal::~OperacionPrincipal() {}
 
-ConexionServidor::Respuesta OperacionPrincipal::delet(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionPrincipal::delet(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionPrincipal->delete" << "\n";
 }
-ConexionServidor::Respuesta OperacionPrincipal::get(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionPrincipal::get(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionPrincipal->get" << "\n";
+	ConexionServidor::BaseDeDatos::User usuario( contenido->getStringDeBytes() );
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoDeCarpeta;
+
+	contenidoDeCarpeta.setPath( "tmp/" + usuario.getEmail() );
+
+	std::string valorRecuperado = contenidoDeCarpeta.recuperar();
+
+	ConexionServidor::Respuesta respuesta;
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("No existe carpeta para el usuario inexistente.");
+		return respuesta;
+	}
+
+	respuesta.setContenido(valorRecuperado);
+	respuesta.setEstado("ok");
+	respuesta.setMensaje("Pagina principal accedida correctamente!");
+	return respuesta;
+
 }
-ConexionServidor::Respuesta OperacionPrincipal::post(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionPrincipal::post(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionPrincipal->post" << "\n";
 }
-ConexionServidor::Respuesta OperacionPrincipal::put(Utiles::Bytes* contenido)
+ConexionServidor::Respuesta OperacionPrincipal::put(Utiles::Bytes* contenido, std::string query)
 {
 	std::cout << "OperacionPrincipal->put" << "\n";
 }

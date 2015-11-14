@@ -25,7 +25,7 @@ public:
 
 	void setContenido(JsonInfo* contenido);
 	void setContenido(std::string contenido);
-	std::string getContenido();
+	virtual std::string getContenido();
 	bool contenidoValido();
 
 	virtual ClaveRocksDB getClaveRocksDB();

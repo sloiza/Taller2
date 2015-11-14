@@ -28,7 +28,7 @@ public:
 	IMetodoREST() {}
 	virtual ~IMetodoREST() {}
 
-	virtual ConexionServidor::Respuesta ejecutar(ConexionServidor::Operaciones::IOperable* operacion, Utiles::Bytes* contenidoBytes) = 0;
+	virtual ConexionServidor::Respuesta ejecutar(ConexionServidor::Operaciones::IOperable* operacion, Utiles::Bytes* contenidoBytes, std::string query) = 0;
 
 	virtual std::string impresion() = 0;
 };

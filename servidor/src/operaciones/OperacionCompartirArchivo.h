@@ -27,10 +27,10 @@ public:
 	OperacionCompartirArchivo();
 	virtual ~OperacionCompartirArchivo();
 
-	ConexionServidor::Respuesta delet(Utiles::Bytes* contenido);
-	ConexionServidor::Respuesta get(Utiles::Bytes* contenido);
-	ConexionServidor::Respuesta post(Utiles::Bytes* contenido);
-	ConexionServidor::Respuesta put(Utiles::Bytes* contenido);
+	ConexionServidor::Respuesta delet(Utiles::Bytes* contenido, std::string query);
+	ConexionServidor::Respuesta get(Utiles::Bytes* contenido, std::string query);
+	ConexionServidor::Respuesta post(Utiles::Bytes* contenido, std::string query);
+	ConexionServidor::Respuesta put(Utiles::Bytes* contenido, std::string query);
 
 	void imprimir();
 

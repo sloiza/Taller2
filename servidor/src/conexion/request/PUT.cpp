@@ -13,9 +13,9 @@ PUT::PUT() {}
 
 PUT::~PUT() {}
 
-ConexionServidor::Respuesta PUT::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, Utiles::Bytes* contenido)
+ConexionServidor::Respuesta PUT::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, Utiles::Bytes* contenido, std::string query)
 {
-	return operacion->put(contenido);
+	return operacion->put(contenido, query);
 }
 
 std::string PUT::impresion()

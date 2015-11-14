@@ -13,9 +13,9 @@ POST::POST() {}
 
 POST::~POST() {}
 
-ConexionServidor::Respuesta POST::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, Utiles::Bytes* contenido)
+ConexionServidor::Respuesta POST::ejecutar(ConexionServidor::Operaciones::IOperable* operacion, Utiles::Bytes* contenido, std::string query)
 {
-	return operacion->post(contenido);
+	return operacion->post(contenido, query);
 }
 
 std::string POST::impresion()

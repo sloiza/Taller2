@@ -93,6 +93,17 @@ void ManagerArchivosTest::testEliminarCarpetaDeDiscoCorrectamente()
 
 }
 
+void ManagerArchivosTest::testChequeaQueHayContenidoEnCarpetaCorrecamente()
+{
+	std::string pathVacio = "tmp/carpetaVacia";
+
+	EXPECT_EQ(true , manager->carpetaEstaVacia( pathVacio )); // VER PORQ NO FUNCA !!!!!!!!
+
+	std::string pathConContenido = "tmp/";
+
+	EXPECT_EQ(false , manager->carpetaEstaVacia( pathConContenido));
+}
+
 void ManagerArchivosTest::setUp()
 {
 	this->manager = new ConexionServidor::BaseDeDatos::ManagerArchivos();

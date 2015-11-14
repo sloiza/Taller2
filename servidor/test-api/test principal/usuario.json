@@ -1,9 +1,9 @@
 {
 	"nombre": "Manuel",
 	"apellido": "Iglesias",
-	"password": "contrasenia2",
+	"password": "contrasenia",
 	"nick": "Manu",
-	"mail": "manu2@gmail.com",
+	"mail": "manu@gmail.com",
 	"foto": "imagenes/profile.jpg",
 	"lugar": "caba",
 	"id": "1234"

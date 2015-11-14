@@ -136,6 +136,17 @@ std::string Carpeta::getPath()
 	return this->carpetaLogica->getPath();
 }
 
+bool Carpeta::existeFisicamente()
+{
+	ManagerArchivos manager;
+	return manager.existe( this->getPath() );
+}
+bool Carpeta::estaVacia()
+{
+	ManagerArchivos manager;
+	return manager.carpetaEstaVacia( this->getPath() );
+}
+
 // Metodos de EntidadBD
 std::string Carpeta::getValor()
 {

@@ -94,6 +94,16 @@ bool Archivo::existeFisicamente()
 	ManagerArchivos manager;
 	return manager.existe( this->getPath() );
 }
+void Archivo::eliminarFisicamente()
+{
+	ManagerArchivos manager;
+	manager.eliminar( archivoLogico->getPath() );
+}
+void Archivo::guardarFisicamente()
+{
+	ManagerArchivos manager;
+	manager.escribir( archivoLogico->getPath(), this->getBytes() );
+}
 
 // Metodos de EntidadBD
 std::string Archivo::getValor()
@@ -108,4 +118,8 @@ std::string Archivo::getColumnaDeFamilia()
 std::string Archivo::getClave()
 {
 	return this->getPath();
+}
+std::string Archivo::getContenido()
+{
+	return this->archivoLogico->getContenido();
 }
