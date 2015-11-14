@@ -15,19 +15,20 @@ before_install:
    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 50
    - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50
    - sudo apt-get install unzip 
-   - wget https://github.com/sloiza/rocksdb-travis/archive/master.zip
-   - unzip master.zip
-   - cd rocksdb-travis-master/ROCKS/ 
-   - "sudo make clean && sudo make install"
    - cd ../..
-   - sudo rm master.zip
    - wget https://github.com/open-source-parsers/jsoncpp/archive/master.zip
    - unzip master.zip
    - cd jsoncpp-master/
    - mkdir -p build/
    - cd build/
-   - cmake -DCMAKE_BUILD_TYPE=debug -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF -DARCHIVE_INSTALL_DIR=. -G "Unix Makefiles" ../..
+   - cmake -DCMAKE_BUILD_TYPE=debug -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF -DARCHIVE_INSTALL_DIR=. -G "Unix Makefiles" ..
    - "sudo make install && sudo make"
+   - sudo rm master.zip
+   - wget https://github.com/sloiza/rocksdb-travis/archive/master.zip
+   - unzip master.zip
+   - cd rocksdb-travis-master/ROCKS/ 
+   - "sudo make clean && sudo make install"
+   - sudo rm master.zip
    - "cd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
    - sudo pip install cpp-coveralls
 
