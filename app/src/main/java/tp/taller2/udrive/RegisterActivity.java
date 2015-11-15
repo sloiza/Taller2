@@ -2,6 +2,7 @@ package tp.taller2.udrive;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -9,15 +10,11 @@ import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +22,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Random;
@@ -45,6 +43,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText pwdET;
     EditText surnameET;
     EditText cityET;
+    String picturePath;
+    Bitmap profilePic;
     TextInputLayout inputLayoutEmail, inputLayoutPassword, inputLayoutUsername, inputLayoutSurname, inputLayoutPlace;
     private static int RESULT_LOAD_IMAGE = 1;
 
@@ -126,6 +126,9 @@ public class RegisterActivity extends AppCompatActivity {
         String password = pwdET.getText().toString();
         String city = cityET.getText().toString();
         String surname = surnameET.getText().toString();
+        profilePic = BitmapFactory.decodeFile(picturePath);
+        String encodedImage = Utility.bitmapToString(profilePic);
+
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(URL);
@@ -141,6 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
             json.put("id", id);
             json.put("lugar", city);
             json.put("password", password);
+            json.put("foto", encodedImage);
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
             httpPost.setHeader("Accept-Encoding", "application/json");
@@ -217,7 +221,7 @@ public class RegisterActivity extends AppCompatActivity {
             cursor.moveToFirst();
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+            picturePath = cursor.getString(columnIndex);
             cursor.close();
 
             CircleImageView imageView = (CircleImageView) findViewById(R.id.imgView);

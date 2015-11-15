@@ -4,21 +4,15 @@ import android.app.DialogFragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.ActionMode;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.util.Log;
-import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,15 +23,11 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
-
 import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -51,7 +41,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Random;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
@@ -60,6 +49,7 @@ import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,LogOutDialogFragment.LogOutDialogListener,
@@ -67,15 +57,11 @@ public class MainActivity extends AppCompatActivity
 
     ActionBarDrawerToggle toggle;
     Toolbar toolbar;
-    FloatingActionButton fab;
     DrawerLayout drawer;
     NavigationView navigationView;
     Fragment fragment;
     FragmentManager fragmentManager;
     SessionManager session;
-    RelativeLayout relativeLayout;
-    private CoordinatorLayout coordinatorLayout;
-    private Button btnSimpleSnackbar;
     GPSTracker gps;
     private static int FILE_SELECT_CODE = 1;
     private ProgressBar progressBar;
@@ -84,7 +70,7 @@ public class MainActivity extends AppCompatActivity
     long totalSize = 0;
     boolean doubleBackToExitPressedOnce = false;
     String newFolderName;
-
+    CircleImageView pic;
 
     /**
      *
@@ -139,6 +125,7 @@ public class MainActivity extends AppCompatActivity
         TextView userName = (TextView) findViewById(R.id.name);
         TextView userSurname = (TextView) findViewById(R.id.surname);
         TextView userEmail = (TextView) findViewById(R.id.email);
+        pic = (CircleImageView)findViewById(R.id.circleView);
 
         session.checkLogin();
 
@@ -146,9 +133,12 @@ public class MainActivity extends AppCompatActivity
         String name = user.get(SessionManager.KEY_NAME);
         String surname = user.get(SessionManager.KEY_SURNAME);
         String email = user.get(SessionManager.KEY_EMAIL);
+        String sessionPicture = user.get(SessionManager.KEY_PICTURE);
         userName.setText(name);
         userSurname.setText(surname);
         userEmail.setText(email);
+        Bitmap picture = Utility.stringToBitmap(sessionPicture);
+        pic.setImageBitmap(picture);
 
     }
 
@@ -174,7 +164,7 @@ public class MainActivity extends AppCompatActivity
             session.logoutUser();
         } else if(dialog.getTag().equals("newFolder")){
             Log.i("New folder name", newFolderName);
-            //new postNewFolderService().execute("http://192.168.0.16:8080/archivos");
+            new postNewFolderService().execute("http://192.168.0.14:8080/carpetas");
         }
     }
 
@@ -189,7 +179,7 @@ public class MainActivity extends AppCompatActivity
     }
     /**
      *
-     * @param navigationView
+     * @param navigationView navigation drawer that appears when slides to rigth
      */
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
@@ -208,7 +198,7 @@ public class MainActivity extends AppCompatActivity
 
     public void uploadFile(View view) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*//*");
+        intent.setType("*/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
@@ -225,8 +215,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("requestCode: ", String.valueOf(requestCode));
+        Log.d("resultCode ", String.valueOf(resultCode));
+        //Log.d("File Uri: ", String.valueOf(data));
 
-        if (requestCode == FILE_SELECT_CODE && resultCode == 200 && null != data) {
+        if (requestCode == FILE_SELECT_CODE && resultCode == -1 && null != data) {
             // Get the Uri of the selected file
             Uri uri = data.getData();
             Log.d("File Uri: ", uri.toString());
@@ -234,8 +227,7 @@ public class MainActivity extends AppCompatActivity
             filePath = uri.getPath();
             Log.d("File path: ", filePath);
             // Initiate the upload
-            new UploadFileToServer().execute();
-
+            new UploadFileMetadatosToServer().execute();
         }
     }
 
@@ -247,7 +239,7 @@ public class MainActivity extends AppCompatActivity
             InputStream inputStream = new FileInputStream(f);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             byte[] b = new byte[1024*8];
-            int bytesRead =0;
+            int bytesRead;
 
             while ((bytesRead = inputStream.read(b)) != -1)
             {
@@ -270,17 +262,17 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPreExecute() {
             // setting progress bar to zero
-            progressBar.setProgress(0);
+           // progressBar.setProgress(0);
             super.onPreExecute();
         }
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
             // Making progress bar visible
-            progressBar.setVisibility(View.VISIBLE);
+           // progressBar.setVisibility(View.VISIBLE);
 
             // updating progress bar value
-            progressBar.setProgress(progress[0]);
+            //progressBar.setProgress(progress[0]);
 
             // updating percentage value
             txtPercentage.setText(String.valueOf(progress[0]) + "%");
@@ -293,9 +285,9 @@ public class MainActivity extends AppCompatActivity
 
         @SuppressWarnings("deprecation")
         private String uploadFile() {
-            String responseString = null;
-            HttpURLConnection con = null;
-            URL url = null;
+            String responseString;
+            HttpURLConnection con;
+            URL url;
 
             try {
                 AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
@@ -310,7 +302,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("File pasddddddath: ", filePath);
 
                 File file = new File(filePath);
-                url = new URL("http://192.168.0.16:8080/archivos?");
+                url = new URL("http://192.168.0.14:8080/archivos?");
                 con = (HttpURLConnection) url.openConnection();
 
                 // Activar método POST
@@ -332,8 +324,6 @@ public class MainActivity extends AppCompatActivity
                             + statusCode;
                 }
 
-            } catch (ClientProtocolException e) {
-                responseString = e.toString();
             } catch (IOException e) {
                 responseString = e.toString();
             }
@@ -343,19 +333,108 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(String result) {
             //try {
-            Log.d("respuesta: ", result);
-                    /*JSONObject jsonObject = new JSONObject(result);
-                    Object status = jsonObject.get("estado");
-                    Object message = jsonObject.get("mensaje");
+                Log.d("respuesta: ", result);
+                //JSONObject jsonObject = new JSONObject(result);
+                //Object status = jsonObject.get("estado");
+                //Object message = jsonObject.get("mensaje");
+                //if (status.equals("ok")) {
+                    Toast.makeText(getApplicationContext(), "upload file success", Toast.LENGTH_LONG).show();
+                //} else {
+                //    Toast.makeText(getApplicationContext(), "upload file error", Toast.LENGTH_LONG).show();
+                //}
+            //} catch (JSONException e) {
+               // e.printStackTrace();
+            //}
 
-                    if (status.equals("ok")) {*/
-            Toast.makeText(getApplicationContext(), "upload file success", Toast.LENGTH_LONG).show();
-                   /* } else {
-                        Toast.makeText(getApplicationContext(), "upload file error", Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
+            super.onPostExecute(result);
+        }
+
+    }
+
+    /**
+     * Uploading the file to server
+     * */
+    class UploadFileMetadatosToServer extends AsyncTask<Void, Integer, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return uploadFileMetadatos();
+        }
+
+        @SuppressWarnings("deprecation")
+        private String uploadFileMetadatos() {
+            String responseString = "";
+            HttpURLConnection con;
+            URL url;
+
+            try {
+                AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
+                        new AndroidMultiPartEntity.ProgressListener() {
+
+                            @Override
+                            public void transferred(long num) {
+                                publishProgress((int) ((num / (float) totalSize) * 100));
+                            }
+                        });
+
+                Log.d("File pasddddddath: ", filePath);
+
+                url = new URL("http://192.168.0.14:8080/archivos?");
+                con = (HttpURLConnection) url.openConnection();
+
+                // Activar método POST
+                con.setDoOutput(true);
+
+                HashMap<String, String> user = session.getUserDetails();
+                String email = user.get(SessionManager.KEY_EMAIL);
+
+                File f = new File(filePath);
+
+                JSONObject json = new JSONObject();
+                json.put("nombre",f.getName());
+                json.put("etiqueta","archivo");
+                json.put("fecha_ulti_modi","26102015");
+                json.put("usuario_ulti_modi","1234");
+                json.put("propietario",email);
+                json.put("baja_logica","no");
+                json.put("direccion","tmp/" + email + "/");
+
+                OutputStream out = con.getOutputStream();
+                out.write(json.toString().getBytes());
+                out.flush();
+                out.close();
+                int statusCode = con.getResponseCode();
+                if (statusCode == 200) {
+                    // Server response
+                    responseString = con.getResponseMessage();
+                } else {
+                    responseString = "Error occurred! Http Status Code: "
+                            + statusCode;
+                }
+
+            } catch (IOException e) {
+                responseString = e.toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return responseString;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            //try {
+                Log.d("respuesta: ", result);
+                //JSONObject jsonObject = new JSONObject(result);
+                //Object status = jsonObject.get("estado");
+                //Object message = jsonObject.get("mensaje");
+                //if (status.equals("ok")) {
+                    new UploadFileToServer().execute();
+                //} else {
+                //    Toast.makeText(getApplicationContext(), "upload file error", Toast.LENGTH_LONG).show();
+                //}
+            //} catch (JSONException e) {
+              //  e.printStackTrace();
+            //}
 
             super.onPostExecute(result);
         }
@@ -390,21 +469,15 @@ public class MainActivity extends AppCompatActivity
                 fragment = new HomeFragment();
         }
 
-        if (fragment != null) {
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
 
-            // Insert the fragment by replacing any existing fragment
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-
-            // Highlight the selected item, update the title, and close the drawer
-            menuItem.setChecked(true);
-            setTitle(menuItem.getTitle());
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            // error in creating fragment
-            Log.e("MainActivity", "Error in creating fragment");
-        }
+        // Highlight the selected item, update the title, and close the drawer
+        menuItem.setChecked(true);
+        setTitle(menuItem.getTitle());
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
     }
 
     @Override
@@ -483,8 +556,6 @@ public class MainActivity extends AppCompatActivity
      * Launching new activity
      * */
     private void LocationFound() {
-        /*Intent i = new Intent(MainActivity.this, LocationFound.class);
-        startActivity(i);*/
         gps = new GPSTracker(this);
         // check if GPS enabled
         if (gps.canGetLocation()) {
@@ -508,9 +579,17 @@ public class MainActivity extends AppCompatActivity
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(URL);
+        HashMap<String, String> user = session.getUserDetails();
+        String email = user.get(SessionManager.KEY_EMAIL);
         JSONObject json = new JSONObject();
         try {
-            json.put("nuevaCarpeta", newFolderName);
+            json.put("nombre", newFolderName);
+            json.put("etiqueta","carpeta");
+            json.put("fecha_ulti_modi","26102015");
+            json.put("usuario_ulti_modi","1234");
+            json.put("propietario",email);
+            json.put("baja_logica","no");
+            json.put("direccion","tmp/" + email + "/");
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
             httpPost.setHeader("Accept-Encoding", "application/json");
@@ -554,7 +633,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("Status", status.toString());
                 Log.d("Message", message.toString());
                 if(status.equals("ok")) {
-                    //Toast.makeText(getContext(), R.string.success_register, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                 }
             } catch (Exception e) {
                 Log.d("ReadJSONTask", e.getLocalizedMessage());

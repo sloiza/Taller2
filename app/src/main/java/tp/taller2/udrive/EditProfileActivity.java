@@ -2,6 +2,7 @@ package tp.taller2.udrive;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -40,7 +41,10 @@ public class EditProfileActivity extends AppCompatActivity {
     EditText password;
     EditText surname;
     EditText city;
+    CircleImageView pic;
     SessionManager session;
+    String picturePath;
+    Bitmap profilePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class EditProfileActivity extends AppCompatActivity {
         password = (EditText)findViewById(R.id.password_text);
         surname = (EditText)findViewById(R.id.surname_text);
         city = (EditText)findViewById(R.id.place_text);
+        pic = (CircleImageView)findViewById(R.id.imgView);
 
         session = new SessionManager(getApplicationContext());
         HashMap<String, String> user = session.getUserDetails();
@@ -61,12 +66,15 @@ public class EditProfileActivity extends AppCompatActivity {
         String sessionEmail = user.get(SessionManager.KEY_EMAIL);
         String sessionCity = user.get(SessionManager.KEY_CITY);
         String sessionPassword = user.get(SessionManager.KEY_PASSWORD);
+        String sessionPicture = user.get(SessionManager.KEY_PICTURE);
 
         name.setText(sessionName);
         surname.setText(sessionSurname);
         email.setText(sessionEmail);
         city.setText(sessionCity);
         password.setText(sessionPassword);
+        Bitmap picture = Utility.stringToBitmap(sessionPicture);
+        pic.setImageBitmap(picture);
 
     }
 
@@ -115,7 +123,7 @@ public class EditProfileActivity extends AppCompatActivity {
             cursor.moveToFirst();
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+            picturePath = cursor.getString(columnIndex);
             cursor.close();
 
             CircleImageView imageView = (CircleImageView) findViewById(R.id.imgView);
@@ -142,9 +150,9 @@ public class EditProfileActivity extends AppCompatActivity {
             }else{
                 if(Utility.validatePassword(newpassword)){
                     if(sessionEmail.equals(newEmail) && sessionPassword.equals(newpassword)){
-                        new getUserUpdateProfileService().execute("http://192.168.0.14:8080/usuario?");
+                        new getUserUpdateProfileService().execute("http://192.168.1.8:8080/usuario?");
                     } else {
-                        new getUserUpdateProfileAndStartNewSessionService().execute("http://192.168.0.14:8080/usuario?");
+                        new getUserUpdateProfileAndStartNewSessionService().execute("http://192.168.1.8:8080/usuario?");
                     }
                 } else {
                     password.requestFocus();
@@ -162,21 +170,19 @@ public class EditProfileActivity extends AppCompatActivity {
         String newpassword = password.getText().toString();
         String newCity = city.getText().toString();
         String newSurname = surname.getText().toString();
+        profilePic = BitmapFactory.decodeFile(picturePath);
+        String encodedImage = Utility.bitmapToString(profilePic);
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(URL);
         JSONObject json = new JSONObject();
-        int min = 1;
-        int max = 1000;
-        Random random = new Random();
-        int id = random.nextInt(max - min + 1) + min;
         try {
             json.put("nombre", newName);
             json.put("apellido", newSurname);
             json.put("mail", newEmail);
-            json.put("id", id);
             json.put("lugar", newCity);
             json.put("password", newpassword);
+            json.put("foto", encodedImage);
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
             httpPost.setHeader("Accept-Encoding", "application/json");
@@ -235,20 +241,18 @@ public class EditProfileActivity extends AppCompatActivity {
         String newpassword = password.getText().toString();
         String newCity = city.getText().toString();
         String newSurname = surname.getText().toString();
+        profilePic = BitmapFactory.decodeFile(picturePath);
+        String encodedImage = Utility.bitmapToString(profilePic);
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(URL);
         JSONObject json = new JSONObject();
-        int min = 1;
-        int max = 1000;
-        Random random = new Random();
-        int id = random.nextInt(max - min + 1) + min;
         try {
             json.put("nombre", newName);
             json.put("apellido", newSurname);
             json.put("mail", newEmail);
-            json.put("id", id);
             json.put("lugar", newCity);
+            json.put("foto", encodedImage);
             json.put("password", newpassword);
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");

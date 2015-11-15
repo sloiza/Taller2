@@ -1,15 +1,10 @@
 package tp.taller2.udrive;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView errorMsg;
     EditText emailET;
     EditText passwordET;
-    Toolbar toolbar;
     SessionManager session;
     TextInputLayout inputLayoutEmail, inputLayoutPassword;
 
@@ -109,8 +103,9 @@ public class LoginActivity extends AppCompatActivity {
                 Object email = jsonObject.get("mail");
                 Object password = jsonObject.get("password");
                 Object city = jsonObject.get("lugar");
+                Object picture = jsonObject.get("foto");
                 if(status.equals("ok")) {
-                    session.createLoginSession(email.toString(), name.toString(), surname.toString(), city.toString(), password.toString());
+                    session.createLoginSession(email.toString(), name.toString(), surname.toString(), city.toString(), password.toString(), picture.toString());
                     Toast.makeText(getApplicationContext(), R.string.success_login, Toast.LENGTH_LONG).show();
                     navigatetoHomeActivity();
                 } else {

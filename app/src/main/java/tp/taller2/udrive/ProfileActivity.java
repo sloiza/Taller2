@@ -1,17 +1,18 @@
 package tp.taller2.udrive;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.HashMap;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -20,6 +21,7 @@ public class ProfileActivity extends AppCompatActivity {
     TextView email;
     TextView surname;
     TextView city;
+    CircleImageView pic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
         email = (TextView)findViewById(R.id.email_text);
         surname = (TextView)findViewById(R.id.surname_text);
         city = (TextView)findViewById(R.id.place_text);
+        pic = (CircleImageView)findViewById(R.id.imgView);
 
         session = new SessionManager(getApplicationContext());
         HashMap<String, String> user = session.getUserDetails();
@@ -38,11 +41,15 @@ public class ProfileActivity extends AppCompatActivity {
         String sessionSurname = user.get(SessionManager.KEY_SURNAME);
         String sessionEmail = user.get(SessionManager.KEY_EMAIL);
         String sessionCity = user.get(SessionManager.KEY_CITY);
+        String sessionPicture = user.get(SessionManager.KEY_PICTURE);
 
         name.setText(sessionName);
         surname.setText(sessionSurname);
         email.setText(sessionEmail);
         city.setText(sessionCity);
+        Bitmap picture = Utility.stringToBitmap(sessionPicture);
+        pic.setImageBitmap(picture);
+
 
     }
 
