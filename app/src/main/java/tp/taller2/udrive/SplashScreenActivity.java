@@ -7,8 +7,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.view.Window;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -28,7 +26,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                     // Start the next activity
                     Intent mainIntent = new Intent().setClass(
-                            SplashScreenActivity.this, LoginActivity.class);
+                            SplashScreenActivity.this, MainActivity.class);
                     startActivity(mainIntent);
 
                     finish();

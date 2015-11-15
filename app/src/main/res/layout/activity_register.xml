@@ -5,53 +5,102 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="tp.taller2.udrive.RegisterActivity">
-    <include
-        android:id="@+id/tool_bar"
-        layout="@layout/toolbar"
-        ></include>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/register_message"
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:textSize="15sp"
-        android:textColor="#000000"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"/>
-    <EditText android:id="@+id/username_message"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_width="match_parent"
+        android:layout_height="70dp">
+
+        <Button
+            android:id="@+id/buttonLoadPicture"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="90dp"
+            android:layout_weight="1"
+            android:onClick="loadPicture"
+            android:background="@drawable/borderbutton"
+            android:text="Load picture"
+            android:textSize="12sp"
+            android:textColor="#0D7694"
+            android:layout_gravity="center_vertical"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/imgView"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:fontFamily="sans-serif"
-        android:theme="@style/EditTextTheme"
-        android:hint="@string/username_message" />
-    <EditText android:id="@+id/newPassword_message"
+        android:orientation="vertical"
         android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType= "textPassword"
-        android:fontFamily="sans-serif"
-        android:textSize="20sp"
-        android:theme="@style/EditTextTheme"
-        android:hint="@string/password_message" />
-    <EditText android:id="@+id/newEmail_message"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/email_message"
-        android:textSize="20sp"
-        android:fontFamily="sans-serif"
-        android:theme="@style/EditTextTheme"
-        android:inputType="textEmailAddress"/>
+        android:layout_marginRight="50dp">
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText android:id="@+id/username_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif"
+                android:theme="@style/EditTextTheme"
+                android:hint="@string/username_message" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_surname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText android:id="@+id/surname_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif"
+                android:theme="@style/EditTextTheme"
+                android:hint="@string/surname_message" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_newEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText android:id="@+id/newEmail_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email_message"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif"
+                android:theme="@style/EditTextTheme"
+                android:inputType="textEmailAddress"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_newPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText android:id="@+id/newPassword_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType= "textPassword"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp"
+                android:theme="@style/EditTextTheme"
+                android:hint="@string/password_message" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText android:id="@+id/place_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp"
+                android:theme="@style/EditTextTheme"
+                android:hint="@string/place_message" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
     <TextView
         android:id="@+id/register_error"
         android:layout_marginLeft="50dp"
@@ -66,10 +115,10 @@
         android:layout_width="100dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
         android:layout_height="50dp"
         android:layout_gravity="end"
         android:onClick="registerMessage"
-        android:layout_marginTop="150dp"
         android:text="@string/button_register"
         android:background="@drawable/radioussolidbutton"
         android:textColor="#ffffff"/>

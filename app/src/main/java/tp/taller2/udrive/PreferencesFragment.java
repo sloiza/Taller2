@@ -6,9 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by mati on 26/09/15.
- */
 public class PreferencesFragment extends Fragment {
 
     public PreferencesFragment() {

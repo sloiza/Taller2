@@ -1,8 +1,5 @@
 package tp.taller2.udrive;
 
-/**
- * Created by mati on 30/09/15.
- */
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,8 +14,6 @@ public class ShareFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_share, container, false);
-
-        return rootView;
+        return inflater.inflate(R.layout.fragment_share, container, false);
     }
 }
