@@ -15,7 +15,10 @@ OperacionCompartirArchivo::~OperacionCompartirArchivo() {}
 
 ConexionServidor::Respuesta OperacionCompartirArchivo::delet(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionCompartirArchivo->delete" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 ConexionServidor::Respuesta OperacionCompartirArchivo::get(Utiles::Bytes* contenido, std::string query)
 {
@@ -56,7 +59,10 @@ ConexionServidor::Respuesta OperacionCompartirArchivo::post(Utiles::Bytes* conte
 }
 ConexionServidor::Respuesta OperacionCompartirArchivo::put(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionCompartirArchivo->put" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 
 void OperacionCompartirArchivo::imprimir()

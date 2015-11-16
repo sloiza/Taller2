@@ -15,7 +15,10 @@ OperacionPrincipal::~OperacionPrincipal() {}
 
 ConexionServidor::Respuesta OperacionPrincipal::delet(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionPrincipal->delete" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 ConexionServidor::Respuesta OperacionPrincipal::get(Utiles::Bytes* contenido, std::string query)
 {
@@ -42,11 +45,17 @@ ConexionServidor::Respuesta OperacionPrincipal::get(Utiles::Bytes* contenido, st
 }
 ConexionServidor::Respuesta OperacionPrincipal::post(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionPrincipal->post" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 ConexionServidor::Respuesta OperacionPrincipal::put(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionPrincipal->put" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 
 void OperacionPrincipal::imprimir()

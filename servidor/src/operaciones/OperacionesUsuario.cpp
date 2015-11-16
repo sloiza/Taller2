@@ -15,7 +15,10 @@ OperacionesUsuario::~OperacionesUsuario() {}
 
 ConexionServidor::Respuesta OperacionesUsuario::delet(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionesUsuario->delete" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 ConexionServidor::Respuesta OperacionesUsuario::get(Utiles::Bytes* contenido, std::string query)
 {
@@ -77,7 +80,10 @@ ConexionServidor::Respuesta OperacionesUsuario::post(Utiles::Bytes* contenido, s
 }
 ConexionServidor::Respuesta OperacionesUsuario::put(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionesUsuario->put" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 
 void OperacionesUsuario::imprimir()

@@ -15,7 +15,10 @@ OperacionCompartirCarpeta::~OperacionCompartirCarpeta() {}
 
 ConexionServidor::Respuesta OperacionCompartirCarpeta::delet(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionCompartirCarpeta->delete" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 ConexionServidor::Respuesta OperacionCompartirCarpeta::get(Utiles::Bytes* contenido, std::string query)
 {
@@ -56,7 +59,10 @@ ConexionServidor::Respuesta OperacionCompartirCarpeta::post(Utiles::Bytes* conte
 }
 ConexionServidor::Respuesta OperacionCompartirCarpeta::put(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionCompartirCarpeta->put" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 
 void OperacionCompartirCarpeta::imprimir()

@@ -44,7 +44,10 @@ ConexionServidor::Respuesta OperacionesCarpetas::delet(Utiles::Bytes* contenido,
 }
 ConexionServidor::Respuesta OperacionesCarpetas::get(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionesCarpetas->get" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 ConexionServidor::Respuesta OperacionesCarpetas::post(Utiles::Bytes* contenido, std::string query)
 {
@@ -66,7 +69,10 @@ ConexionServidor::Respuesta OperacionesCarpetas::post(Utiles::Bytes* contenido, 
 }
 ConexionServidor::Respuesta OperacionesCarpetas::put(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionesCarpetas->put" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 
 void OperacionesCarpetas::imprimir()

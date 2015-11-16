@@ -15,7 +15,10 @@ OperacionDescargarArchivo::~OperacionDescargarArchivo() {}
 
 ConexionServidor::Respuesta OperacionDescargarArchivo::delet(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionDescargarArchivo->delete" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 ConexionServidor::Respuesta OperacionDescargarArchivo::get(Utiles::Bytes* contenido, std::string query)
 {
@@ -37,11 +40,17 @@ ConexionServidor::Respuesta OperacionDescargarArchivo::get(Utiles::Bytes* conten
 }
 ConexionServidor::Respuesta OperacionDescargarArchivo::post(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionDescargarArchivo->post" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 ConexionServidor::Respuesta OperacionDescargarArchivo::put(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionDescargarArchivo->put" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 
 void OperacionDescargarArchivo::imprimir()

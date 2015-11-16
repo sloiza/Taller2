@@ -15,19 +15,31 @@ OperacionErrorURL::~OperacionErrorURL() {}
 
 ConexionServidor::Respuesta OperacionErrorURL::delet(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionErrorURL->delete" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 ConexionServidor::Respuesta OperacionErrorURL::get(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionErrorURL->get" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 ConexionServidor::Respuesta OperacionErrorURL::post(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionErrorURL->post" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 ConexionServidor::Respuesta OperacionErrorURL::put(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionErrorURL->put" << "\n";
+	ConexionServidor::Respuesta respuesta;
+	respuesta.setEstado("error");
+	respuesta.setMensaje("operacion no implementada.");
+	return respuesta;
 }
 
 void OperacionErrorURL::imprimir()
