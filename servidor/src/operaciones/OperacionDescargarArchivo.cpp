@@ -19,7 +19,21 @@ ConexionServidor::Respuesta OperacionDescargarArchivo::delet(Utiles::Bytes* cont
 }
 ConexionServidor::Respuesta OperacionDescargarArchivo::get(Utiles::Bytes* contenido, std::string query)
 {
-	std::cout << "OperacionDescargarArchivo->get" << "\n";
+	ConexionServidor::BaseDeDatos::Archivo archivoFisico(contenido->getStringDeBytes() );
+
+	ConexionServidor::Respuesta respuesta;
+	if ( archivoFisico.existeFisicamente() == false)
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("Archivo a descargar inexistente.");
+		return respuesta;
+	}
+
+	respuesta.setEstado("ok");
+	respuesta.setMensaje("Archivo descargado correctamente!");
+	respuesta.setEsDescarga(true);
+	respuesta.setPathDelArchivoADescargar( archivoFisico.getPath() );
+	return respuesta;
 }
 ConexionServidor::Respuesta OperacionDescargarArchivo::post(Utiles::Bytes* contenido, std::string query)
 {

@@ -32,7 +32,18 @@ int HandlerEventos::handler(struct mg_connection* conn, enum mg_event ev)
 			ConexionServidor::Respuesta respuesta = conexion->procesarRequest();
 			std::cout << "respuesta:\n" << respuesta.getContenido() << "\n";
 
-			mg_printf_data(conn, respuesta.getContenido().c_str());
+			if ( respuesta.getEsDescarga() )
+			{
+				mg_send_file(conn, respuesta.getPathDelArchivoADescargar().c_str(), NULL);
+				delete conexion;
+				return MG_MORE;
+			}
+			else
+			{
+				mg_printf_data(conn, respuesta.getContenido().c_str());
+				delete conexion;
+				return MG_TRUE;
+			}
 
 //			Respuesta rta = procesarRequest(conexion);
 //			switch( rta.getResultado() )
@@ -41,9 +52,6 @@ int HandlerEventos::handler(struct mg_connection* conn, enum mg_event ev)
 //				  NO_HAY_RESPUESTA: return MG_FALSE;
 //				  FALTA_COMPLETAR_RESPUESTA: return MG_MORE;
 //			  }
-
-			delete conexion;
-		  return MG_TRUE;
 		}
 		case MG_CLOSE: return MG_TRUE;
 

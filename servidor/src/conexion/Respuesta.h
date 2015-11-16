@@ -34,9 +34,14 @@ public:
 
 	std::string getEstado();
 	std::string getMensaje();
+	bool getEsDescarga();
+	std::string getPathDelArchivoADescargar();
 
 	void setEstado(std::string estado);
 	void setMensaje(std::string mensaje);
+	void setEsDescarga(bool);
+
+	void setPathDelArchivoADescargar(std::string);
 
 	// Metodos de EntidadDB
 	virtual std::string getValor();
@@ -45,6 +50,11 @@ protected:
 	// Metodos de EntidadDB
 	virtual std::string getColumnaDeFamilia();
 	virtual std::string getClave();
+
+private:
+
+	bool esDescarga;
+	std::string pathArchivoADescargar;
 };
 };
 

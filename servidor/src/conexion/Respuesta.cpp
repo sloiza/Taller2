@@ -11,7 +11,7 @@ using namespace ConexionServidor;
 
 const std::string Respuesta::etiquetas[] = {"estado", "mensaje" };
 
-Respuesta::Respuesta() {}
+Respuesta::Respuesta() : esDescarga(false) {}
 
 Respuesta::~Respuesta() {}
 
@@ -23,6 +23,14 @@ std::string Respuesta::getMensaje()
 {
 	return this->info->getAtributo(etiquetas[MENSAJE], "mensajeDefault");
 }
+bool Respuesta::getEsDescarga()
+{
+	return this->esDescarga;
+}
+std::string Respuesta::getPathDelArchivoADescargar()
+{
+	return this->pathArchivoADescargar;
+}
 
 void Respuesta::setEstado(std::string estado)
 {
@@ -31,6 +39,14 @@ void Respuesta::setEstado(std::string estado)
 void Respuesta::setMensaje(std::string mensaje)
 {
 	this->info->setAtributo(etiquetas[MENSAJE], mensaje);
+}
+void Respuesta::setEsDescarga(bool esDescarga)
+{
+	this->esDescarga = esDescarga;
+}
+void Respuesta::setPathDelArchivoADescargar(std::string pathArchivoADescargar)
+{
+	this->pathArchivoADescargar = pathArchivoADescargar;
 }
 
 // Metodos de EntidadDB

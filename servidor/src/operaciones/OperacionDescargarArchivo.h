@@ -8,6 +8,10 @@
 #ifndef OPERACIONDESCARGARARCHIVO_H_
 #define OPERACIONDESCARGARARCHIVO_H_
 
+// archivos
+#include "../archivos/Archivo.h"
+// conexion
+#include "../conexion/Respuesta.h"
 // Operaciones
 #include "IOperable.h"
 
