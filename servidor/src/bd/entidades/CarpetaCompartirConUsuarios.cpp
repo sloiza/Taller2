@@ -38,17 +38,17 @@ std::vector<std::string> CarpetaCompartirConUsuarios::getUsuariosACompartirles()
 }
 
 // Metodos de EntidadDB
-std::string ContenidoPorCarpeta::getValor()
+std::string CarpetaCompartirConUsuarios::getValor()
 {
 	return this->info->getContenido();
 }
 
-std::string ContenidoPorCarpeta::getColumnaDeFamilia()
+std::string CarpetaCompartirConUsuarios::getColumnaDeFamilia()
 {
 	return "file";
 }
 
-std::string ContenidoPorCarpeta::getClave()
+std::string CarpetaCompartirConUsuarios::getClave()
 {
 	//return "contenido" + this->getPath();
 	return "noImportaPorqNuncaSeAlmacena";

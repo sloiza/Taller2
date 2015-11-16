@@ -1,12 +1,12 @@
 /*
- * CarpetaCompartirConUsuarios.h
+ * ArchivoCompartirConUsuarios.h
  *
- *  Created on: 14/11/2015
+ *  Created on: 16/11/2015
  *      Author: manuel
  */
 
-#ifndef CARPETACOMPARTIRCONUSUARIOS_H_
-#define CARPETACOMPARTIRCONUSUARIOS_H_
+#ifndef ARCHIVOCOMPARTIRCONUSUARIOS_H_
+#define ARCHIVOCOMPARTIRCONUSUARIOS_H_
 
 // utiles
 #include "../../utiles/utiles.h"
@@ -18,7 +18,7 @@ namespace ConexionServidor
 namespace BaseDeDatos
 {
 
-class CarpetaCompartirConUsuarios : public EntidadDB
+class ArchivoCompartirConUsuarios : public EntidadDB
 {
 public:
 
@@ -26,15 +26,16 @@ public:
 	{
 		NOMBRE,
 		DIRECCION,
+		EXTENSION,
 		USUARIOS
 	};
 	static const std::string etiquetas[];
 
-	CarpetaCompartirConUsuarios();
-	CarpetaCompartirConUsuarios(std::string);
-	virtual ~CarpetaCompartirConUsuarios();
+	ArchivoCompartirConUsuarios();
+	ArchivoCompartirConUsuarios(std::string);
+	virtual ~ArchivoCompartirConUsuarios();
 
-	std::string getNombreCarpeta(), getDireccionCarpeta(), getPathCarpeta();
+	std::string getNombreArchivo(), getDireccionArchivo(), getPathArchivo(), getExtensionArchivo();
 	std::vector<std::string> getUsuariosACompartirles();
 
 	// Metodos de EntidadDB
@@ -44,9 +45,8 @@ protected:
 	// Metodos de EntidadDB
 	virtual std::string getColumnaDeFamilia();
 	virtual std::string getClave();
-
 };
 };
 };
 
-#endif /* CARPETACOMPARTIRCONUSUARIOS_H_ */
+#endif /* ARCHIVOCOMPARTIRCONUSUARIOS_H_ */

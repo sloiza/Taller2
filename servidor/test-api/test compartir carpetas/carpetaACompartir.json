@@ -1,5 +1,5 @@
 {
-	"nombre":"archivoSubido",
+	"nombre":"carpeta",
 	"direccion": "tmp/",
-	"usuarios": [ "manu2@gmail.com", "manu4@gmail.com" ]
+	"usuarios": [ "manu@gmail.com", "manu4@gmail.com" ]
 }

@@ -10,7 +10,11 @@
 
 // Operaciones
 #include "IOperable.h"
-
+#include "InfoOperaciones.h"
+// entidades
+#include "../bd/entidades/User.h"
+#include "../bd/entidades/ContenidoPorCarpeta.h"
+#include "../bd/entidades/ArchivoCompartirConUsuarios.h"
 // STL
 #include <iostream>
 #include <string>
@@ -24,6 +28,7 @@ namespace Operaciones
 class OperacionCompartirArchivo: public IOperable
 {
 public:
+
 	OperacionCompartirArchivo();
 	virtual ~OperacionCompartirArchivo();
 
@@ -34,6 +39,7 @@ public:
 
 	void imprimir();
 
+	void compartirArchivoConUsuario(std::string mail, std::string carpeta );
 };
 };
 };

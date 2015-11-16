@@ -30,25 +30,24 @@ ConexionServidor::Respuesta OperacionCompartirCarpeta::get(Utiles::Bytes* conten
 	if ( valorRecuperado.compare("vacio") == 0 )
 	{
 		respuesta.setEstado("no-existe");
-		respuesta.setMensaje("No existe carpeta para el usuario inexistente.");
+		respuesta.setMensaje("No existe carpeta para el usuario.");
 		return respuesta;
 	}
 
 	respuesta.setContenido(valorRecuperado);
 	respuesta.setEstado("ok");
-	respuesta.setMensaje("Pagina principal accedida correctamente!");
+	respuesta.setMensaje("Mis Compartidos/ accedida correctamente!");
 	return respuesta;
 }
 ConexionServidor::Respuesta OperacionCompartirCarpeta::post(Utiles::Bytes* contenido, std::string query)
 {
-//	//ConexionServidor::BaseDeDatos::ArchivoLogico archivoLogico(contenido);
-//	ConexionServidor::BaseDeDatos::CarpetaCompartirConUsuarios carpetaYUsuarios(contenido);
-//
-//	Carpeta carpeta = carpetaYUsuarios.getCarpeta();
-//	for ( std::string mailUsuario : carpetaYUsuarios.getMailDeUsuarios() )
-//	{
-//		compartirCarpetaConUsuario( usuario,  carpeta);
-//	}
+	ConexionServidor::BaseDeDatos::CarpetaCompartirConUsuarios carpetaYUsuarios( contenido->getStringDeBytes() );
+
+	std::string carpeta = carpetaYUsuarios.getNombreCarpeta();
+	for ( std::string mailUsuario : carpetaYUsuarios.getUsuariosACompartirles() )
+	{
+		compartirCarpetaConUsuario( mailUsuario,  carpeta);
+	}
 
 	ConexionServidor::Respuesta respuesta;
 	respuesta.setEstado("ok");
@@ -65,11 +64,11 @@ void OperacionCompartirCarpeta::imprimir()
 	std::cout << "compartirCarpeta\n";
 }
 
-void OperacionCompartirCarpeta::compartirCarpetaConUsuario(std::string mail, std::string carpeta )
+void OperacionCompartirCarpeta::compartirCarpetaConUsuario(std::string mailUsuario, std::string carpeta )
 {
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoDeCarpeta;
 
-	contenidoDeCarpeta.setPath( mail + "/" + InfoOperaciones::compartidos );
+	contenidoDeCarpeta.setPath( mailUsuario + "/" + InfoOperaciones::compartidos );
 
 	std::string valorRecuperado = contenidoDeCarpeta.recuperar();
 

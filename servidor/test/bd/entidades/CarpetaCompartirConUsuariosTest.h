@@ -13,6 +13,7 @@
 
 // User
 #include "../../../src/bd/entidades/CarpetaCompartirConUsuarios.h"
+#include "../../../src/bd/entidades/CarpetaLogica.h"
 
 namespace Test
 {
@@ -24,7 +25,7 @@ public:
 	CarpetaCompartirConUsuariosTest();
 	virtual ~CarpetaCompartirConUsuariosTest();
 
-	static const std::string archivoEjemplo;
+	static const std::string compartirEjemplo;
 
 	void testRecuperarCarpetaCorrectamente();
 	void testRecuperarUsuariosCorrectamente();
@@ -39,8 +40,19 @@ protected:
 	void setUp();
 	void terminando();
 
-	ConexionServidor::BaseDeDatos::CarpetaCompartirConUsuarios* archivo;
+	ConexionServidor::BaseDeDatos::CarpetaCompartirConUsuarios* carpetaCompartir;
 };
+
+TEST_F(CarpetaCompartirConUsuariosTest, recuperarCarpeta)
+{
+	CarpetaCompartirConUsuariosTest test;
+	test.testRecuperarCarpetaCorrectamente();
+}
+TEST_F(CarpetaCompartirConUsuariosTest, recuperarUsuarios)
+{
+	CarpetaCompartirConUsuariosTest test;
+	test.testRecuperarUsuariosCorrectamente();
+}
 };
 
 

@@ -16,6 +16,7 @@
 // entidades
 #include "../bd/entidades/User.h"
 #include "../bd/entidades/ContenidoPorCarpeta.h"
+#include "../bd/entidades/CarpetaCompartirConUsuarios.h"
 // STL
 #include <iostream>
 #include <string>
