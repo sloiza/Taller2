@@ -23,5 +23,11 @@
         android:title="Download"
         android:titleCondensed="Download">
     </item>
+    <item
+        android:id="@+id/item_details"
+        app:showAsAction="ifRoom|withText"
+        android:title="Details"
+        android:titleCondensed="Details">
+    </item>
 
 </menu>

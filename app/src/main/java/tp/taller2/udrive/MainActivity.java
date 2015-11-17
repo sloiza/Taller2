@@ -53,7 +53,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,LogOutDialogFragment.LogOutDialogListener,
-        NewFolderDialogFragment.NewFolderDialogListener{
+        NewFolderDialogFragment.NewFolderDialogListener, BinFragment.OnFragmentInteractionListener,
+        FileOptionsDialogFragment.FileOptionsDialogListener{
 
     ActionBarDrawerToggle toggle;
     Toolbar toolbar;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity
     boolean doubleBackToExitPressedOnce = false;
     String newFolderName;
     CircleImageView pic;
+    String restoreItem;
 
     /**
      *
@@ -154,6 +156,12 @@ public class MainActivity extends AppCompatActivity
         dialog.show(getFragmentManager(), "logOut");
     }
 
+    public void showFileOptionsDialog() {
+        // Create an instance of the dialog fragment and show it
+        DialogFragment dialog = new FileOptionsDialogFragment();
+        dialog.show(getFragmentManager(), "restore");
+    }
+
     // The dialog fragment receives a reference to this Activity through the
     // Fragment.onAttach() callback, which it uses to call the following methods
     // defined by the LogOutDialogFragment.LogOutDialogListener interface
@@ -164,7 +172,10 @@ public class MainActivity extends AppCompatActivity
             session.logoutUser();
         } else if(dialog.getTag().equals("newFolder")){
             Log.i("New folder name", newFolderName);
-            new postNewFolderService().execute("http://192.168.0.14:8080/carpetas");
+            //new postNewFolderService().execute("http://192.168.0.14:8080/carpetas");
+        } else if(dialog.getTag().equals("restore")){
+            Log.d("restore item", restoreItem);
+            Log.d("dasdas", "dasdasdasdasd");
         }
     }
 
@@ -255,6 +266,12 @@ public class MainActivity extends AppCompatActivity
         return byteArray;
     }
 
+    @Override
+    public void onFragmentInteraction(String id) {
+        restoreItem = id;
+        showFileOptionsDialog();
+    }
+
     /**
      * Uploading the file to server
      * */
@@ -262,17 +279,17 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPreExecute() {
             // setting progress bar to zero
-           // progressBar.setProgress(0);
+            progressBar.setProgress(0);
             super.onPreExecute();
         }
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
             // Making progress bar visible
-           // progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
 
             // updating progress bar value
-            //progressBar.setProgress(progress[0]);
+            progressBar.setProgress(progress[0]);
 
             // updating percentage value
             txtPercentage.setText(String.valueOf(progress[0]) + "%");
@@ -302,7 +319,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("File pasddddddath: ", filePath);
 
                 File file = new File(filePath);
-                url = new URL("http://192.168.0.14:8080/archivos?");
+                url = new URL("http://192.168.0.19:8080/archivos?");
                 con = (HttpURLConnection) url.openConnection();
 
                 // Activar método POST
@@ -379,7 +396,7 @@ public class MainActivity extends AppCompatActivity
 
                 Log.d("File pasddddddath: ", filePath);
 
-                url = new URL("http://192.168.0.14:8080/archivos?");
+                url = new URL("http://192.168.0.19:8080/archivos?");
                 con = (HttpURLConnection) url.openConnection();
 
                 // Activar método POST
@@ -458,8 +475,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_shareWithMe:
                 fragment = new ShareFragment();
                 break;
-            case R.id.nav_settings:
-                fragment = new PreferencesFragment();
+            case R.id.nav_bin:
+                fragment = new BinFragment();
                 break;
             case R.id.nav_end_session:
                 fragment = new HomeFragment();

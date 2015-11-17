@@ -85,8 +85,9 @@
             android:parentActivityName=".MainActivity" >
         </activity>
         <activity
-            android:name=".SingleListItem"
-            android:label="Single Item Selected" >
+            android:name=".ListItemDetailsActivity"
+            android:label="Details"
+            android:parentActivityName=".MainActivity">
         </activity>
     </application>
 

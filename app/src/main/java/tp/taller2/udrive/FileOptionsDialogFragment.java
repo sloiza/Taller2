@@ -32,88 +32,46 @@ public class FileOptionsDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Choose an option")
-                .setItems(R.array.fileOptions, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        switch(which) {
-                            case 0:
-                                new deleteFileService().execute("http://192.168.1.9:8080/archivos");
-                                break;
-                            case 1:
-                                break;
-                            case 2:
-                                break;
-                        }
+        builder.setTitle("Restore");
+        builder.setMessage("Are you sure you want to restore this file?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Send the positive button event back to the host activity
+                        listener.onDialogPositiveClick(FileOptionsDialogFragment.this);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Send the negative button event back to the host activity
+                        listener.onDialogNegativeClick(FileOptionsDialogFragment.this);
                     }
                 });
         // Create the AlertDialog object and return it
         return builder.create();
     }
 
-    public String deleteFile(String URL) {
-        //String surname = surnameET.getText().toString();
-        StringBuilder stringBuilder = new StringBuilder();
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpDelete httpDelete = new HttpDelete(URL);
-        JSONObject json = new JSONObject();
-        try {
-            /*json.put("nombre",f.getName());
-            json.put("etiqueta","archivo");
-            json.put("fecha_ulti_modi","26102015");
-            json.put("usuario_ulti_modi","1234");
-            json.put("propietario",email);
-            json.put("baja_logica","no");
-            json.put("direccion","tmp/" + email + "/");*/
-            httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
-            httpDelete.setHeader("Content-Type", "application/json");
-            httpDelete.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            HttpResponse response = httpClient.execute(httpDelete);
-            StatusLine statusLine = response.getStatusLine();
-            int statusCode = statusLine.getStatusCode();
-            if (statusCode == 200) {
-                HttpEntity entity = response.getEntity();
-                InputStream inputStream = entity.getContent();
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
-                inputStream.close();
-            } else {
-                Log.d("JSON", "Failed to download file");
-            }
-        } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
-        }
-        return stringBuilder.toString();
+    /* The activity that creates an instance of this dialog fragment must
+     * implement this interface in order to receive event callbacks.
+     * Each method passes the DialogFragment in case the host needs to query it. */
+    public interface FileOptionsDialogListener {
+        void onDialogPositiveClick(DialogFragment dialog);
+        void onDialogNegativeClick(DialogFragment dialog);
     }
 
-    private class deleteFileService extends AsyncTask<String, Void, String> {
-        protected String doInBackground(String... urls) {
-            return deleteFile(urls[0]);
-        }
+    FileOptionsDialogListener listener;
 
-        protected void onPostExecute(String result) {
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                Object status = jsonObject.get("estado");
-                Object message = jsonObject.get("mensaje");
-                Log.d("result", result);
-                Log.d("Status", status.toString());
-                Log.d("Message", message.toString());
-                if(status.equals("ok")) {
-                    Toast.makeText(getContext(), R.string.success_register, Toast.LENGTH_LONG).show();
-                }
-            } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
-            }
+    // Override the Fragment.onAttach() method to instantiate the LogOutDialogListener
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // Verify that the host activity implements the callback interface
+        try {
+            // Instantiate the LogOutDialogListener so we can send events to the host
+            listener = (FileOptionsDialogListener) activity;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(activity.toString()
+                    + " must implement NewFolderDialogListener");
         }
     }
 }
