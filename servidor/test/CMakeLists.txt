@@ -11,6 +11,7 @@ find_package(Threads REQUIRED)
 find_package(GTest REQUIRED)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/tmp)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/tmp/carpetaVacia)
 
 file(GLOB TEST correrTests.cpp)
 file(GLOB TEST_CONEXION "conexion/*.cpp" conexion/mongoose.c)
