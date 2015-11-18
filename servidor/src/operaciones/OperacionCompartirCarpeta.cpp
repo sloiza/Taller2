@@ -46,7 +46,7 @@ ConexionServidor::Respuesta OperacionCompartirCarpeta::post(Utiles::Bytes* conte
 {
 	ConexionServidor::BaseDeDatos::CarpetaCompartirConUsuarios carpetaYUsuarios( contenido->getStringDeBytes() );
 
-	std::string carpeta = carpetaYUsuarios.getNombreCarpeta();
+	std::string carpeta = carpetaYUsuarios.getPathCarpeta();
 	for ( std::string mailUsuario : carpetaYUsuarios.getUsuariosACompartirles() )
 	{
 		compartirCarpetaConUsuario( mailUsuario,  carpeta);

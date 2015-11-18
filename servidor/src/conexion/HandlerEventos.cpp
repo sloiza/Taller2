@@ -30,7 +30,12 @@ int HandlerEventos::handler(struct mg_connection* conn, enum mg_event ev)
 			Utiles::Log::instancia()->info( std::string("\nConexion recibida:\n") + conexion->impresion(), std::string("HandlerEventos"));
 
 			ConexionServidor::Respuesta respuesta = conexion->procesarRequest();
-			std::cout << "respuesta:\n" << respuesta.getContenido() << "\n";
+
+			// si se esta recuperando el usuario, entonces evito imprimir los datos para q no me imprima el string que contiene los bytes
+			// de la imagen.
+			if ( !(conexion->getUri()->getURI().compare("/usuario") == 0 && conexion->getMetodo()->impresion().compare("GET") == 0) )
+				std::cout << "respuesta:\n" << respuesta.getContenido() << "\n";
+
 
 			if ( respuesta.getEsDescarga() )
 			{

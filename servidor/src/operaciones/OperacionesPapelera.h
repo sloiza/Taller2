@@ -1,21 +1,20 @@
 /*
- * OperacionesCarpetas.h
+ * OperacionesPapelera.h
  *
- *  Created on: 30/10/2015
+ *  Created on: 16/11/2015
  *      Author: manuel
  */
 
-#ifndef OPERACIONESCARPETAS_H_
-#define OPERACIONESCARPETAS_H_
-
-
-// carpetas
-#include "../archivos/Carpeta.h"
+#ifndef OPERACIONESPAPELERA_H_
+#define OPERACIONESPAPELERA_H_
 
 // Operaciones
 #include "IOperable.h"
 #include "InfoOperaciones.h"
-
+// entidadaes
+#include "../bd/entidades/ContenidoPorCarpeta.h"
+#include "../bd/entidades/User.h"
+#include "../bd/entidades/ArchivoLogico.h"
 // STL
 #include <iostream>
 #include <string>
@@ -26,10 +25,11 @@ namespace ConexionServidor
 namespace Operaciones
 {
 
-class OperacionesCarpetas: public IOperable {
+class OperacionesPapelera : public IOperable
+{
 public:
-	OperacionesCarpetas();
-	virtual ~OperacionesCarpetas();
+	OperacionesPapelera();
+	virtual ~OperacionesPapelera();
 
 	ConexionServidor::Respuesta delet(Utiles::Bytes* contenido, std::string query);
 	ConexionServidor::Respuesta get(Utiles::Bytes* contenido, std::string query);
@@ -38,10 +38,8 @@ public:
 
 	void imprimir();
 
-
-	void agregarCarpetaALaListaDeArchivosPorCarpeta(std::string contenido);
 };
 };
 };
 
-#endif /* OPERACIONESCARPETAS_H_ */
+#endif /* OPERACIONESPAPELERA_H_ */

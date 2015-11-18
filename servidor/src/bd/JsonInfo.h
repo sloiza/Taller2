@@ -30,6 +30,7 @@ public:
 
 	void agregarValorAAtributo(std::string campo, std::string valorAAgregar);
 	void borrarValorDeAtributo(std::string campo, std::string valorABorrar);
+	void borrarValoresDeAtributo(std::string campo);
 	std::vector<std::string> getListaDeValorDeAtributo(std::string campo, std::string valorDefault);
 
 	void setContenido();

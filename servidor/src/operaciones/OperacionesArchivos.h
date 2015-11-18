@@ -17,6 +17,7 @@
 #include "../bd/entidades/ContenidoPorCarpeta.h"
 // Operaciones
 #include "IOperable.h"
+#include "InfoOperaciones.h"
 
 // STL
 #include <iostream>
@@ -50,6 +51,7 @@ public:
 	static bool error;
 	static bool sobreescribir;
 	static void agregarArchivoALaListaDeArchivosPorCarpeta(std::string);
+	static void agregarArchivoALaListaDeArchivosDeUsuario(std::string);
 
 };
 };

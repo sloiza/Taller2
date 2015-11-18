@@ -74,6 +74,14 @@ void ContenidoPorCarpeta::eliminarCarpeta(std::string carpetaAEliminar)
 {
 	this->info->borrarValorDeAtributo(etiquetas[CARPETAS], carpetaAEliminar);
 }
+void ContenidoPorCarpeta::eliminarTodosLosArchivos()
+{
+	this->info->borrarValoresDeAtributo(etiquetas[ARCHIVOS]);
+}
+void ContenidoPorCarpeta::eliminarTodasLosCarpetas()
+{
+	this->info->borrarValoresDeAtributo(etiquetas[CARPETAS]);
+}
 
 std::string ContenidoPorCarpeta::getPath()
 {

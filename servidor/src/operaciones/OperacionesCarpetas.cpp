@@ -34,8 +34,40 @@ ConexionServidor::Respuesta OperacionesCarpetas::delet(Utiles::Bytes* contenido,
 		return respuesta;
 	}
 
-	std::cout << "check\n";
+	// 2) sacarlo de contenidoPorCarpeta
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoEnCarpeta;
+	contenidoEnCarpeta.setPath( carpeta.getDireccion() );
+	std::string valorRecuperado = contenidoEnCarpeta.recuperar();
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("Carpeta inexistente.");
+		return respuesta;
+	}
+	contenidoEnCarpeta.setContenido( valorRecuperado );
 
+	//contenidoEnCarpeta.eliminarArchivo( archivoLogico.getNombreYExtension() );
+	contenidoEnCarpeta.eliminarCarpeta( carpeta.getPath() );
+
+	contenidoEnCarpeta.guardar();
+
+	// 3) agregarlo a la papelera
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta papelera;
+
+	papelera.setPath( carpeta.getPropietario() + "/" + InfoOperaciones::papelera );
+
+	valorRecuperado = papelera.recuperar();
+
+	if ( valorRecuperado.compare("vacio") != 0 )
+	{
+		papelera.setContenido( valorRecuperado );
+	}
+
+	papelera.agregarCarpeta( carpeta.getPath() );
+
+	papelera.guardar();
+
+	// ---- //
 	carpeta.eliminar();
 
 	respuesta.setEstado("ok");
@@ -63,6 +95,8 @@ ConexionServidor::Respuesta OperacionesCarpetas::post(Utiles::Bytes* contenido, 
 
 	carpeta.guardar();
 
+	agregarCarpetaALaListaDeArchivosPorCarpeta( contenido->getStringDeBytes() );
+
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Carpeta creada correctamente!");
 	return respuesta;
@@ -78,4 +112,24 @@ ConexionServidor::Respuesta OperacionesCarpetas::put(Utiles::Bytes* contenido, s
 void OperacionesCarpetas::imprimir()
 {
 	std::cout << "carpetas\n";
+}
+
+void OperacionesCarpetas::agregarCarpetaALaListaDeArchivosPorCarpeta(std::string contenido)
+{
+	ConexionServidor::BaseDeDatos::CarpetaLogica carpetaLogica(contenido);
+
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoEnCarpeta;
+	contenidoEnCarpeta.setPath( carpetaLogica.getDireccion() );
+
+	std::string valorRecuperado = contenidoEnCarpeta.recuperar();
+
+	if ( valorRecuperado.compare("vacio") != 0 )
+	{// si recupero algo, entonces lo seteo el contenido recuperado. sino no hace falta.
+		contenidoEnCarpeta.setContenido(valorRecuperado);
+	}
+
+	//contenidoEnCarpeta.agregarArchivo( archivoLogico.getNombreYExtension() );
+	contenidoEnCarpeta.agregarCarpeta( carpetaLogica.getPath() );
+
+	contenidoEnCarpeta.guardar();
 }

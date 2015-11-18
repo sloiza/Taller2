@@ -47,11 +47,27 @@ ConexionServidor::Respuesta OperacionesArchivos::delet(Utiles::Bytes* contenido,
 	}
 	contenidoEnCarpeta.setContenido( valorRecuperado );
 
-	contenidoEnCarpeta.eliminarArchivo( archivoLogico.getNombreYExtension() );
+	//contenidoEnCarpeta.eliminarArchivo( archivoLogico.getNombreYExtension() );
+	contenidoEnCarpeta.eliminarArchivo( archivoLogico.getPath() );
 
 	contenidoEnCarpeta.guardar();
 	// 3) agregarlo a la papelera
-	//ConexionServidor::BaseDeDatos::Papelera agregarArchivo( archivoLogico );
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta papelera;
+
+	papelera.setPath( archivoLogico.getPropietario() + "/" + InfoOperaciones::papelera );
+
+	std::cout << "archivos path papelera: " + archivoLogico.getPropietario() + "/" + InfoOperaciones::papelera << "\n";
+
+	valorRecuperado = papelera.recuperar();
+
+	if ( valorRecuperado.compare("vacio") != 0 )
+	{
+		papelera.setContenido( valorRecuperado );
+	}
+
+	papelera.agregarArchivo( archivoLogico.getPath() );
+
+	papelera.guardar();
 
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Archivo dado de baja correctamente!");
@@ -142,6 +158,7 @@ void OperacionesArchivos::settearContenidoSegunFlag(Utiles::Bytes* contenido)
 		{// si no estoy sobreescribiendo, lo estoy creando, entonces lo guardo tanto fisica como logicamente.
 			archivoTemporal->guardar();
 			agregarArchivoALaListaDeArchivosPorCarpeta( archivoTemporal->getContenido() );
+			agregarArchivoALaListaDeArchivosDeUsuario( archivoTemporal->getContenido() );
 		}
 
 	}
@@ -222,7 +239,28 @@ void OperacionesArchivos::agregarArchivoALaListaDeArchivosPorCarpeta(std::string
 		contenidoEnCarpeta.setContenido(valorRecuperado);
 	}
 
-	contenidoEnCarpeta.agregarArchivo( archivoLogico.getNombreYExtension() );
+	//contenidoEnCarpeta.agregarArchivo( archivoLogico.getNombreYExtension() );
+	contenidoEnCarpeta.agregarArchivo( archivoLogico.getPath() );
+
+	contenidoEnCarpeta.guardar();
+}
+
+void OperacionesArchivos::agregarArchivoALaListaDeArchivosDeUsuario(std::string contenido)
+{
+	ConexionServidor::BaseDeDatos::ArchivoLogico archivoLogico(contenido);
+
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoEnCarpeta;
+	contenidoEnCarpeta.setPath( archivoLogico.getPropietario() + "/" + InfoOperaciones::carpetaArchivosPorUsuario );
+
+	std::string valorRecuperado = contenidoEnCarpeta.recuperar();
+
+	if ( valorRecuperado.compare("vacio") != 0 )
+	{// si recupero algo, entonces lo seteo el contenido recuperado. sino no hace falta.
+		contenidoEnCarpeta.setContenido(valorRecuperado);
+	}
+
+	//contenidoEnCarpeta.agregarArchivo( archivoLogico.getNombreYExtension() );
+	contenidoEnCarpeta.agregarArchivo( archivoLogico.getPath() );
 
 	contenidoEnCarpeta.guardar();
 }

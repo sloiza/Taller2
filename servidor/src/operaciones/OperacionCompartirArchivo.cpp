@@ -70,7 +70,7 @@ void OperacionCompartirArchivo::imprimir()
 	std::cout << "compartirArchivo\n";
 }
 
-void OperacionCompartirArchivo::compartirArchivoConUsuario(std::string mailUsuario, std::string carpeta )
+void OperacionCompartirArchivo::compartirArchivoConUsuario(std::string mailUsuario, std::string archivo )
 {
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoDeCarpeta;
 
@@ -81,9 +81,10 @@ void OperacionCompartirArchivo::compartirArchivoConUsuario(std::string mailUsuar
 	if ( valorRecuperado.compare("vacio") != 0 )
 	{
 		contenidoDeCarpeta.setContenido( valorRecuperado );
+		return;
 	}
 
-	contenidoDeCarpeta.agregarArchivo( carpeta );
+	contenidoDeCarpeta.agregarArchivo( archivo );
 
 	contenidoDeCarpeta.guardar();
 }

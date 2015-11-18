@@ -48,6 +48,11 @@ void JsonInfo::borrarValorDeAtributo(std::string campo, std::string valorABorrar
 	}
 }
 
+void JsonInfo::borrarValoresDeAtributo(std::string campo)
+{
+	this->raiz[campo].clear();
+}
+
 std::vector<std::string> JsonInfo::getListaDeValorDeAtributo(std::string campo, std::string valorDefault)
 {
 	Json::Value valueValores = this->raiz[campo];

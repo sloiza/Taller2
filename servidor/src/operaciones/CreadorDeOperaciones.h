@@ -20,6 +20,7 @@
 #include "OperacionesCarpetas.h"
 #include "OperacionErrorURL.h"
 #include "OperacionPrincipal.h"
+#include "OperacionesPapelera.h"
 #include "InfoOperaciones.h"
 
 // STL
@@ -44,7 +45,8 @@ public:
 		CARPETAS,
 		COMPARTIR_ARCHIVO,
 		COMPARTIR_CARPETA,
-		DESCARGAR
+		DESCARGAR,
+		PAPELERA
 	};
 
 	struct Recurso
