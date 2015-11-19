@@ -10,21 +10,15 @@ Sobre la carpeta Servidor/build ejecutar:
 
 .. code-block:: bash
 
-   $ make test 
+   $ make tests 
 
 
-Si no se ha compilado el servidor, antes debe ejecutarse sobre la carpeta Servidor/build:
+Si no se ha compilado el servidor, antes debe ejecutarse sobre la carpeta servidor/build:
 
 .. code-block:: bash
 
    $ cmake ..
    $ make 
-
-Para ver el resultado de las pruebas en detalle
-
-.. code-block:: bash
-
-   $ ctest -V
 
 
 Pruebas REST API
@@ -39,7 +33,6 @@ Finalmente para correr las pruebas (el servidor debe estar corriendo):
 .. code-block:: bash
 
    $ python restTester.py
-
 
 
 Cobertura
