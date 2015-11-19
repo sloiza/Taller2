@@ -27,9 +27,17 @@ public:
 	static void destruir();
 
 	void info(const std::string& mensaje, const std::string& autor);
+	void error(const std::string& mensaje, const std::string& autor);
+	void warn(const std::string& mensaje, const std::string& autor);
+	void debug(const std::string& mensaje, const std::string& autor);
+	void trace(const std::string& mensaje, const std::string& autor);
 
 private:
-	std::fstream log;
+	std::fstream logInfo;
+	std::fstream logError;
+	std::fstream logWarn;
+	std::fstream logDebug;
+	std::fstream logTrace;
 	static Log* ptr;
 
 };
