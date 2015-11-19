@@ -150,7 +150,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }else{
                 if(Utility.validatePassword(newpassword)){
                     if(sessionEmail.equals(newEmail) && sessionPassword.equals(newpassword)){
-                        new getUserUpdateProfileService().execute("http://192.168.1.8:8080/usuario?");
+                        new getUserUpdateProfileService().execute("http://192.168.1.8:8080/usuario?modificar");
                     } else {
                         new getUserUpdateProfileAndStartNewSessionService().execute("http://192.168.1.8:8080/usuario?");
                     }

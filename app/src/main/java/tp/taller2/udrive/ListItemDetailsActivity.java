@@ -12,11 +12,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.HttpGet;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Random;
 
 import cz.msebera.android.httpclient.HttpEntity;
@@ -41,6 +44,13 @@ public class ListItemDetailsActivity extends AppCompatActivity {
     EditText lastModUserET;
     EditText ownerET;
     EditText locationET;
+    String actualItemPath;
+    SessionManager session;
+    HashMap<String, String> user;
+    String email;
+    String itemName;
+    String name;
+    String surname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +72,20 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         ownerET = (EditText)findViewById(R.id.itemOwner);
         locationET = (EditText)findViewById(R.id.itemLocation);
 
-        Intent i = getIntent();
-        String product = i.getStringExtra("itemName");
-        nameET.setText(product);
+        session = new SessionManager(getApplicationContext());
+        user = session.getUserDetails();
+        email = user.get(SessionManager.KEY_EMAIL);
+        name = user.get(SessionManager.KEY_NAME);
+        surname = user.get(SessionManager.KEY_SURNAME);
+
+        Intent intent = getIntent();
+        itemName = intent.getStringExtra("itemName");
+        actualItemPath = "tmp/" + email + "/";
+
+        nameET.setText(itemName);
+        ownerET.setText(name + " " + surname);
+        locationET.setText(actualItemPath);
+        new getItemMetadataService().execute("http://192.168.0.14:8080/archivos");
     }
 
     public void editItemDetails(View view) {
@@ -79,6 +100,70 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                 new putModifyItemDetailsService().execute("http://192.168.0.14:8080/archivos?modificar");
         }else{
             Toast.makeText(getApplicationContext(), R.string.error_emptyFields, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public String getItemMetadata(String URL) {
+        StringBuilder stringBuilder = new StringBuilder();
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet httpGet = new HttpGet(URL);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("path",actualItemPath);
+            httpGet.setEntity(new StringEntity(json.toString(), "UTF-8"));
+            httpGet.setHeader("Content-Type", "application/json");
+            httpGet.setHeader("Accept-Encoding", "application/json");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            HttpResponse response = httpClient.execute(httpGet);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+                InputStream inputStream = entity.getContent();
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                inputStream.close();
+            } else {
+                Log.d("JSON", "Failed to get metadata of item");
+            }
+        } catch (Exception e) {
+            Log.d("readJSONFeed", e.getLocalizedMessage());
+        }
+        return stringBuilder.toString();
+    }
+
+    private class getItemMetadataService extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... urls) {
+            return getItemMetadata(urls[0]);
+        }
+
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                Object status = jsonObject.get("estado");
+                Object message = jsonObject.get("mensaje");
+                Object label = jsonObject.get("etiqueta");
+                Object lastModDate = jsonObject.get("fecha_ulti_modi");
+                Object lastModUser = jsonObject.get("usuario_ulti_modi");
+                if(status.equals("ok")) {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    labelET.setText(label.toString());
+                    lastModDateET.setText(lastModDate.toString()); ;
+                    lastModUserET.setText(lastModUser.toString());
+                    ownerET.setText(name + " " + surname);
+                    nameET.setText(itemName);
+                    locationET.setText("tmp/" + email + "/");
+                }
+            } catch (Exception e) {
+                Log.d("ReadJSONTask", e.getLocalizedMessage());
+            }
         }
     }
 
@@ -102,6 +187,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
             json.put("propietario",owner);
             json.put("baja_logica","no");
             json.put("direccion",location);
+            json.put("path",actualItemPath);
             httpPut.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPut.setHeader("Content-Type", "application/json");
             httpPut.setHeader("Accept-Encoding", "application/json");
@@ -123,7 +209,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to download file");
+                Log.d("JSON", "Failed to modify metadata of item");
             }
         } catch (Exception e) {
             Log.d("readJSONFeed", e.getLocalizedMessage());
@@ -141,9 +227,6 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
-                Log.d("result", result);
-                Log.d("Status", status.toString());
-                Log.d("Message", message.toString());
                 if(status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     navigatetoMainActivity();

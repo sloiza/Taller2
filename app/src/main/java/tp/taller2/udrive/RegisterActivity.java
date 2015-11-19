@@ -109,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
                 emailET.setError(getString(R.string.email_error));
             }else{
                 if(Utility.validatePassword(password)){
-                    new getUserSignUpService().execute("http://192.168.0.14:8080/usuario?");
+                    new getUserSignUpService().execute("http://192.168.1.9:8080/usuario?");
                 } else {
                     pwdET.requestFocus();
                     pwdET.setError(getString(R.string.password_error));

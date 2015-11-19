@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
                 emailET.setError(getString(R.string.email_error));
             }else{
                 if(Utility.validatePassword(password)){
-                    new getUserLoginService().execute("http://192.168.0.14:8080/usuario?");
+                    new getUserLoginService().execute("http://192.168.1.9:8080/usuario?");
                 }else{
                     passwordET.requestFocus();
                     passwordET.setError(getString(R.string.password_error));

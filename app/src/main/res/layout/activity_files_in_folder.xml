@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinatorLayout"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:padding="10dip"
+                android:gravity="center_vertical"
+                android:textSize="20sp"
+                android:textStyle="bold|italic"
+                android:textColor="#000000"
+                android:background="@color/background"
+                android:text="Files" />
+
+            <ListView
+                android:id="@+id/list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </ListView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/background"
+                android:textSize="20sp"
+                android:padding="10dip"
+                android:textColor="#000000"
+                android:textStyle="bold|italic"
+                android:gravity="center_vertical"
+                android:text="Folders" />
+
+            <ListView
+                android:id="@+id/folder_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </ListView>
+        </LinearLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/right_labels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|end"
+        app:fab_addButtonColorPressed="@color/ColorPrimary"
+        app:fab_addButtonStrokeVisible="true"
+        app:fab_addButtonColorNormal="@color/ColorPrimary">
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/uploadButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/ColorPrimary"
+            app:fab_colorPressed="@color/ColorPrimary"
+            app:fab_size="mini"
+            app:fab_stroke_visible="true"
+            android:onClick="uploadFile"
+            app:fab_title="Upload"
+            app:fab_icon="@drawable/ic_action_upload"/>
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/newFolderButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/ColorPrimary"
+            app:fab_colorPressed="@color/ColorPrimary"
+            app:fab_size="mini"
+            android:onClick="newFolder"
+            app:fab_stroke_visible="true"
+            app:fab_icon="@drawable/ic_menu_folder"
+            app:fab_title="New folder"/>
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+</android.support.design.widget.CoordinatorLayout>

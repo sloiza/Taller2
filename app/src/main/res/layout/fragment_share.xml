@@ -1,46 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipe_refresh_layout"
+    android:layout_marginTop="55dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/lastWeekLabel"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="#eeeeee"
-        android:layout_marginTop="60dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:paddingTop="5dp"
-        android:textSize="16sp"
-        android:text="Last week"
-        android:textColor="#000000"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/actualMonthLabel"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="#eeeeee"
-        android:layout_marginTop="120dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:paddingTop="5dp"
-        android:textSize="16sp"
-        android:text="This month"
-        android:textColor="#000000"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:padding="10dip"
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            android:textStyle="bold|italic"
+            android:textColor="#000000"
+            android:background="@color/background"
+            android:text="Files" />
 
-    <TextView
-        android:id="@+id/lastMonthLabel"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="#eeeeee"
-        android:layout_marginTop="180dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:paddingTop="5dp"
-        android:textSize="16sp"
-        android:text="September"
-        android:textColor="#000000"/>
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip" >
+        </ListView>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dip"
+            android:background="@color/background"
+            android:textSize="20sp"
+            android:padding="10dip"
+            android:textColor="#000000"
+            android:textStyle="bold|italic"
+            android:gravity="center_vertical"
+            android:text="Folders" />
 
-</RelativeLayout>
+        <ListView
+            android:id="@+id/folder_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip" >
+        </ListView>
+    </LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

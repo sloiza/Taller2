@@ -7,8 +7,16 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -110,5 +118,52 @@ public class Utility {
             extension = filePath.substring(i+1);
         }
         return extension;
+    }
+
+    public static String getNameFromFile(String filePath) {
+        return filePath.substring(0, filePath.lastIndexOf("."));
+    }
+
+    public static byte[] convertFileToByteArray(File f)
+    {
+        byte[] byteArray = null;
+        try
+        {
+            InputStream inputStream = new FileInputStream(f);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] b = new byte[1024*8];
+            int bytesRead;
+
+            while ((bytesRead = inputStream.read(b)) != -1)
+            {
+                bos.write(b, 0, bytesRead);
+            }
+
+            byteArray = bos.toByteArray();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return byteArray;
+    }
+
+    public static void setDynamicHeight(ListView mListView) {
+        ListAdapter mListAdapter = mListView.getAdapter();
+        if (mListAdapter == null) {
+            // when adapter is null
+            return;
+        }
+        int height = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(mListView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        for (int i = 0; i < mListAdapter.getCount(); i++) {
+            View listItem = mListAdapter.getView(i, null, mListView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            height += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = mListView.getLayoutParams();
+        params.height = height + (mListView.getDividerHeight() * (mListAdapter.getCount() - 1));
+        mListView.setLayoutParams(params);
+        mListView.requestLayout();
     }
 }
