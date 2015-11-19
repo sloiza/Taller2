@@ -15,9 +15,6 @@ Indice:
    /Admin/guiaAdministrador
    /Usuario/manualdeusuario
    /Tecnica/docTecnica
-   /src/servidor
-   /src/cliente
-
 
 
 Indices y tablas

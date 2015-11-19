@@ -1,22 +1,28 @@
-1-Tecnologías utilizadas durante el desarrollo
+Tecnologías utilizadas durante el desarrollo
 ==============================================
 
-* C++ std=11, para el desarrolo del servidor
+* C++ para el desarrolo del servidor
 
 * CMake para la compilación [#f1]_
 
 * Java con la SDK de Android para el desarrollo del cliente [#f2]_
 
-* Rocksdb para la base de datos en el servidor [#f3]_
+* RocksDB para la base de datos en el servidor [#f3]_
 
-* SQLlite para la base de datos del cliente [#f4]_
+* GIT para el control de versiones [#f4]_
 
-* GIT para el control de versiones [#f5]_
+* Google Test como framework de C++ tests. [#f5]_
+
+* Travis CI para integración continua [#f6]_
+
+* Docker como unidad de software que contiene el entorno necesario para ejecutar el server [#f7]_
 
 .. rubric:: Footnotes
 
 .. [#f1] http://www.cmake.org/
 .. [#f2] http://developer.android.com/sdk/index.html
 .. [#f3] http://rocksdb.org/
-.. [#f4] https://www.sqlite.org/
-.. [#f5] http://es.wikipedia.org/wiki/Git
+.. [#f4] http://es.wikipedia.org/wiki/Git
+.. [#f5] https://code.google.com/p/googletest/
+.. [#f6] https://travis-ci.org/
+.. [#f7] https://www.docker.com/

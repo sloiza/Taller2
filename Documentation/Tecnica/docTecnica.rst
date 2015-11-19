@@ -10,4 +10,6 @@ Indice:
    :maxdepth: 1
    
    /Tecnica/tecnoUsada
+   /src/servidor
+   /src/cliente
    /Tecnica/pruebas
