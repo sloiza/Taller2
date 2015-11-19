@@ -27,7 +27,7 @@ if [ ! -d "rocksdb-travis-master/" ]; then
 	echo "install rocks"
 	cd rocksdb-travis-master/ROCKS/ 
 	make
-	sudo make install
+	make static_lib
 	rm master.zip
 	cd ../../..
 fi
