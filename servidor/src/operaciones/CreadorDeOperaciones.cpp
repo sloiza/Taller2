@@ -92,7 +92,6 @@ IOperable* CreadorDeOperaciones::getOperacion(ConexionServidor::Request::URI* ur
     campos = uri->getRecursosDividos();
 
     std::cout << "uri: " << uri->getURI() << "\n";
-    Utiles::Log::instancia()->info("Usuario inexiste.", this->nombreClase() );
 
     return reconocerUriRecursivamente(raiz, 1);
 }
@@ -132,7 +131,7 @@ IOperable* CreadorDeOperaciones::crearOperacion(InfoOperaciones::OPERACIONES tip
 		case InfoOperaciones::BUSCAR: return new OperacionBusqueda();
 		default:
 			{
-				Utiles::Log::instancia()->warn("URL no mapeada.", this->nombreClase() );
+				Utiles::Log::instancia()->warn("URL no mapeada.", nombreClase() );
 				return new OperacionErrorURL();
 			}
 	}

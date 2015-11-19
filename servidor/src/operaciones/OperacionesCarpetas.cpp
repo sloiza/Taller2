@@ -76,21 +76,39 @@ ConexionServidor::Respuesta OperacionesCarpetas::delet(Utiles::Bytes* contenido,
 }
 ConexionServidor::Respuesta OperacionesCarpetas::get(Utiles::Bytes* contenido, std::string query)
 {
+	ConexionServidor::BaseDeDatos::CarpetaLogica carpetaLogica( contenido->getStringDeBytes() );
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoDeCarpeta( contenido->getStringDeBytes() );
 
-	std::string valorRecuperado = contenidoDeCarpeta.recuperar();
+	std::string valorRecuperadoArchivos = contenidoDeCarpeta.recuperar();
 
 	ConexionServidor::Respuesta respuesta;
-	if ( valorRecuperado.compare("vacio") == 0 )
+	if ( valorRecuperadoArchivos.compare("vacio") == 0 )
 	{
 		respuesta.setEstado("no-existe");
-		respuesta.setMensaje("No existe carpeta para el usuario inexistente.");
+		respuesta.setMensaje("No existe carpeta.");
 		return respuesta;
 	}
 
-	respuesta.setContenido(valorRecuperado);
+	std::string valorRecuperadoDetalles = carpetaLogica.recuperar();
+
+	if ( valorRecuperadoDetalles.compare("vacio") == 0 )
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("No existe carpeta.");
+		return respuesta;
+	}
+
+	if ( query.compare("detalles") == 0 )
+	{
+		respuesta.setContenido(valorRecuperadoDetalles);
+	}
+	else
+	{
+		respuesta.setContenido(valorRecuperadoArchivos);
+	}
+
 	respuesta.setEstado("ok");
-	respuesta.setMensaje("Pagina principal accedida correctamente!");
+	respuesta.setMensaje("Carpeta accedida correctamente!");
 	return respuesta;
 }
 ConexionServidor::Respuesta OperacionesCarpetas::post(Utiles::Bytes* contenido, std::string query)

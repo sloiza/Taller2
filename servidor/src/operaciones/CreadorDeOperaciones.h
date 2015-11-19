@@ -75,7 +75,7 @@ public:
 
 	static IOperable* crearOperacion(InfoOperaciones::OPERACIONES tipo);
 
-	std::string nombreClase();
+	static std::string nombreClase();
 
 private:
 	static std::vector<std::string> campos;

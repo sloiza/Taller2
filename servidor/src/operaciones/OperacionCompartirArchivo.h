@@ -41,7 +41,7 @@ public:
 
 	void compartirArchivoConUsuario(std::string mail, std::string carpeta );
 
-	std::string OperacionCompartirArchivo::nombreClase();
+	std::string nombreClase();
 };
 };
 };
