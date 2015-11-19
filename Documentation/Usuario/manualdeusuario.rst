@@ -14,7 +14,7 @@ Iniciar la aplicación:
 Para poder utilizar la aplicación, una vez instalada, seleccione el icono que se muestra a continuación en la imagen.
 
 .. image:: /Usuario/imagenes/launchApp.png
-   :scale: 40 %
+   :scale: 35 %
    :align: center
    
 A continuación se muestra en detalle los pasos que debe seguir para poder ingresar al sistema.
@@ -33,9 +33,9 @@ Para ello debe realizar los siguientes pasos:
 3. Al finalizar, presione el boton Register y su registro estará completo.
 
 .. |logo1| image:: /Usuario/imagenes/signUp.png
-   :scale: 40%
+   :scale: 35%
 .. |logo2| image:: /Usuario/imagenes/register.png
-   :scale: 40%
+   :scale: 35%
 
 +---------------+---------------+
 |    |logo1|    |    |logo2|    |
@@ -49,7 +49,7 @@ Finalizado el registro de datos, sera llevado a la pantalla de inicio en donde p
 De vuelta en la pantalla de inicio, ingrese su numero de email y la contraseña con los cuales se registró y presione el botón Login, si los datos están correctos podrá ingresar al sistema. 
 
 .. image:: /Usuario/imagenes/login.png
-   :scale: 40%
+   :scale: 35%
    :align: center
    
 Utilizar la Aplicación
@@ -70,9 +70,9 @@ Para poder subir un archivo debe seguir los siguientes pasos:
 4. Ahora en la pantalla de My Unity verá el archivo en la seccion Files que acaba de subir.
 
 .. |logo3| image:: /Usuario/imagenes/myUnity.png
-   :scale: 40%
+   :scale: 35%
 .. |logo4| image:: /Usuario/imagenes/fabActionUploadFile.png
-   :scale: 40%
+   :scale: 35%
 
 +---------------+---------------+
 |    |logo3|    |    |logo4|    |
@@ -92,11 +92,11 @@ la carpeta que desea crear.
 3. Ahora en la pantalla de My Unity verá la carpeta en la seccion Folders que acaba de crear.
 
 .. |logo4| image:: /Usuario/imagenes/myUnity.png
-   :scale: 35%
+   :scale: 30%
 .. |logo5| image:: /Usuario/imagenes/fabActionNewFolder.png
-   :scale: 35%
+   :scale: 30%
 .. |logo6| image:: /Usuario/imagenes/newFolder.png
-   :scale: 35%
+   :scale: 30%
    
 +----------+----------+----------+
 |  |logo4| |  |logo5| |  |logo6| |
@@ -119,13 +119,13 @@ debe realizar los siguientes pasos:
 5. Si selecciona la opcion indicada con el numero 4 accedera a la pantalla Storage donde puede ver el espacio de almacenamiento que esta usando.
 
 .. |logo7| image:: /Usuario/imagenes/navDrawer.png
-   :scale: 35%
+   :scale: 30%
 .. |logo8| image:: /Usuario/imagenes/shareWithMe.png
-   :scale: 35%
+   :scale: 30%
 .. |logo9| image:: /Usuario/imagenes/paperBin.png
-   :scale: 35%
+   :scale: 30%
 .. |logo10| image:: /Usuario/imagenes/storage.png
-   :scale: 35%
+   :scale: 30%
 
 +---------+---------+---------+----------+
 | |logo7| | |logo8| | |logo9| | |logo10| |
@@ -146,11 +146,11 @@ Para acceder a la informacion de su perfil, seleccion la opcion View Profile que
 4. Una vez finalizados los cambios, presione el boton save y volvera a la pantalla de My Unity o en caso de que haya modificado el mail y/o la contrasena, volvera a la pantalla de inicio para volver a iniciar sesion con sus nuevos datos.
 
 .. |logo11| image:: /Usuario/imagenes/navDrawer.png
-   :scale: 35%
+   :scale: 30%
 .. |logo12| image:: /Usuario/imagenes/profile.png
-   :scale: 35 %
+   :scale: 30 %
 .. |logo13| image:: /Usuario/imagenes/editProfile.png
-   :scale: 35%
+   :scale: 30%
    
 +----------+----------+----------+
 | |logo11| | |logo12| | |logo13| |
@@ -164,9 +164,9 @@ Para cerrar sesión, debe presionar el botón de log out indicado con el numero 
 Esto lo devolverá a la pantalla de logueo en caso de que desee iniciar sesión nuevamente.
 
 .. |logo14| image:: /Usuario/imagenes/navDrawer.png
-   :scale: 35%
+   :scale: 30%
 .. |logo15| image:: /Usuario/imagenes/logout.png
-   :scale: 35%
+   :scale: 30%
 
 +----------+----------+
 | |logo14| | |logo15| |
