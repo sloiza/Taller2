@@ -1,7 +1,7 @@
-Documentaci´on técnica
+Documentacion técnica
 ======================
 
-Documentaci´on técnica.
+Documentacion técnica.
 
 Indice:
 ^^^^^^^
