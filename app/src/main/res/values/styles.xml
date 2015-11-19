@@ -2,7 +2,12 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-       <!-- Customize your theme here. -->
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+        <item name="colorPrimary">@color/ColorPrimary</item>
+        <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeStyle">@style/LStyled.ActionMode</item>
     </style>
     <style name="EditTextTheme">
         <item name="colorControlActivated">#0D7694</item>
@@ -18,8 +23,27 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/ColorPrimary</item>
+        <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="actionModeStyle">@style/LStyled.ActionMode</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="menu_labels_style">
+        <item name="android:background">@color/ColorPrimary</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light">
+         <item name="actionModeStyle">@style/LStyled.ActionMode</item>
+    </style>
+
+    <style name="LStyled.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="background">@color/ColorPrimary</item>
+        <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
+        <item name="titleTextStyle">@color/windowBackground</item>
+    </style>
 
    </resources>

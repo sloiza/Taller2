@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:background="@drawable/a3e811c0"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:orientation="vertical"
+    android:gravity="bottom"
+    android:weightSum="1"
+    tools:showIn="@layout/activity_main2">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/circleView"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#ffffff"
+            android:text="Matias"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/surname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#ffffff"
+            android:text="Carreras"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="5dp"
+        android:text="mncarreras@gmail.com"
+        android:textSize="14sp"
+        android:textStyle="normal"/>
+    <TextView
+        android:id="@+id/profileLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View profile"
+        android:autoLink="all"
+        android:linksClickable="true"
+        android:clickable="true"
+        android:layout_marginLeft="16dp"
+        android:textColor="#ffffff"
+        android:textStyle="italic"
+        android:textSize="13sp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="left"/>
+
+</LinearLayout>
