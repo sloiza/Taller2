@@ -13,7 +13,7 @@ Indice:
    :maxdepth: 1
    
    /Admin/guiaAdministrador
-   /Usuario/guiaUsuario
+   /Usuario/manualdeusuario
    /Tecnica/docTecnica
    /src/servidor
    /src/cliente
