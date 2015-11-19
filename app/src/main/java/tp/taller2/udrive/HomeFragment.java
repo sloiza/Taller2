@@ -1,10 +1,5 @@
 package tp.taller2.udrive;
 
-/**
- * Created by mati on 30/09/15.
- */
-
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
@@ -59,8 +54,6 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
     HashMap<String, String> user;
     String email;
     SwipeRefreshLayout swipeRefreshLayout;
-    String shareUsers;
-    String products [] = {"Taller2.pdf", "tdd.pdf", "RNG.doc"};
 
     public HomeFragment(){}
 
@@ -69,24 +62,15 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         lv = (ListView) rootView.findViewById(R.id.list_view);
-        ArrayAdapter<String> productsList = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,products);
-        lv.setAdapter(productsList);
         registerForContextMenu(lv);
 
-        foldersList.add("taller");
-        foldersList.add("tecnicas");
-        foldersList.add("distribuidos");
-
         folderlv = (ListView) rootView.findViewById(R.id.folder_list_view);
-        ArrayAdapter<String> folderList = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,foldersList);
-        folderlv.setAdapter(folderList);
 
         Utility.setDynamicHeight(lv);
         Utility.setDynamicHeight(folderlv);
 
         folderlv.setOnItemClickListener(this);
         registerForContextMenu(folderlv);
-
 
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -107,8 +91,8 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        //swipeRefreshLayout.setRefreshing(true);
-                                        //new getUserFilesService().execute("http://192.168.1.9:8080/");
+                                        swipeRefreshLayout.setRefreshing(true);
+                                        new getUserFilesService().execute("http://192.168.1.9:8080/");
                                     }
                                 }
         );
@@ -118,7 +102,9 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
 
     @Override
     public void onRefresh() {
-        //new getUserFilesService().execute("http://192.168.1.9:8080/");
+        filesList.clear();
+        foldersList.clear();
+        new getUserFilesService().execute("http://192.168.1.9:8080/");
     }
 
     @Override
@@ -160,18 +146,14 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
     }
 
     private void shareCurrentItem() {
-        Toast.makeText(getContext(), "Share item click", Toast.LENGTH_LONG).show();
         showShareFileDialog();
     }
 
     private void deleteCurrentItem() {
-        Toast.makeText(getContext(), "Delete item click", Toast.LENGTH_LONG).show();
         if(!Utility.getExtensionFromFile(itemName).isEmpty()){
-            Toast.makeText(getContext(), "Delete file", Toast.LENGTH_LONG).show();
-            //new deleteFileService().execute("http://192.168.1.9:8080/archivos");
+            new deleteFileService().execute("http://192.168.1.9:8080/archivos");
         } else {
-            Toast.makeText(getContext(), "Delete folder", Toast.LENGTH_LONG).show();
-            //new deleteFolderService().execute("http://192.168.1.9:8080/carpetas");
+            new deleteFolderService().execute("http://192.168.1.9:8080/carpetas");
         }
     }
 
@@ -251,6 +233,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                     ArrayAdapter<String> folders = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,foldersList);
                     lv.setAdapter(files);
                     folderlv.setAdapter(folders);
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             } catch (Exception e) {
                 Log.d("Error", e.getLocalizedMessage());

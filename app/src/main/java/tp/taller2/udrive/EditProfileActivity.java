@@ -29,6 +29,7 @@ import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.StatusLine;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.client.methods.HttpPut;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -150,9 +151,9 @@ public class EditProfileActivity extends AppCompatActivity {
             }else{
                 if(Utility.validatePassword(newpassword)){
                     if(sessionEmail.equals(newEmail) && sessionPassword.equals(newpassword)){
-                        new getUserUpdateProfileService().execute("http://192.168.1.8:8080/usuario?modificar");
+                        new getUserUpdateProfileService().execute("http://192.168.1.9:8080/usuario?");
                     } else {
-                        new getUserUpdateProfileAndStartNewSessionService().execute("http://192.168.1.8:8080/usuario?");
+                        new getUserUpdateProfileAndStartNewSessionService().execute("http://192.168.1.9:8080/usuario?");
                     }
                 } else {
                     password.requestFocus();
@@ -222,11 +223,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
-                Log.d("result", result);
-                Log.d("Status", status.toString());
-                Log.d("Message", message.toString());
                 if(status.equals("ok")) {
-                    Toast.makeText(getApplicationContext(), R.string.success_register, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     navigatetoLoginActivity();
                 }
             } catch (Exception e) {
@@ -245,7 +243,7 @@ public class EditProfileActivity extends AppCompatActivity {
         String encodedImage = Utility.bitmapToString(profilePic);
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(URL);
+        HttpPut httpPut = new HttpPut(URL);
         JSONObject json = new JSONObject();
         try {
             json.put("nombre", newName);
@@ -254,14 +252,14 @@ public class EditProfileActivity extends AppCompatActivity {
             json.put("lugar", newCity);
             json.put("foto", encodedImage);
             json.put("password", newpassword);
-            httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
-            httpPost.setHeader("Content-Type", "application/json");
-            httpPost.setHeader("Accept-Encoding", "application/json");
+            httpPut.setEntity(new StringEntity(json.toString(), "UTF-8"));
+            httpPut.setHeader("Content-Type", "application/json");
+            httpPut.setHeader("Accept-Encoding", "application/json");
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            HttpResponse response = httpClient.execute(httpPost);
+            HttpResponse response = httpClient.execute(httpPut);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
             if (statusCode == 200) {
@@ -293,11 +291,10 @@ public class EditProfileActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
-                Log.d("result", result);
-                Log.d("Status", status.toString());
-                Log.d("Message", message.toString());
                 if(status.equals("ok")) {
-                    Toast.makeText(getApplicationContext(), R.string.success_register, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    session.createLoginSession(email.getText().toString(), name.getText().toString(), surname.getText().toString(),
+                            city.getText().toString(), password.getText().toString(), picturePath);
                     navigatetoProfileActivity();
                 }
             } catch (Exception e) {
@@ -311,16 +308,12 @@ public class EditProfileActivity extends AppCompatActivity {
      */
     public void navigatetoProfileActivity(){
         Intent profileIntent = new Intent(getApplicationContext(),ProfileActivity.class);
-        profileIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        profileIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(profileIntent);
     }
 
     public void navigatetoLoginActivity(){
-        Intent loginIntent = new Intent(getApplicationContext(),LoginActivity.class);
-        loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(loginIntent);
+        session.logoutUser();
     }
 
 }

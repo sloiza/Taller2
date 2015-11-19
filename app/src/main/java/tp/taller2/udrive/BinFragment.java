@@ -77,28 +77,12 @@ public class BinFragment extends Fragment implements AbsListView.OnItemClickList
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        filesList.add("fisica");
-        filesList.add("Resumen.pdf");
-        filesList.add("Tdd.doc");
-        filesList.add("Crisp.pdf");
-
-
-        // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_list_item_1, filesList);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_bin, container, false);
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -114,8 +98,8 @@ public class BinFragment extends Fragment implements AbsListView.OnItemClickList
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        //swipeRefreshLayout.setRefreshing(true);
-                                        //new getPaperBinFilesService().execute("http://192.168.1.9:8080/papelera");
+                                        swipeRefreshLayout.setRefreshing(true);
+                                        new getPaperBinFilesService().execute("http://192.168.1.9:8080/papelera");
                                     }
                                 }
         );
@@ -168,7 +152,7 @@ public class BinFragment extends Fragment implements AbsListView.OnItemClickList
 
     @Override
     public void onRefresh() {
-        //new getPaperBinFilesService().execute("http://192.168.1.9:8080/papelera");
+        new getPaperBinFilesService().execute("http://192.168.1.9:8080/papelera");
     }
 
     /**
@@ -251,6 +235,7 @@ public class BinFragment extends Fragment implements AbsListView.OnItemClickList
                     }
                     ArrayAdapter<String> files = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,filesList);
                     mListView.setAdapter(files);
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             } catch (Exception e) {
                 Log.d("ReadJSONTask", e.getLocalizedMessage());

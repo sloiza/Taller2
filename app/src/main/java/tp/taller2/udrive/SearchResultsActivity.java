@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cz.msebera.android.httpclient.HttpEntity;
@@ -33,6 +34,9 @@ public class SearchResultsActivity extends AppCompatActivity {
     String query;
     List<String> filesList = new ArrayList<>();
     private ListView lv;
+    SessionManager session;
+    HashMap<String, String> user;
+    String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +45,9 @@ public class SearchResultsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         lv = (ListView) findViewById(R.id.list_view);
 
-        filesList.add("taller");
-        filesList.add("Taller.pdf");
-        filesList.add("taller2.doc");
-        ArrayAdapter<String> files = new ArrayAdapter<>(getApplication(),R.layout.list_item,filesList);
-        lv.setAdapter(files);
+        session = new SessionManager(getApplicationContext());
+        user = session.getUserDetails();
+        email = user.get(SessionManager.KEY_EMAIL);
 
         handleIntent(getIntent());
     }
@@ -62,8 +64,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             query = intent.getStringExtra(SearchManager.QUERY);
-            Toast.makeText(getApplicationContext(), query, Toast.LENGTH_LONG).show();
-            //new getSearchFilesService().execute("http://192.168.0.14/buscar");
+            new getSearchFilesService().execute("http://192.168.1.9:8080/buscar?" + query);
         }
     }
 
@@ -73,14 +74,10 @@ public class SearchResultsActivity extends AppCompatActivity {
         HttpGet httpGet = new HttpGet(URL);
         JSONObject json = new JSONObject();
         try {
-            json.put("aBuscar",query);
+            json.put("mail", email);
             httpGet.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpGet.setHeader("Content-Type", "application/json");
             httpGet.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             HttpResponse response = httpClient.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();

@@ -170,16 +170,16 @@ public class MainActivity extends AppCompatActivity
         } else if (dialog.getTag().equals("newFolder")) {
             new postNewFolderService().execute("http://192.168.1.9:8080/carpetas");
         } else if (dialog.getTag().equals("restore")) {
-            new restoreFilesService().execute("http://192.168.1.9:8080/compartirCarpeta");
-        } else if (dialog.getTag().equals("shareUsers")) {
-            Log.d("itemName", itemName);
-            Log.d("dialogInput", dialogInput);
-            if(!Utility.getExtensionFromFile(itemName).isEmpty()){
-                Toast.makeText(getApplicationContext(), "share file", Toast.LENGTH_LONG).show();
-                //new shareFileService().execute("http://192.168.1.9:8080/compartirArchivo");
+            if(!Utility.getExtensionFromFile(restoreItem).isEmpty()){
+                new restoreFilesService().execute("http://192.168.1.9:8080/papelera");
             } else {
-                //new shareFolderService().execute("http://192.168.1.9:8080/compartirCarpeta");
-                Toast.makeText(getApplicationContext(), "share folder", Toast.LENGTH_LONG).show();
+                new restoreFolderService().execute("http://192.168.1.9:8080/papelera");
+            }
+        } else if (dialog.getTag().equals("shareUsers")) {
+            if(!Utility.getExtensionFromFile(itemName).isEmpty()){
+                new shareFileService().execute("http://192.168.1.9:8080/compartirArchivo");
+            } else {
+                new shareFolderService().execute("http://192.168.1.9:8080/compartirCarpeta");
             }
         }
 
@@ -220,6 +220,40 @@ public class MainActivity extends AppCompatActivity
         return stringBuilder.toString();
     }
 
+    public String restoreFolder(String URL) {
+        StringBuilder stringBuilder = new StringBuilder();
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPut httpPut = new HttpPut(URL);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("nombre", restoreItem);
+            json.put("direccion", "tmp/" + email + "/");
+            json.put("mail", email);
+            httpPut.setEntity(new StringEntity(json.toString(), "UTF-8"));
+            httpPut.setHeader("Content-Type", "application/json");
+            httpPut.setHeader("Accept-Encoding", "application/json");
+            HttpResponse response = httpClient.execute(httpPut);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) {
+               HttpEntity entity = response.getEntity();
+               InputStream inputStream = entity.getContent();
+               BufferedReader reader = new BufferedReader(
+               new InputStreamReader(inputStream));
+               String line;
+               while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+               }
+               inputStream.close();
+               } else {
+                  Log.d("JSON", "Failed to restore file");
+               }
+        } catch (Exception e) {
+          Log.d("readJSONFeed", e.getLocalizedMessage());
+        }
+        return stringBuilder.toString();
+    }
+
     @Override
     public void onFragmentInteraction(String name) {
         restoreItem = name;
@@ -245,6 +279,25 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
+             private class restoreFolderService extends AsyncTask<String, Void, String> {
+                 protected String doInBackground(String... urls) {
+                     return restoreFolder(urls[0]);
+                 }
+
+                 protected void onPostExecute(String result) {
+                     try {
+                         JSONObject jsonObject = new JSONObject(result);
+                         Object status = jsonObject.get("estado");
+                         Object message = jsonObject.get("mensaje");
+                         if (status.equals("ok")) {
+                             Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                         }
+                     } catch (Exception e) {
+                         Log.d("ReadJSONTask", e.getLocalizedMessage());
+                     }
+                 }
+             }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
@@ -704,46 +757,47 @@ public class MainActivity extends AppCompatActivity
                 Log.d("ReadJSONTask", e.getLocalizedMessage());
             }
         }
+    }
 
-        public String shareFolder(String URL) {
-            StringBuilder stringBuilder = new StringBuilder();
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(URL);
-            JSONObject json = new JSONObject();
-            JSONArray jsonArray = new JSONArray();
-            try {
-                jsonArray.put(dialogInput);
-                json.put("nombre", itemName);
-                json.put("direccion", "tmp/" + email + "/");
-                json.put("usuarios", jsonArray);
-                httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
-                httpPost.setHeader("Content-Type", "application/json");
-                httpPost.setHeader("Accept-Encoding", "application/json");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                HttpResponse response = httpClient.execute(httpPost);
-                StatusLine statusLine = response.getStatusLine();
-                int statusCode = statusLine.getStatusCode();
-                if (statusCode == 200) {
-                    HttpEntity entity = response.getEntity();
-                    InputStream inputStream = entity.getContent();
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(inputStream));
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        stringBuilder.append(line);
-                    }
-                    inputStream.close();
-                } else {
-                    Log.d("JSON", "Failed to share folder");
-                }
-            } catch (Exception e) {
-                Log.d("readJSONFeed", e.getLocalizedMessage());
-            }
-            return stringBuilder.toString();
+    public String shareFolder(String URL) {
+        StringBuilder stringBuilder = new StringBuilder();
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(URL);
+        JSONObject json = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        try {
+            jsonArray.put(dialogInput);
+            json.put("nombre", itemName);
+            json.put("direccion", "tmp/" + email + "/");
+            json.put("usuarios", jsonArray);
+            httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
+            httpPost.setHeader("Content-Type", "application/json");
+            httpPost.setHeader("Accept-Encoding", "application/json");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        try {
+            HttpResponse response = httpClient.execute(httpPost);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+                InputStream inputStream = entity.getContent();
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                     stringBuilder.append(line);
+                }
+                inputStream.close();
+            } else {
+                Log.d("JSON", "Failed to share folder");
+            }
+        } catch (Exception e) {
+            Log.d("readJSONFeed", e.getLocalizedMessage());
+        }
+        return stringBuilder.toString();
+    }
 
         private class shareFolderService extends AsyncTask<String, Void, String> {
             protected String doInBackground(String... urls) {
@@ -763,5 +817,5 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
-    }
+
 }

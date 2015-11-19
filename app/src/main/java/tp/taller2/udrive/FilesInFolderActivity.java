@@ -113,7 +113,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                                     @Override
                                     public void run() {
                                         //swipeRefreshLayout.setRefreshing(true);
-                                        //new getFolderFilesService().execute("http://192.168.1.9:8080/compartirArchivo");
+                                        new getFolderFilesService().execute("http://192.168.1.9:8080/compartirArchivo");
                                     }
                                 }
         );
@@ -166,10 +166,10 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         Toast.makeText(getApplicationContext(), "Delete item click", Toast.LENGTH_LONG).show();
         if(!Utility.getExtensionFromFile(itemName).isEmpty()){
             Toast.makeText(getApplicationContext(), "Delete file", Toast.LENGTH_LONG).show();
-            //new deleteFileService().execute("http://192.168.1.9:8080/archivos");
+            new deleteFileService().execute("http://192.168.1.9:8080/archivos");
         } else {
             Toast.makeText(getApplicationContext(), "Delete folder", Toast.LENGTH_LONG).show();
-            //new deleteFolderService().execute("http://192.168.1.9:8080/carpetas");
+            new deleteFolderService().execute("http://192.168.1.9:8080/carpetas");
         }
     }
 
@@ -185,7 +185,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
 
     @Override
     public void onRefresh() {
-        //new getFolderFilesService().execute("http://192.168.1.9:8080/compartirArchivo");
+        new getFolderFilesService().execute("http://192.168.1.9:8080/compartirArchivo");
     }
 
     public String getFolderFiles(String URL) {
@@ -432,15 +432,15 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         // User touched the dialog's positive button
          if (dialog.getTag().equals("newFolder")) {
              Log.d("dialogInput", dialogInput);
-            //new postNewFolderService().execute("http://192.168.1.9:8080/carpetas");
+            new postNewFolderService().execute("http://192.168.1.9:8080/carpetas");
         } else if (dialog.getTag().equals("shareUsers")) {
             Log.d("itemName", itemName);
             Log.d("dialogInput", dialogInput);
              if(!Utility.getExtensionFromFile(itemName).isEmpty()){
                  Toast.makeText(getApplicationContext(), "share file", Toast.LENGTH_LONG).show();
-                 //new shareFileService().execute("http://192.168.1.9:8080/compartirArchivo");
+                 new shareFileService().execute("http://192.168.1.9:8080/compartirArchivo");
              } else {
-                 //new shareFoldersService().execute("http://192.168.1.9:8080/compartirCarpeta");
+                 new shareFolderService().execute("http://192.168.1.9:8080/compartirCarpeta");
                  Toast.makeText(getApplicationContext(), "share folder", Toast.LENGTH_LONG).show();
              }
         }
@@ -769,6 +769,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 Log.d("ReadJSONTask", e.getLocalizedMessage());
             }
         }
+    }
 
         public String shareFolder(String URL) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -810,7 +811,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
             return stringBuilder.toString();
         }
 
-        private class shareFoldersService extends AsyncTask<String, Void, String> {
+        private class shareFolderService extends AsyncTask<String, Void, String> {
             protected String doInBackground(String... urls) {
                 return shareFolder(urls[0]);
             }
@@ -828,7 +829,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 }
             }
         }
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

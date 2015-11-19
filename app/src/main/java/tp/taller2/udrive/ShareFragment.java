@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.HttpDelete;
 import com.loopj.android.http.HttpGet;
 
 import org.json.JSONArray;
@@ -46,7 +47,6 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     List<String> foldersList = new ArrayList<>();
     HashMap<String, String> user;
     String email;
-    String products [] = {"parciales.pdf", "finales.pdf"};
     String itemName;
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -60,15 +60,9 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         View rootView = inflater.inflate(R.layout.fragment_share, container, false);
 
         lv = (ListView) rootView.findViewById(R.id.list_view);
-        ArrayAdapter<String> productsList = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,products);
-        lv.setAdapter(productsList);
         registerForContextMenu(lv);
 
-        foldersList.add("inteligentes");
-
         folderlv = (ListView) rootView.findViewById(R.id.folder_list_view);
-        ArrayAdapter<String> folderList = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,foldersList);
-        folderlv.setAdapter(folderList);
 
         Utility.setDynamicHeight(lv);
         Utility.setDynamicHeight(folderlv);
@@ -86,8 +80,8 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        //swipeRefreshLayout.setRefreshing(true);
-                                        //new getShareFilesService().execute("http://192.168.1.9:8080/archivos");
+                                        swipeRefreshLayout.setRefreshing(true);
+                                        new getShareFilesService().execute("http://192.168.1.9:8080/compartirArchivo");
                                     }
                                 }
         );
@@ -143,10 +137,10 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         Toast.makeText(getContext(), "Delete item click", Toast.LENGTH_LONG).show();
         if(!Utility.getExtensionFromFile(itemName).isEmpty()){
             Toast.makeText(getContext(), "Delete file", Toast.LENGTH_LONG).show();
-            //new deleteFileService().execute("http://192.168.1.9:8080/archivos");
+            new deleteFileService().execute("http://192.168.1.9:8080/archivos");
         } else {
             Toast.makeText(getContext(), "Delete folder", Toast.LENGTH_LONG).show();
-            //new deleteFolderService().execute("http://192.168.1.9:8080/carpetas");
+            new deleteFolderService().execute("http://192.168.1.9:8080/carpetas");
         }
     }
 
@@ -196,7 +190,7 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onRefresh() {
-        //new getShareFilesService().execute("http://192.168.1.9:8080/archivos");
+        new getShareFilesService().execute("http://192.168.1.9:8080/compartirArchivos");
     }
 
     private class getShareFilesService extends AsyncTask<String, Void, String> {
@@ -236,6 +230,123 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 }
             } catch (Exception e) {
                 Log.d("ReadJSONTask", e.getLocalizedMessage());
+            }
+        }
+    }
+
+    public String deleteFile(String URL) {
+        StringBuilder stringBuilder = new StringBuilder();
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpDelete httpDelete = new HttpDelete(URL);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("nombre",Utility.getNameFromFile(itemName));
+            json.put("extension", Utility.getExtensionFromFile(itemName));
+            json.put("propietario",email);
+            json.put("baja_logica","si");
+            json.put("direccion","tmp/" + email + "/");
+            httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
+            httpDelete.setHeader("Content-Type", "application/json");
+            httpDelete.setHeader("Accept-Encoding", "application/json");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            HttpResponse response = httpClient.execute(httpDelete);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+                InputStream inputStream = entity.getContent();
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                inputStream.close();
+            } else {
+                Log.d("Error", "Failed to delete file");
+            }
+        } catch (Exception e) {
+            Log.d("Error", e.getLocalizedMessage());
+        }
+        return stringBuilder.toString();
+    }
+
+    private class deleteFileService extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... urls) {
+            return deleteFile(urls[0]);
+        }
+
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                Object status = jsonObject.get("estado");
+                Object message = jsonObject.get("mensaje");
+                if(status.equals("ok")) {
+                    Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
+                Log.d("Error", e.getLocalizedMessage());
+            }
+        }
+    }
+
+    public String deleteFolder(String URL) {
+        StringBuilder stringBuilder = new StringBuilder();
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpDelete httpDelete = new HttpDelete(URL);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("nombre", itemName);
+            json.put("propietario",email);
+            json.put("baja_logica","si");
+            json.put("direccion","tmp/" + email + "/");
+            httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
+            httpDelete.setHeader("Content-Type", "application/json");
+            httpDelete.setHeader("Accept-Encoding", "application/json");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            HttpResponse response = httpClient.execute(httpDelete);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+                InputStream inputStream = entity.getContent();
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                inputStream.close();
+            } else {
+                Log.d("Error", "Failed to delete folder");
+            }
+        } catch (Exception e) {
+            Log.d("Error", e.getLocalizedMessage());
+        }
+        return stringBuilder.toString();
+    }
+
+    private class deleteFolderService extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... urls) {
+            return deleteFolder(urls[0]);
+        }
+
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                Object status = jsonObject.get("estado");
+                Object message = jsonObject.get("mensaje");
+                if(status.equals("ok")) {
+                    Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
+                Log.d("Error", e.getLocalizedMessage());
             }
         }
     }

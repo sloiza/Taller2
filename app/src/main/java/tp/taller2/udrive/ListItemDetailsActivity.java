@@ -85,7 +85,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         nameET.setText(itemName);
         ownerET.setText(name + " " + surname);
         locationET.setText(actualItemPath);
-        new getItemMetadataService().execute("http://192.168.0.14:8080/archivos");
+        new getItemMetadataService().execute("http://192.168.1.9:8080/archivos");
     }
 
     public void editItemDetails(View view) {
@@ -97,7 +97,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         String location = locationET.getText().toString();
         if(Utility.isNotNull(name) && Utility.isNotNull(label) && Utility.isNotNull(lastModDate)
                 && Utility.isNotNull(lastModUser) && Utility.isNotNull(owner) && Utility.isNotNull(location)){
-                new putModifyItemDetailsService().execute("http://192.168.0.14:8080/archivos?modificar");
+                new putModifyItemDetailsService().execute("http://192.168.1.9:8080/archivos");
         }else{
             Toast.makeText(getApplicationContext(), R.string.error_emptyFields, Toast.LENGTH_LONG).show();
         }
@@ -109,7 +109,9 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         HttpGet httpGet = new HttpGet(URL);
         JSONObject json = new JSONObject();
         try {
-            json.put("path",actualItemPath);
+            json.put("direccion",actualItemPath);
+            json.put("nombre",Utility.getNameFromFile(itemName));
+            json.put("extension",Utility.getExtensionFromFile(itemName));
             httpGet.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpGet.setHeader("Content-Type", "application/json");
             httpGet.setHeader("Accept-Encoding", "application/json");
@@ -180,7 +182,8 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         HttpPut httpPut = new HttpPut(URL);
         JSONObject json = new JSONObject();
         try {
-            json.put("nombre",name);
+            json.put("nombre",Utility.getNameFromFile(name));
+            json.put("extension",Utility.getExtensionFromFile(name));
             json.put("etiqueta",label);
             json.put("fecha_ulti_modi",lastModDate);
             json.put("usuario_ulti_modi",lastModUser);
@@ -230,6 +233,12 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                 if(status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     navigatetoMainActivity();
+                    labelET.setText(labelET.getText().toString());
+                    lastModDateET.setText(lastModDateET.getText().toString()); ;
+                    lastModUserET.setText(lastModUserET.getText().toString());
+                    ownerET.setText(name + " " + surname);
+                    nameET.setText(itemName);
+                    locationET.setText("tmp/" + email + "/");
                 }
             } catch (Exception e) {
                 Log.d("ReadJSONTask", e.getLocalizedMessage());
