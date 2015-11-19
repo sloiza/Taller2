@@ -27,7 +27,7 @@ before_install:
    - wget https://github.com/sloiza/rocksdb-travis/archive/master.zip
    - unzip master.zip
    - cd rocksdb-travis-master/ROCKS/ 
-   - "sudo make clean && sudo make install"
+   - "make && make static_lib && sudo make install"
    - "cd ../.. && sudo rm master.zip"
    - "cd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
    - sudo pip install cpp-coveralls
