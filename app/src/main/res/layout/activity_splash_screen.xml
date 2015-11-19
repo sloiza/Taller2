@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SplashScreenActivity"
-    android:paddingTop="150dp"
+    android:paddingTop="160dp"
     android:paddingLeft="30dp">
     <ImageView
         android:layout_width="300dp"

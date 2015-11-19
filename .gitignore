@@ -9,3 +9,6 @@ servidor/dbTest
 servidor/test/dbTest
 servidor/Documentation
 app/Documentation
+Documentation/docClient
+Documentation/docServer
+Documentation/_build
