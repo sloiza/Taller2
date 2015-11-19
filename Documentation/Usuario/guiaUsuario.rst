@@ -6,7 +6,7 @@ Manual de usuario para Udrive.
 Descripción de la aplicación
 ----------------------------
 
-La aplicación Udrive  es una aplicación para smartphones que permite cargar y compartir archivos entre usuarios de la aplicaci´ion.
+La aplicación Udrive  es una aplicación para smartphones que permite cargar y compartir archivos entre usuarios de la aplicación.
 
 Iniciar la aplicación:
 ----------------------

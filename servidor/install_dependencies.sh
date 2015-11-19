@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-mkdir installs/
+mkdir -p installs/
 cd installs/
 if [ ! -d "jsoncpp-master/" ]; then
   # Control will enter here if $DIRECTORY doesn't exist.
-  wget https://github.com/open-source-parsers/jsoncpp/archive/master.zip
+  	wget https://github.com/open-source-parsers/jsoncpp/archive/master.zip
 	unzip master.zip 
 	ls
 	echo "install jsoncpp"

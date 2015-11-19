@@ -9,4 +9,4 @@ Documento
 
 `Link`_.
 
-.. _Link: file:../docServer/html/index.html
+.. _Link: file:../../../docServer/html/index.html
