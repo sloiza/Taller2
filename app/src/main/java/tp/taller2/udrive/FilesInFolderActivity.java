@@ -62,12 +62,12 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
     SessionManager session;
     String itemName;
     SwipeRefreshLayout swipeRefreshLayout;
-    String products [] = {"MaterialDesign.pdf", "NoSql.pdf", "Docker.doc"};
     private static int FILE_SELECT_CODE = 1;
     private String filePath = null;
     long totalSize = 0;
     String dialogInput;
     GPSTracker gps;
+    String itemClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,16 +84,9 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         itemName = intent.getStringExtra("folderName");
         getSupportActionBar().setTitle(itemName);
 
-        ArrayAdapter<String> productsList = new ArrayAdapter<>(getApplication(),R.layout.list_item,products);
-        lv.setAdapter(productsList);
         registerForContextMenu(lv);
 
-        foldersList.add("tp");
-        foldersList.add("final");
-
         folderlv = (ListView) findViewById(R.id.folder_list_view);
-        ArrayAdapter<String> folderList = new ArrayAdapter<>(getApplication(),R.layout.list_item,foldersList);
-        folderlv.setAdapter(folderList);
 
         Utility.setDynamicHeight(lv);
         Utility.setDynamicHeight(folderlv);
@@ -113,7 +106,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                                     @Override
                                     public void run() {
                                         //swipeRefreshLayout.setRefreshing(true);
-                                        new getFolderFilesService().execute("http://192.168.1.9:8080/compartirArchivo");
+                                        new getFolderFilesService().execute("http://192.168.1.9:8080/carpetas");
                                     }
                                 }
         );
@@ -131,7 +124,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        itemName = ((TextView) info.targetView).getText().toString();
+        itemClick = ((TextView) info.targetView).getText().toString();
         switch(item.getItemId()) {
             case R.id.item_share:
                 shareCurrentItem();
@@ -153,7 +146,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
     private void showItemDetails() {
         Intent intent = new Intent(getApplicationContext(), ListItemDetailsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("itemName", itemName);
+        intent.putExtra("itemName", itemClick);
         startActivity(intent);
     }
 
@@ -164,7 +157,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
 
     private void deleteCurrentItem() {
         Toast.makeText(getApplicationContext(), "Delete item click", Toast.LENGTH_LONG).show();
-        if(!Utility.getExtensionFromFile(itemName).isEmpty()){
+        if(!Utility.getExtensionFromFile(itemClick).isEmpty()){
             Toast.makeText(getApplicationContext(), "Delete file", Toast.LENGTH_LONG).show();
             new deleteFileService().execute("http://192.168.1.9:8080/archivos");
         } else {
@@ -179,13 +172,15 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
     }
 
     public void showShareFileDialog() {
-        DialogFragment dialog = ShareItemDialogFragment.newInstance(itemName);
+        DialogFragment dialog = ShareItemDialogFragment.newInstance(itemClick);
         dialog.show(getFragmentManager(), "shareUsers");
     }
 
     @Override
     public void onRefresh() {
-        new getFolderFilesService().execute("http://192.168.1.9:8080/compartirArchivo");
+        filesList.clear();
+        foldersList.clear();
+        new getFolderFilesService().execute("http://192.168.1.9:8080/carpetas");
     }
 
     public String getFolderFiles(String URL) {
@@ -196,7 +191,8 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         String email = user.get(SessionManager.KEY_EMAIL);
         JSONObject json = new JSONObject();
         try {
-            json.put("mail", email);
+            json.put("nombre", itemName);
+            json.put("direccion", "tmp/" + email + "/");
             httpGet.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpGet.setHeader("Content-Type", "application/json");
             httpGet.setHeader("Accept-Encoding", "application/json");
@@ -252,9 +248,9 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                             filesList.add(fileName);
                         }
                     }
-                    ArrayAdapter<String> files = new ArrayAdapter<>(getApplicationContext(),android.R.layout.simple_list_item_1,filesList);
+                    ArrayAdapter<String> files = new ArrayAdapter<>(getApplicationContext(),R.layout.list_item,filesList);
                     lv.setAdapter(files);
-                    ArrayAdapter<String> folders = new ArrayAdapter<>(getApplicationContext(),android.R.layout.simple_list_item_1,foldersList);
+                    ArrayAdapter<String> folders = new ArrayAdapter<>(getApplicationContext(),R.layout.list_item,foldersList);
                     folderlv.setAdapter(folders);
                 }
             } catch (Exception e) {
@@ -269,9 +265,9 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         HttpGet httpGet = new HttpGet(URL);
         JSONObject json = new JSONObject();
         try {
-            json.put("nombre", Utility.getNameFromFile(itemName));
-            json.put("direccion", "tmp/" + email + "/");
-            json.put("extension", Utility.getExtensionFromFile(itemName));
+            json.put("nombre", Utility.getNameFromFile(itemClick));
+            json.put("direccion", "tmp/" + email + "/" + itemName);
+            json.put("extension", Utility.getExtensionFromFile(itemClick));
             HttpResponse response = httpClient.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -316,11 +312,11 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         HttpDelete httpDelete = new HttpDelete(URL);
         JSONObject json = new JSONObject();
         try {
-            json.put("nombre",Utility.getNameFromFile(itemName));
-            json.put("extension", Utility.getExtensionFromFile(itemName));
+            json.put("nombre",Utility.getNameFromFile(itemClick));
+            json.put("extension", Utility.getExtensionFromFile(itemClick));
             json.put("propietario",email);
             json.put("baja_logica","si");
-            json.put("direccion","tmp/" + email + "/");
+            json.put("direccion","tmp/" + email + "/" + itemName);
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
@@ -375,10 +371,10 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         HttpDelete httpDelete = new HttpDelete(URL);
         JSONObject json = new JSONObject();
         try {
-            json.put("nombre", itemName);
+            json.put("nombre", itemClick);
             json.put("propietario",email);
             json.put("baja_logica","si");
-            json.put("direccion","tmp/" + email + "/");
+            json.put("direccion","tmp/" + email + "/" + itemName);
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
@@ -434,9 +430,9 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
              Log.d("dialogInput", dialogInput);
             new postNewFolderService().execute("http://192.168.1.9:8080/carpetas");
         } else if (dialog.getTag().equals("shareUsers")) {
-            Log.d("itemName", itemName);
+            Log.d("itemName", itemClick);
             Log.d("dialogInput", dialogInput);
-             if(!Utility.getExtensionFromFile(itemName).isEmpty()){
+             if(!Utility.getExtensionFromFile(itemClick).isEmpty()){
                  Toast.makeText(getApplicationContext(), "share file", Toast.LENGTH_LONG).show();
                  new shareFileService().execute("http://192.168.1.9:8080/compartirArchivo");
              } else {
@@ -596,14 +592,15 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 con.setDoOutput(true);
 
                 JSONObject json = new JSONObject();
-                json.put("nombre", Utility.getNameFromFile(filePath));
+                File file = new File(filePath);
+                json.put("nombre", Utility.getNameFromFile(file.getName()));
                 json.put("extension", Utility.getExtensionFromFile(filePath));
                 json.put("etiqueta", "archivo");
                 json.put("fecha_ulti_modi", "26102015");
                 json.put("usuario_ulti_modi", "1234");
                 json.put("propietario", email);
                 json.put("baja_logica", "no");
-                json.put("direccion", "tmp/" + email + "/");
+                json.put("direccion", "tmp/" + email + "/" + itemName + "/");
 
                 OutputStream out = con.getOutputStream();
                 out.write(json.toString().getBytes());
@@ -657,7 +654,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
             json.put("usuario_ulti_modi", "0");
             json.put("propietario", email);
             json.put("baja_logica", "no");
-            json.put("direccion", "tmp/" + email + "/");
+            json.put("direccion", "tmp/" + email + "/" + itemName);
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
             httpPost.setHeader("Accept-Encoding", "application/json");
@@ -716,9 +713,9 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         JSONArray jsonArray = new JSONArray();
         try {
             jsonArray.put(dialogInput);
-            json.put("nombre", Utility.getNameFromFile(itemName));
-            json.put("extension", Utility.getExtensionFromFile(itemName));
-            json.put("direccion", "tmp/" + email + "/");
+            json.put("nombre", Utility.getNameFromFile(itemClick));
+            json.put("extension", Utility.getExtensionFromFile(itemClick));
+            json.put("direccion", "tmp/" + email + "/" + itemName);
             json.put("usuarios", jsonArray);
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
@@ -779,8 +776,8 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
             JSONArray jsonArray = new JSONArray();
             try {
                 jsonArray.put(dialogInput);
-                json.put("nombre", itemName);
-                json.put("direccion", "tmp/" + email + "/");
+                json.put("nombre", itemClick);
+                json.put("direccion", "tmp/" + email + "/" + itemName);
                 json.put("usuarios", jsonArray);
                 httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
                 httpPost.setHeader("Content-Type", "application/json");

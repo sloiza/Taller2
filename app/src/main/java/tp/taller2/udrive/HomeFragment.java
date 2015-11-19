@@ -13,6 +13,7 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -28,9 +29,14 @@ import com.loopj.android.http.HttpGet;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -159,7 +165,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
 
     private void downloadCurrentItem() {
         Toast.makeText(getContext(), "Download item click", Toast.LENGTH_LONG).show();
-        //new getDownloadFileService().execute("http://192.168.0.16:8080/descargar");
+        new getDownloadFileService().execute("http://192.168.1.9:8080/descargar");
     }
 
     public void showShareFileDialog() {
@@ -256,12 +262,14 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
             if (statusCode == 200) {
                 HttpEntity entity = response.getEntity();
                 InputStream inputStream = entity.getContent();
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line);
+                FileOutputStream out = new FileOutputStream("/sdcard/aaaaaa.pdf");
+
+                int read = 0;
+                byte[] buffer = new byte[32768];
+                while((read = inputStream.read(buffer)) > 0){
+                    out.write(buffer, 0, read);
                 }
+                out.close();
                 inputStream.close();
             } else {
                 Log.d("Error", "Failed to download file");
@@ -272,7 +280,9 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
         return stringBuilder.toString();
     }
 
-    private class getDownloadFileService extends AsyncTask<String, Void, String> {
+
+
+        private class getDownloadFileService extends AsyncTask<String, Void, String> {
 
           protected String doInBackground(String... urls) {
             return getDownloadFile(urls[0]);
@@ -280,8 +290,14 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
 
         protected void onPostExecute(String result) {
             try {
-                JSONObject jsonObject = new JSONObject(result);
+                //JSONObject jsonObject = new JSONObject(result);
                 //devuelve los bytes
+                Log.d("result", result);
+                FileOutputStream out = new FileOutputStream("/sdcard/download.pdf");
+                out.write(result.getBytes());
+                out.close();
+                out.flush();
+                out.close();
             } catch (Exception e) {
                 Log.d("ReadJSONTask", e.getLocalizedMessage());
             }
