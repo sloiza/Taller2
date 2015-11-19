@@ -31,6 +31,8 @@ public:
 	void testEliminarEnBDCorrectamente();
 	void testModificarAtributoCorrectamente();
 
+	void testSetearPathCorrectamente();
+
 	void TestBody() {};
 
 protected:
@@ -67,7 +69,11 @@ TEST_F(ArchivoLogicoTest, modificarAtributo)
 	ArchivoLogicoTest test;
 	test.testModificarAtributoCorrectamente();
 }
-
+TEST_F(ArchivoLogicoTest, setearPath)
+{
+	ArchivoLogicoTest test;
+	test.testSetearPathCorrectamente();
+}
 }
 
 #endif /* ARCHIVOLOGICOTEST_H_ */
