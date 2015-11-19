@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_home"
+            android:checked="true"
+            android:icon="@drawable/ic_menu_home"
+            android:title="My Unity" />
+        <item android:id="@+id/nav_shareWithMe"
+            android:icon="@drawable/ic_share_with_me"
+            android:title="Share with me" />
+        <item android:id="@+id/nav_bin"
+            android:icon="@android:drawable/ic_menu_delete"
+            android:title="Paper bin" />
+    </group>
+
+    <group
+        android:id="@+id/menu_bottom"
+        android:checkableBehavior="single">
+
+        <item android:id="@+id/nav_storage"
+            android:icon="@drawable/ic_menu_space"
+            android:title="Storage"/>
+        <item android:id="@+id/nav_end_session"
+            android:icon="@android:drawable/ic_menu_close_clear_cancel"
+            android:title="Log out" />
+    </group>
+
+</menu>
