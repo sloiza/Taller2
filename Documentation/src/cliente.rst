@@ -8,4 +8,4 @@ Documento
 
 `Link`_.
 
-.. _Link: file:../docClient/html/index.html
+.. _Link: file:../../../docClient/html/index.html

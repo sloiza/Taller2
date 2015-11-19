@@ -1,14 +1,12 @@
 Manual de usuario
 ===================
 
-Manual de usuario para la aplicación Udrive.
+Manual de usuario para Udrive.
 
 Descripción de la aplicación
 ----------------------------
 
-La aplicación MensajeroX  es una aplicación para smartphones
-con **Android 4.1 (JELLY_BEAN) o posterior**, que permite que permite administrar archivos
-y carpetas. Los mismos se pueden editar, compartir, borrar y descargar. 
+La aplicación Udrive  es una aplicación para smartphones que permite cargar y compartir archivos entre usuarios de la aplicación.
 
 Iniciar la aplicación:
 ----------------------
@@ -121,13 +119,13 @@ debe realizar los siguientes pasos:
 5. Si selecciona la opcion indicada con el numero 4 accedera a la pantalla Storage donde puede ver el espacio de almacenamiento que esta usando.
 
 .. |logo8| image:: /Usuario/imagenes/navDrawer.png
-   :scale: 25%
+   :scale: 20%
 .. |logo9| image:: /Usuario/imagenes/shareWithMe.png
-   :scale: 25%
+   :scale: 20%
 .. |logo10| image:: /Usuario/imagenes/paperBin.png
-   :scale: 25%
+   :scale: 20%
 .. |logo11| image:: /Usuario/imagenes/storage.png
-   :scale: 25%
+   :scale: 20%
 
 +---------+---------+---------+----------+
 | |logo8| | |logo9| ||logo10| | |logo11| |

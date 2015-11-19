@@ -14,5 +14,5 @@ RUN  apt-get install -y unzip
 RUN  pip install cpp-coveralls
 RUN wget https://github.com/sloiza/Taller2/archive/master.zip 
 RUN unzip master.zip
-CMD ./taller/Taller2-master/servidor/install_dependencies.sh
-CMD ./taller/Taller2-master/servidor/build/servidor
+CMD ./Taller2-master/servidor/install_dependencies.sh
+CMD ./Taller2-master/servidor/build/servidor
