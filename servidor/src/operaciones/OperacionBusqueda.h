@@ -17,6 +17,8 @@
 #include "../bd/entidades/ContenidoPorCarpeta.h"
 #include "../bd/entidades/ArchivoLogico.h"
 #include "../bd/entidades/User.h"
+// utiles
+#include "../utiles/Log.h"
 
 // STL
 #include <iostream>
@@ -45,6 +47,22 @@ public:
 
 	void imprimir();
 
+	std::vector<ConexionServidor::BaseDeDatos::ArchivoLogico*> getArchivosAFiltrar(std::vector<std::string> pathsAFiltrar);
+
+	std::vector<std::string> buscarArchivosPorNombre(std::vector<std::string> archivosAFiltrar, std::string query);
+	std::vector<std::string> buscarArchivosPorExtension(std::vector<std::string> archivosAFiltrar, std::string query);
+	std::vector<std::string> buscarArchivosPorEtiqueta(std::vector<std::string> archivosAFiltrar, std::string query);
+	std::vector<std::string> buscarArchivosPorPropietario(std::vector<std::string> archivosAFiltrar, std::string query);
+
+	std::vector<std::string> buscarArchivosPorNombre(std::vector<ConexionServidor::BaseDeDatos::ArchivoLogico*> archivosAFiltrar, std::string query);
+	std::vector<std::string> buscarArchivosPorExtension(std::vector<ConexionServidor::BaseDeDatos::ArchivoLogico*> archivosAFiltrar, std::string query);
+	std::vector<std::string> buscarArchivosPorEtiqueta(std::vector<ConexionServidor::BaseDeDatos::ArchivoLogico*> archivosAFiltrar, std::string query);
+	std::vector<std::string> buscarArchivosPorPropietario(std::vector<ConexionServidor::BaseDeDatos::ArchivoLogico*> archivosAFiltrar, std::string query);
+
+
+	std::string nombreClase();
+};
+};
 };
 
 #endif /* OPERACIONBUSQUEDA_H_ */

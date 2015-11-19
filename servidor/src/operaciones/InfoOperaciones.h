@@ -31,7 +31,8 @@ public:
 		COMPARTIR_ARCHIVO,
 		COMPARTIR_CARPETA,
 		DESCARGAR,
-		PAPELERA
+		PAPELERA,
+		BUSCAR
 	};
 
 	static const std::string nombresRecursos[];

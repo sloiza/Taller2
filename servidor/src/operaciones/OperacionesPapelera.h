@@ -15,6 +15,7 @@
 #include "../bd/entidades/ContenidoPorCarpeta.h"
 #include "../bd/entidades/User.h"
 #include "../bd/entidades/ArchivoLogico.h"
+#include "../bd/entidades/CarpetaLogica.h"
 // STL
 #include <iostream>
 #include <string>
@@ -37,6 +38,8 @@ public:
 	ConexionServidor::Respuesta put(Utiles::Bytes* contenido, std::string query);
 
 	void imprimir();
+
+	void restaurarCarpeta(Utiles::Bytes* contenido, std::string mailDeUsuario);
 
 };
 };

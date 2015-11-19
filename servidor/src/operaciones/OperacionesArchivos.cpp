@@ -56,7 +56,7 @@ ConexionServidor::Respuesta OperacionesArchivos::delet(Utiles::Bytes* contenido,
 
 	papelera.setPath( archivoLogico.getPropietario() + "/" + InfoOperaciones::papelera );
 
-	std::cout << "archivos path papelera: " + archivoLogico.getPropietario() + "/" + InfoOperaciones::papelera << "\n";
+//	std::cout << "archivos path papelera: " + archivoLogico.getPropietario() + "/" + InfoOperaciones::papelera << "\n";
 
 	valorRecuperado = papelera.recuperar();
 
@@ -115,9 +115,21 @@ ConexionServidor::Respuesta OperacionesArchivos::post(Utiles::Bytes* contenido, 
 }
 ConexionServidor::Respuesta OperacionesArchivos::put(Utiles::Bytes* contenido, std::string query)
 {
+	ConexionServidor::BaseDeDatos::ArchivoLogico archivo(contenido->getStringDeBytes());
 	ConexionServidor::Respuesta respuesta;
-	respuesta.setEstado("error");
-	respuesta.setMensaje("operacion no implementada.");
+
+	std::string valorRecuperado = archivo.recuperar();
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("Usuario inexistente.");
+		return respuesta;
+	}
+
+	archivo.guardar();
+
+	respuesta.setEstado("ok");
+	respuesta.setMensaje("Archivo modificado correctamente!");
 	return respuesta;
 }
 
@@ -252,6 +264,8 @@ void OperacionesArchivos::agregarArchivoALaListaDeArchivosDeUsuario(std::string 
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoEnCarpeta;
 	contenidoEnCarpeta.setPath( archivoLogico.getPropietario() + "/" + InfoOperaciones::carpetaArchivosPorUsuario );
 
+	std::cout << "propietario: " << archivoLogico.getPropietario() << "\n";
+
 	std::string valorRecuperado = contenidoEnCarpeta.recuperar();
 
 	if ( valorRecuperado.compare("vacio") != 0 )
@@ -263,5 +277,7 @@ void OperacionesArchivos::agregarArchivoALaListaDeArchivosDeUsuario(std::string 
 	contenidoEnCarpeta.agregarArchivo( archivoLogico.getPath() );
 
 	contenidoEnCarpeta.guardar();
+
+	std::cout << "contenido carpetaArchivos: " << contenidoEnCarpeta.getContenido() << "\n";
 }
 

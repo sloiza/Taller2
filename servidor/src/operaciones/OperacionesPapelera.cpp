@@ -75,8 +75,6 @@ ConexionServidor::Respuesta OperacionesPapelera::put(Utiles::Bytes* contenido, s
 	papelera.setPath( usuarioAux.getEmail() + "/" + InfoOperaciones::papelera );
 	std::string valorRecuperadoPapelera = papelera.recuperar();
 
-	std::cout << "papelera path papelera: " + usuarioAux.getEmail() + "/" + InfoOperaciones::papelera << "\n";
-
 	ConexionServidor::Respuesta respuesta;
 	if ( valorRecuperadoPapelera.compare("vacio") == 0 )
 	{
@@ -87,6 +85,15 @@ ConexionServidor::Respuesta OperacionesPapelera::put(Utiles::Bytes* contenido, s
 	else
 	{
 		papelera.setContenido( valorRecuperadoPapelera );
+	}
+
+	// si el json llega sin extension, entonces quiere decir q se quiere recuperar una carpeta.
+	if ( archivoARecuperar.getExtension().compare("extensionDefault") == 0 )
+	{
+		restaurarCarpeta(contenido, usuarioAux.getEmail() );
+		respuesta.setEstado("ok");
+		respuesta.setMensaje("Carpeta restaurada correctamente!");
+		return respuesta;
 	}
 
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta carpetaOriginal;
@@ -115,5 +122,31 @@ ConexionServidor::Respuesta OperacionesPapelera::put(Utiles::Bytes* contenido, s
 void OperacionesPapelera::imprimir()
 {
 	std::cout << "papelera\n";
+}
+
+void OperacionesPapelera::restaurarCarpeta(Utiles::Bytes* contenido, std::string mail)
+{
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta carpetaOriginal;
+	ConexionServidor::BaseDeDatos::CarpetaLogica carpetaARecuperar( contenido->getStringDeBytes() );
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta papelera;
+
+	papelera.setPath( mail + "/" + InfoOperaciones::papelera );
+
+	carpetaOriginal.setPath( carpetaARecuperar.getDireccion() );
+	std::string valorRecuperadoCarpeta = carpetaOriginal.recuperar();
+	if ( valorRecuperadoCarpeta.compare("vacio") != 0 )
+	{
+		carpetaOriginal.setContenido( valorRecuperadoCarpeta );
+	}
+
+	// saco el archivo de la papelera
+	papelera.eliminarCarpeta( carpetaARecuperar.getPath() );
+	papelera.guardar();
+
+	// sete "baja_logica" del archivo en "no", y lo agrego a la carpeta donde estaba originalmente
+	carpetaARecuperar.setBajaLogica( "no" );
+	carpetaARecuperar.guardar();
+	carpetaOriginal.agregarCarpeta( carpetaARecuperar.getPath() );
+	carpetaOriginal.guardar();
 }
 

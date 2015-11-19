@@ -18,6 +18,7 @@ ConexionServidor::Respuesta OperacionCompartirArchivo::delet(Utiles::Bytes* cont
 	ConexionServidor::Respuesta respuesta;
 	respuesta.setEstado("error");
 	respuesta.setMensaje("operacion no implementada.");
+	Utiles::Log::instancia()->warn("DELETE /compartirArchivo: no implementado.", this->nombreClase() );
 	return respuesta;
 }
 ConexionServidor::Respuesta OperacionCompartirArchivo::get(Utiles::Bytes* contenido, std::string query)
@@ -34,12 +35,14 @@ ConexionServidor::Respuesta OperacionCompartirArchivo::get(Utiles::Bytes* conten
 	{
 		respuesta.setEstado("no-existe");
 		respuesta.setMensaje("No existe carpeta para el usuario.");
+		Utiles::Log::instancia()->warn("URL no mapeada.", this->nombreClase() );
 		return respuesta;
 	}
 
 	respuesta.setContenido(valorRecuperado);
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Mis Compartidos/ accedida correctamente!");
+	Utiles::Log::instancia()->info("Acceso a 'mis compartidos' de " + usuario.getEmail(), this->nombreClase() );
 	return respuesta;
 }
 ConexionServidor::Respuesta OperacionCompartirArchivo::post(Utiles::Bytes* contenido, std::string query)
@@ -55,6 +58,7 @@ ConexionServidor::Respuesta OperacionCompartirArchivo::post(Utiles::Bytes* conte
 	ConexionServidor::Respuesta respuesta;
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Archivo compartido correctamente!");
+	Utiles::Log::instancia()->info("Archivo '" + archivoYUsuarios.getPathArchivo() + "' compartido correctamente.", this->nombreClase() );
 	return respuesta;
 }
 ConexionServidor::Respuesta OperacionCompartirArchivo::put(Utiles::Bytes* contenido, std::string query)
@@ -62,6 +66,7 @@ ConexionServidor::Respuesta OperacionCompartirArchivo::put(Utiles::Bytes* conten
 	ConexionServidor::Respuesta respuesta;
 	respuesta.setEstado("error");
 	respuesta.setMensaje("operacion no implementada.");
+	Utiles::Log::instancia()->warn("PUT /compartirArchivo: no implementado.", this->nombreClase() );
 	return respuesta;
 }
 
@@ -87,4 +92,8 @@ void OperacionCompartirArchivo::compartirArchivoConUsuario(std::string mailUsuar
 	contenidoDeCarpeta.agregarArchivo( archivo );
 
 	contenidoDeCarpeta.guardar();
+}
+std::string OperacionCompartirArchivo::nombreClase()
+{
+	return "OperacionCompartirArchivo";
 }

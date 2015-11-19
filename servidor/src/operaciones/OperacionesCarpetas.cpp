@@ -76,9 +76,21 @@ ConexionServidor::Respuesta OperacionesCarpetas::delet(Utiles::Bytes* contenido,
 }
 ConexionServidor::Respuesta OperacionesCarpetas::get(Utiles::Bytes* contenido, std::string query)
 {
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoDeCarpeta( contenido->getStringDeBytes() );
+
+	std::string valorRecuperado = contenidoDeCarpeta.recuperar();
+
 	ConexionServidor::Respuesta respuesta;
-	respuesta.setEstado("error");
-	respuesta.setMensaje("operacion no implementada.");
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("No existe carpeta para el usuario inexistente.");
+		return respuesta;
+	}
+
+	respuesta.setContenido(valorRecuperado);
+	respuesta.setEstado("ok");
+	respuesta.setMensaje("Pagina principal accedida correctamente!");
 	return respuesta;
 }
 ConexionServidor::Respuesta OperacionesCarpetas::post(Utiles::Bytes* contenido, std::string query)

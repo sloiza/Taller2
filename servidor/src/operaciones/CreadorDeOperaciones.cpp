@@ -60,6 +60,10 @@ void CreadorDeOperaciones::crearArbolDeRecursos()
 	papelera->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::PAPELERA];
 	papelera->tipo = InfoOperaciones::PAPELERA;
 
+	Recurso* busqueda = new Recurso();
+	busqueda->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::BUSCAR];
+	busqueda->tipo = InfoOperaciones::BUSCAR;
+
 	principal->hijos.push_back(usuarios);
 	principal->hijos.push_back(baul);
 	//usuarios->hijos.push_back(perfil);
@@ -68,6 +72,7 @@ void CreadorDeOperaciones::crearArbolDeRecursos()
 	principal->hijos.push_back(compartirCarpeta);
 	principal->hijos.push_back(descargarArchivo);
 	principal->hijos.push_back(papelera);
+	principal->hijos.push_back(busqueda);
 
 	raiz = principal;
 }
@@ -87,7 +92,7 @@ IOperable* CreadorDeOperaciones::getOperacion(ConexionServidor::Request::URI* ur
     campos = uri->getRecursosDividos();
 
     std::cout << "uri: " << uri->getURI() << "\n";
-    //std::cout << "campos.size(): " << campos.size() << "\n";
+    Utiles::Log::instancia()->info("Usuario inexiste.", this->nombreClase() );
 
     return reconocerUriRecursivamente(raiz, 1);
 }
@@ -124,7 +129,12 @@ IOperable* CreadorDeOperaciones::crearOperacion(InfoOperaciones::OPERACIONES tip
 		case InfoOperaciones::COMPARTIR_CARPETA: return new OperacionCompartirCarpeta();
 		case InfoOperaciones::DESCARGAR: return new OperacionDescargarArchivo();
 		case InfoOperaciones::PAPELERA: return new OperacionesPapelera();
-		default: return new OperacionErrorURL();
+		case InfoOperaciones::BUSCAR: return new OperacionBusqueda();
+		default:
+			{
+				Utiles::Log::instancia()->warn("URL no mapeada.", this->nombreClase() );
+				return new OperacionErrorURL();
+			}
 	}
 }
 
@@ -148,4 +158,7 @@ void CreadorDeOperaciones::liberarRecusivamente(Recurso* recurso)
 	}
 }
 
-
+std::string CreadorDeOperaciones::nombreClase()
+{
+	return "CreadorDeOperaciones";
+}

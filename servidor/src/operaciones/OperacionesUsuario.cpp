@@ -91,9 +91,21 @@ ConexionServidor::Respuesta OperacionesUsuario::post(Utiles::Bytes* contenido, s
 }
 ConexionServidor::Respuesta OperacionesUsuario::put(Utiles::Bytes* contenido, std::string query)
 {
+	ConexionServidor::BaseDeDatos::User usuario(contenido->getStringDeBytes());
 	ConexionServidor::Respuesta respuesta;
-	respuesta.setEstado("error");
-	respuesta.setMensaje("operacion no implementada.");
+
+	std::string valorRecuperado = usuario.recuperar();
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("Usuario inexistente.");
+		return respuesta;
+	}
+
+	usuario.guardar();
+
+	respuesta.setEstado("ok");
+	respuesta.setMensaje("Usuario modificado correctamente!");
 	return respuesta;
 }
 
