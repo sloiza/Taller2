@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(Servidor)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -pthread -fprofile-arcs -ftest-coverage --coverage")
 
 enable_testing()
 
@@ -29,7 +29,7 @@ target_link_libraries(servidor /usr/local/lib/libjsoncpp.a)
 
 if(INCLUIR_TEST)
 	add_subdirectory(test)
-	target_link_libraries(servidor "-fprofile-arcs -ftest-coverage")
+	target_link_libraries(servidor /usr/lib/gcc/x86_64-linux-gnu/4.8/libgcov.a)
 endif()
 
 install(TARGETS servidor DESTINATION bin)

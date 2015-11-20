@@ -25,6 +25,7 @@ namespace ConexionServidor
 
 class Servidor
 {
+
 public:
 	Servidor();
 	virtual ~Servidor();

@@ -22,16 +22,34 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
-	ConexionServidor::Servidor servidor;
+//	ConexionServidor::Servidor servidor;
+//
+//	servidor.crear(lector.getPuertoInt());
+//
+//	std::cout << "Servidor creado!\n";
+//	Utiles::Log::instancia()->info("Servidor creado!", "main.cpp");
+//
+//	while( servidor.estaCorriendo() )
+//	{
+//		servidor.escuchar(1000);
+//	}
+//	std::cout << "\nServidor cerrado. Saliendo...\n";
+//	Utiles::Log::instancia()->info("Servidor cerrado.", "main.cpp");
+//	servidor.destruir();
 
-	servidor.crear(lector.getPuertoInt());
+	ConexionServidor::ServidorMultihilo servidor;
+	servidor.setPuerto(8080);
+	//servidor.setNumeroDeHilos(lector.getNumeroDeHilos());
+	servidor.setNumeroDeHilos(3);
+
+	servidor.crear();
 
 	std::cout << "Servidor creado!\n";
 	Utiles::Log::instancia()->info("Servidor creado!", "main.cpp");
 
 	while( servidor.estaCorriendo() )
 	{
-		servidor.escuchar(1000);
+		servidor.escuchar();
 	}
 	std::cout << "\nServidor cerrado. Saliendo...\n";
 	Utiles::Log::instancia()->info("Servidor cerrado.", "main.cpp");

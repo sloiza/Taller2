@@ -1,7 +1,7 @@
 include(FindPkgConfig)
 cmake_minimum_required(VERSION 2.8)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -pthread -fprofile-arcs -ftest-coverage --coverage")
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 
 include_directories(${SRC_DIR})
@@ -12,6 +12,9 @@ find_package(GTest REQUIRED)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/tmp)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/tmp/carpetaVacia)
+
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/test/tmp)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/test/tmp/carpetaVacia)
 
 file(GLOB TEST correrTests.cpp)
 file(GLOB TEST_CONEXION "conexion/*.cpp" conexion/mongoose.c)
@@ -38,4 +41,5 @@ target_link_libraries(tests /usr/lib/x86_64-linux-gnu/libz.so)
 target_link_libraries(tests /usr/lib/libsnappy.so)
 target_link_libraries(tests /usr/lib/x86_64-linux-gnu/libbz2.so)
 target_link_libraries(tests /usr/local/lib/libjsoncpp.a)
+target_link_libraries(tests /usr/lib/gcc/x86_64-linux-gnu/4.8/libgcov.a)
 add_test(CorrerTestUnitarios tests)
