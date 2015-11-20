@@ -9,7 +9,7 @@
 
 using namespace Test;
 
-Utiles::Bytes* ManagerArchivosTest::bytesEjemplo = new Utiles::Bytes("estosSonBytesDePrueba", 21);
+Utiles::Bytes* ManagerArchivosTest::bytesEjemplo = new Utiles::Bytes((char*)"estosSonBytesDePrueba", 21);
 
 ManagerArchivosTest::ManagerArchivosTest() : manager(NULL)
 {
@@ -44,7 +44,7 @@ void ManagerArchivosTest::testModificarEnDiscoCorrectamente()
 
 	EXPECT_STREQ(bytesEjemplo->getStringDeBytes().c_str(), bytesLeidos->getStringDeBytes().c_str());
 
-	Utiles::Bytes* nuevosBytes = new Utiles::Bytes("estosSonNuevosBytes", 19);
+	Utiles::Bytes* nuevosBytes = new Utiles::Bytes((char*)"estosSonNuevosBytes", 19);
 	this->manager->modificar(path, nuevosBytes);
 	Utiles::Bytes* nuevosBytesLeidos = this->manager->leer(path);
 

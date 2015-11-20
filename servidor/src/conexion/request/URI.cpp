@@ -18,11 +18,6 @@ URI::URI(std::string uri)
 
 URI::~URI() {}
 
-ConexionServidor::BaseDeDatos::EntidadDB* URI::getEntidadAManejar()
-{
-	//return this->uri;
-}
-
 std::string URI::getURI()
 {
 	return this->uri;

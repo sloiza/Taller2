@@ -39,7 +39,7 @@ void JsonInfo::borrarValorDeAtributo(std::string campo, std::string valorABorrar
 
 	this->raiz[campo].clear();
 
-	for ( int i = 0; i < valoresViejos.size() ; i++)
+	for ( unsigned int i = 0; i < valoresViejos.size() ; i++)
 	{
 		if ( valoresViejos[i].compare(valorABorrar) != 0 )
 		{
@@ -58,7 +58,7 @@ std::vector<std::string> JsonInfo::getListaDeValorDeAtributo(std::string campo, 
 	Json::Value valueValores = this->raiz[campo];
 
 	std::vector<std::string> valores;
-	for( int i = 0; i < valueValores.size() ; i++)
+	for( unsigned int i = 0; i < valueValores.size() ; i++)
 	{
 		valores.push_back( valueValores[i].asString() );
 	}

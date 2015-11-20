@@ -98,7 +98,7 @@ IOperable* CreadorDeOperaciones::getOperacion(ConexionServidor::Request::URI* ur
 
 IOperable* CreadorDeOperaciones::reconocerUriRecursivamente(Recurso* recurso, int nivel)
 {
-    if ( campos.size() == nivel )
+    if ( campos.size() == (unsigned int) nivel )
     {
     	return crearOperacion( recurso->tipo );
     }

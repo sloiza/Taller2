@@ -31,7 +31,7 @@ public:
 	void setURI(std::string uri);
 
 	//std::string getEntidadAManejar();
-	ConexionServidor::BaseDeDatos::EntidadDB* getEntidadAManejar();
+	//ConexionServidor::BaseDeDatos::EntidadDB* getEntidadAManejar();
 
 	std::vector<std::string> getRecursosDividos();
 

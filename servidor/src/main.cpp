@@ -7,6 +7,7 @@
 
 // Conexion Servidor
 #include "conexion/Servidor.h"
+#include "conexion/ServidorMultihilo.h"
 #include "utiles/LectorParametros.h"
 #include "utiles/Log.h"
 
@@ -22,21 +23,6 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
-//	ConexionServidor::Servidor servidor;
-//
-//	servidor.crear(lector.getPuertoInt());
-//
-//	std::cout << "Servidor creado!\n";
-//	Utiles::Log::instancia()->info("Servidor creado!", "main.cpp");
-//
-//	while( servidor.estaCorriendo() )
-//	{
-//		servidor.escuchar(1000);
-//	}
-//	std::cout << "\nServidor cerrado. Saliendo...\n";
-//	Utiles::Log::instancia()->info("Servidor cerrado.", "main.cpp");
-//	servidor.destruir();
-
 	ConexionServidor::ServidorMultihilo servidor;
 	servidor.setPuerto(8080);
 	//servidor.setNumeroDeHilos(lector.getNumeroDeHilos());
@@ -47,10 +33,15 @@ int main(int argc, char** argv)
 	std::cout << "Servidor creado!\n";
 	Utiles::Log::instancia()->info("Servidor creado!", "main.cpp");
 
+	servidor.comenzarAEscuchar();
+
 	while( servidor.estaCorriendo() )
 	{
-		servidor.escuchar();
+		// pongo este hilo a dormir mientras los demas escuchas las llamadas...
+		// lo pongo a dormir 10 segundos para asegurar que no coma la cpu.
+		sleep(10);
 	}
+
 	std::cout << "\nServidor cerrado. Saliendo...\n";
 	Utiles::Log::instancia()->info("Servidor cerrado.", "main.cpp");
 	servidor.destruir();
