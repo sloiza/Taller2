@@ -421,7 +421,10 @@ public class MainActivity extends AppCompatActivity
             //}
 
             super.onPostExecute(result);
+            Log.d("storage", storageUsed.toString());
             storageUsed = storageUsed + 0.3;
+            Log.d("storage", storageUsed.toString());
+
         }
 
     }
@@ -457,7 +460,8 @@ public class MainActivity extends AppCompatActivity
                 con.setDoOutput(true);
 
                 JSONObject json = new JSONObject();
-                json.put("nombre", Utility.getNameFromFile(filePath));
+                File file = new File(filePath);
+                json.put("nombre", Utility.getNameFromFile(file.getName()));
                 json.put("extension", Utility.getExtensionFromFile(filePath));
                 json.put("etiqueta", "archivo");
                 json.put("fecha_ulti_modi", "26102015");
