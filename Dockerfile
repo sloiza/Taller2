@@ -11,7 +11,7 @@ RUN  apt-get install -y -qq gcc-4.9 g++-4.9 libgtest-dev zlib1g-dev libbz2-dev l
 RUN  apt-get install -y python2.7
 RUN  apt-get install -y python-pip
 RUN  pip install cpp-coveralls
-RUN  unzip master.zip
 RUN  wget https://github.com/sloiza/Taller2/archive/master.zip 
+RUN  unzip master.zip
 CMD  ./Taller2-master/servidor/install_dependencies.sh
 CMD  ./Taller2-master/servidor/build/servidor

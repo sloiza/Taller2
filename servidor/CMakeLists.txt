@@ -16,8 +16,9 @@ file(GLOB SRC_BD "src/bd/*.cpp")
 file(GLOB SRC_BD_ENTIDADES "src/bd/entidades/*.cpp")
 file(GLOB SRC_ARCHIVOS "src/archivos/*.cpp")
 file(GLOB SRC_OPERACIONES "src/operaciones/*.cpp")
+file(GLOB SRC_JSON "src/json.cpp")
 
-file(GLOB SRC_COMPLETO ${SRC} ${SRC_CONEXION} ${SRC_ARCHIVOS} ${SRC_OPERACIONES} ${SRC_CONEXION_REQUEST} ${SRC_UTILES} ${SRC_BD} ${SRC_BD_ENTIDADES})
+file(GLOB SRC_COMPLETO ${SRC} ${SRC_CONEXION} ${SRC_ARCHIVOS} ${SRC_OPERACIONES} ${SRC_CONEXION_REQUEST} ${SRC_UTILES} ${SRC_BD} ${SRC_BD_ENTIDADES} ${SRC_JSON})
 
 add_executable(servidor ${SRC_COMPLETO})
 
@@ -25,7 +26,7 @@ target_link_libraries(servidor /usr/local/lib/librocksdb.a)
 target_link_libraries(servidor /usr/lib/x86_64-linux-gnu/libz.so)
 target_link_libraries(servidor /usr/lib/libsnappy.so)
 target_link_libraries(servidor /usr/lib/x86_64-linux-gnu/libbz2.so)
-target_link_libraries(servidor /usr/local/lib/libjsoncpp.a)
+
 
 if(INCLUIR_TEST)
 	add_subdirectory(test)
