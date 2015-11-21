@@ -16,7 +16,6 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.HttpDelete;
 import com.loopj.android.http.HttpGet;
 
 import org.json.JSONArray;
@@ -36,70 +35,35 @@ import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
- * interface.
- */
 public class BinFragment extends Fragment implements AbsListView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private OnFragmentInteractionListener mListener;
-
-    /**
-     * The fragment's ListView/GridView.
-     */
     private AbsListView mListView;
-
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
-    private ListAdapter mAdapter;
-
     List<String> filesList = new ArrayList<>();
-
     SwipeRefreshLayout swipeRefreshLayout;
-
     SessionManager session;
     HashMap<String, String> user;
     String email;
 
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public BinFragment() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_bin, container, false);
 
-        // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
-
-        // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.ColorPrimary);
 
-        /**
-         * Showing Swipe Refresh animation on activity create
-         * As animation won't start on onCreate, post runnable is used
-         */
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         swipeRefreshLayout.setRefreshing(true);
-                                        new getPaperBinFilesService().execute("http://192.168.1.9:8080/papelera");
+                                        new getPaperBinFilesService().execute(session.getIp() + session.getPort() + "papelera");
                                     }
                                 }
         );
@@ -131,43 +95,17 @@ public class BinFragment extends Fragment implements AbsListView.OnItemClickList
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
             mListener.onFragmentInteraction(filesList.get(position));
-        }
-    }
-
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
         }
     }
 
     @Override
     public void onRefresh() {
-        new getPaperBinFilesService().execute("http://192.168.1.9:8080/papelera");
+        new getPaperBinFilesService().execute(session.getIp() + session.getPort() + "papelera");
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String name);
+        void onFragmentInteraction(String name);
     }
 
     public String getPaperBinFiles(String URL) {
@@ -194,10 +132,12 @@ public class BinFragment extends Fragment implements AbsListView.OnItemClickList
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to download file");
+                Log.e("Paper bin", "service status code: " + statusCode);
+                Utility.appendToErrorLog("Paper bin", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            Log.e("Paper bin", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Paper bin", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -214,9 +154,10 @@ public class BinFragment extends Fragment implements AbsListView.OnItemClickList
                 Object message = jsonObject.get("mensaje");
                 JSONArray fileArray;
                 JSONArray folderArray;
-                Log.d("respuesta", result);
                 if(status.equals("ok")) {
                     Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Paper bin", message.toString());
+                    Utility.appendToInfoLog("Paper bin", message.toString());
                     if(jsonObject.has("carpetas")){
                         folderArray = jsonObject.getJSONArray("carpetas");
                         for (int i=0; i<folderArray.length(); i++) {
@@ -233,12 +174,19 @@ public class BinFragment extends Fragment implements AbsListView.OnItemClickList
                             filesList.add(fileName);
                         }
                     }
+                    Log.d("Paper bin", jsonObject.toString());
+                    Utility.appendToDebugLog("Paper bin", jsonObject.toString());
                     ArrayAdapter<String> files = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,filesList);
                     mListView.setAdapter(files);
                     swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Paper bin", message.toString());
+                    Utility.appendToErrorLog("Paper bin", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("Paper bin", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Paper bin", e.getLocalizedMessage());
             }
         }
     }

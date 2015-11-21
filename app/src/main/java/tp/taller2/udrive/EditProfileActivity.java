@@ -22,7 +22,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.Random;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
@@ -37,15 +36,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class EditProfileActivity extends AppCompatActivity {
 
     private static int RESULT_LOAD_IMAGE = 1;
-    EditText name;
-    EditText email;
-    EditText password;
-    EditText surname;
-    EditText city;
+    EditText nameET;
+    EditText emailET;
+    EditText passwordET;
+    EditText surnameET;
+    EditText cityET;
     CircleImageView pic;
     SessionManager session;
     String picturePath;
     Bitmap profilePic;
+    String name, email, password, surname, city;
+    HashMap<String, String> user;
+    Float storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,27 +55,28 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        name = (EditText)findViewById(R.id.username_text);
-        email = (EditText)findViewById(R.id.email_text);
-        password = (EditText)findViewById(R.id.password_text);
-        surname = (EditText)findViewById(R.id.surname_text);
-        city = (EditText)findViewById(R.id.place_text);
+        nameET = (EditText)findViewById(R.id.username_text);
+        emailET = (EditText)findViewById(R.id.email_text);
+        passwordET = (EditText)findViewById(R.id.password_text);
+        surnameET = (EditText)findViewById(R.id.surname_text);
+        cityET = (EditText)findViewById(R.id.place_text);
         pic = (CircleImageView)findViewById(R.id.imgView);
 
         session = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = session.getUserDetails();
-        String sessionName = user.get(SessionManager.KEY_NAME);
-        String sessionSurname = user.get(SessionManager.KEY_SURNAME);
-        String sessionEmail = user.get(SessionManager.KEY_EMAIL);
-        String sessionCity = user.get(SessionManager.KEY_CITY);
-        String sessionPassword = user.get(SessionManager.KEY_PASSWORD);
+        user = session.getUserDetails();
+        name = user.get(SessionManager.KEY_NAME);
+        surname = user.get(SessionManager.KEY_SURNAME);
+        email = user.get(SessionManager.KEY_EMAIL);
+        city = user.get(SessionManager.KEY_CITY);
+        password = user.get(SessionManager.KEY_PASSWORD);
         String sessionPicture = user.get(SessionManager.KEY_PICTURE);
+        storage = session.getUserStorageUsed();
 
-        name.setText(sessionName);
-        surname.setText(sessionSurname);
-        email.setText(sessionEmail);
-        city.setText(sessionCity);
-        password.setText(sessionPassword);
+        nameET.setText(name);
+        surnameET.setText(surname);
+        emailET.setText(email);
+        cityET.setText(city);
+        passwordET.setText(password);
         Bitmap picture = Utility.stringToBitmap(sessionPicture);
         pic.setImageBitmap(picture);
 
@@ -81,7 +84,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_empty, menu);
         return true;
     }
@@ -91,18 +93,14 @@ public class EditProfileActivity extends AppCompatActivity {
      * automatically handle clicks on the Home/Up button, so long
      * as you specify a parent activity in AndroidManifest.xml.
      * @param item
-     * @return
+     * @return option
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -135,29 +133,28 @@ public class EditProfileActivity extends AppCompatActivity {
 
     /** Called when the user clicks the register borderbutton */
     public void saveProfile(View view) {
-        String newName = name.getText().toString();
-        String newEmail = email.getText().toString();
-        String newpassword = password.getText().toString();
-        String newCity = city.getText().toString();
-        String newSurname = surname.getText().toString();
-        HashMap<String, String> user = session.getUserDetails();
+        name = nameET.getText().toString();
+        email = emailET.getText().toString();
+        password = passwordET.getText().toString();
+        city = cityET.getText().toString();
+        surname = surnameET.getText().toString();
         String sessionEmail = user.get(SessionManager.KEY_EMAIL);
         String sessionPassword = user.get(SessionManager.KEY_PASSWORD);
-        if(Utility.isNotNull(newName) && Utility.isNotNull(newEmail) && Utility.isNotNull(newpassword)
-                && Utility.isNotNull(newSurname) && Utility.isNotNull(newCity)){
-            if(!Utility.validateEmail(newEmail)){
-                email.requestFocus();
-                email.setError(getString(R.string.email_error));
+        if(Utility.isNotNull(name) && Utility.isNotNull(email) && Utility.isNotNull(password)
+                && Utility.isNotNull(surname) && Utility.isNotNull(city)){
+            if(!Utility.validateEmail(email)){
+                emailET.requestFocus();
+                emailET.setError(getString(R.string.email_error));
             }else{
-                if(Utility.validatePassword(newpassword)){
-                    if(sessionEmail.equals(newEmail) && sessionPassword.equals(newpassword)){
-                        new getUserUpdateProfileService().execute("http://192.168.1.9:8080/usuario?");
+                if(Utility.validatePassword(password)){
+                    if(sessionEmail.equals(email) && sessionPassword.equals(password)){
+                        new userUpdateProfileService().execute(session.getIp() + session.getPort() + "usuario?");
                     } else {
-                        new getUserUpdateProfileAndStartNewSessionService().execute("http://192.168.1.9:8080/usuario?");
+                        new userUpdateProfileAndStartNewSessionService().execute(session.getIp() + session.getPort() + "usuario?");
                     }
                 } else {
-                    password.requestFocus();
-                    password.setError(getString(R.string.password_error));
+                    passwordET.requestFocus();
+                    passwordET.setError(getString(R.string.password_error));
                 }
             }
         }else{
@@ -165,12 +162,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    public String getUserUpdateProfileAndStartNewSession(String URL) {
-        String newName = name.getText().toString();
-        String newEmail = email.getText().toString();
-        String newpassword = password.getText().toString();
-        String newCity = city.getText().toString();
-        String newSurname = surname.getText().toString();
+    public String userUpdateProfileAndStartNewSession(String URL) {
         profilePic = BitmapFactory.decodeFile(picturePath);
         String encodedImage = Utility.bitmapToString(profilePic);
         StringBuilder stringBuilder = new StringBuilder();
@@ -178,19 +170,15 @@ public class EditProfileActivity extends AppCompatActivity {
         HttpPost httpPost = new HttpPost(URL);
         JSONObject json = new JSONObject();
         try {
-            json.put("nombre", newName);
-            json.put("apellido", newSurname);
-            json.put("mail", newEmail);
-            json.put("lugar", newCity);
-            json.put("password", newpassword);
+            json.put("nombre", name);
+            json.put("apellido", surname);
+            json.put("mail", email);
+            json.put("lugar", city);
+            json.put("password", password);
             json.put("foto", encodedImage);
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
             httpPost.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             HttpResponse response = httpClient.execute(httpPost);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -205,17 +193,19 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to download file");
+                Log.e("New update profile", "service status code: " + statusCode);
+                Utility.appendToErrorLog("Update profile and start new session", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            Log.e("New update profile", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Update profile and start new session", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
 
-    private class getUserUpdateProfileAndStartNewSessionService extends AsyncTask<String, Void, String> {
+    private class userUpdateProfileAndStartNewSessionService extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... urls) {
-            return getUserUpdateProfileAndStartNewSession(urls[0]);
+            return userUpdateProfileAndStartNewSession(urls[0]);
         }
 
         protected void onPostExecute(String result) {
@@ -225,20 +215,24 @@ public class EditProfileActivity extends AppCompatActivity {
                 Object message = jsonObject.get("mensaje");
                 if(status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("New update profile", message.toString());
+                    Utility.appendToInfoLog("Update profile and start new session", message.toString());
+                    Log.d("New update profile", jsonObject.toString());
+                    Utility.appendToDebugLog("Update profile and start new session", message.toString());
                     navigatetoLoginActivity();
+                } else {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("New update profile", message.toString());
+                    Utility.appendToErrorLog("Update profile and start new session", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("New update profile", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Update profile and start new session", e.getLocalizedMessage());
             }
         }
     }
 
-    public String getUserUpdateProfile(String URL) {
-        String newName = name.getText().toString();
-        String newEmail = email.getText().toString();
-        String newpassword = password.getText().toString();
-        String newCity = city.getText().toString();
-        String newSurname = surname.getText().toString();
+    public String userUpdateProfile(String URL) {
         profilePic = BitmapFactory.decodeFile(picturePath);
         String encodedImage = Utility.bitmapToString(profilePic);
         StringBuilder stringBuilder = new StringBuilder();
@@ -246,20 +240,16 @@ public class EditProfileActivity extends AppCompatActivity {
         HttpPut httpPut = new HttpPut(URL);
         JSONObject json = new JSONObject();
         try {
-            json.put("nombre", newName);
-            json.put("apellido", newSurname);
-            json.put("mail", newEmail);
-            json.put("lugar", newCity);
+            json.put("nombre", name);
+            json.put("apellido", surname);
+            json.put("mail", email);
+            json.put("lugar", city);
             json.put("foto", encodedImage);
-            json.put("password", newpassword);
+            json.put("password", password);
             httpPut.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPut.setHeader("Content-Type", "application/json");
             httpPut.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            HttpResponse response = httpClient.execute(httpPut);
+             HttpResponse response = httpClient.execute(httpPut);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
             if (statusCode == 200) {
@@ -273,32 +263,44 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to download file");
+                Log.e("Update profile", "service status code: " + statusCode);
+                Utility.appendToErrorLog("Update profile", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            Log.e("Update profile", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Update profile", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
 
-    private class getUserUpdateProfileService extends AsyncTask<String, Void, String> {
+    private class userUpdateProfileService extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... urls) {
-            return getUserUpdateProfile(urls[0]);
+            return userUpdateProfile(urls[0]);
         }
 
         protected void onPostExecute(String result) {
             try {
+                profilePic = BitmapFactory.decodeFile(picturePath);
+                String encodedImage = Utility.bitmapToString(profilePic);
                 JSONObject jsonObject = new JSONObject(result);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
                 if(status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
-                    session.createLoginSession(email.getText().toString(), name.getText().toString(), surname.getText().toString(),
-                            city.getText().toString(), password.getText().toString(), picturePath);
+                    Log.i("Update profile", message.toString());
+                    Utility.appendToInfoLog("Update profile", message.toString());
+                    Log.d("Update profile", jsonObject.toString());
+                    Utility.appendToDebugLog("Update profile", jsonObject.toString());
+                    session.createLoginSession(email, name, surname, city, password, encodedImage, storage, session.getIp(), session.getPort());
                     navigatetoProfileActivity();
+                } else {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Update profile", message.toString());
+                    Utility.appendToErrorLog("Update profile", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("Update profile", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Update profile", e.getLocalizedMessage());
             }
         }
     }
@@ -313,7 +315,10 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public void navigatetoLoginActivity(){
-        session.logoutUser();
+        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 }

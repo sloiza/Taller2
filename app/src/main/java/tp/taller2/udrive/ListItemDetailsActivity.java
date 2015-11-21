@@ -1,7 +1,6 @@
 package tp.taller2.udrive;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -9,18 +8,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.HttpGet;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Random;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
@@ -34,16 +34,18 @@ public class ListItemDetailsActivity extends AppCompatActivity {
 
     TextInputLayout inputLayoutName;
     TextInputLayout inputLayoutLabel;
-    TextInputLayout inputLayoutLastModDate;
-    TextInputLayout inputLayoutLastModUser;
+    TextInputLayout inputLayoutModified;
     TextInputLayout inputLayoutOwner;
     TextInputLayout inputLayoutLocation;
+    TextInputLayout inputLayoutShareWith;
+    TextInputLayout inputLayoutCreated;
     EditText nameET;
     EditText labelET;
-    EditText lastModDateET;
-    EditText lastModUserET;
+    EditText modifiedET;
     EditText ownerET;
     EditText locationET;
+    EditText shareWithET;
+    EditText createdET;
     String actualItemPath;
     SessionManager session;
     HashMap<String, String> user;
@@ -51,6 +53,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
     String itemName;
     String name;
     String surname;
+    Integer actualVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +63,18 @@ public class ListItemDetailsActivity extends AppCompatActivity {
 
         inputLayoutName = (TextInputLayout) findViewById(R.id.input_layout_name);
         inputLayoutLabel = (TextInputLayout) findViewById(R.id.input_layout_label);
-        inputLayoutLastModDate = (TextInputLayout) findViewById(R.id.input_layout_lastModDate);
-        inputLayoutLastModUser = (TextInputLayout) findViewById(R.id.input_layout_lastModUser);
+        inputLayoutModified = (TextInputLayout) findViewById(R.id.input_layout_modified);
         inputLayoutOwner = (TextInputLayout) findViewById(R.id.input_layout_owner);
         inputLayoutLocation = (TextInputLayout) findViewById(R.id.input_layout_location);
+        inputLayoutShareWith = (TextInputLayout) findViewById(R.id.input_layout_shareWith);
+        inputLayoutCreated = (TextInputLayout) findViewById(R.id.input_layout_created);
 
         nameET = (EditText)findViewById(R.id.itemName);
         labelET = (EditText)findViewById(R.id.itemLabel);
-        lastModDateET = (EditText)findViewById(R.id.itemLastModDate);
-        lastModUserET = (EditText)findViewById(R.id.itemLastModUser);
-        ownerET = (EditText)findViewById(R.id.itemOwner);
+        modifiedET = (EditText)findViewById(R.id.itemModified);
         locationET = (EditText)findViewById(R.id.itemLocation);
+        shareWithET = (EditText)findViewById(R.id.itemShareWith);
+        createdET = (EditText)findViewById(R.id.itemCreated);
 
         session = new SessionManager(getApplicationContext());
         user = session.getUserDetails();
@@ -82,22 +86,14 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         itemName = intent.getStringExtra("itemName");
         actualItemPath = "tmp/" + email + "/";
 
-        nameET.setText(itemName);
-        ownerET.setText(name + " " + surname);
-        locationET.setText(actualItemPath);
-        new getItemMetadataService().execute("http://192.168.1.9:8080/archivos");
+        new getItemMetadataService().execute(session.getIp() + session.getPort() + "archivos");
     }
 
     public void editItemDetails(View view) {
-        String name = nameET.getText().toString();
         String label = labelET.getText().toString();
-        String lastModDate = lastModDateET.getText().toString();
-        String lastModUser = lastModUserET.getText().toString();
-        String owner = ownerET.getText().toString();
         String location = locationET.getText().toString();
-        if(Utility.isNotNull(name) && Utility.isNotNull(label) && Utility.isNotNull(lastModDate)
-                && Utility.isNotNull(lastModUser) && Utility.isNotNull(owner) && Utility.isNotNull(location)){
-                new putModifyItemDetailsService().execute("http://192.168.1.9:8080/archivos");
+        if(Utility.isNotNull(label) && Utility.isNotNull(location)){
+                new putModifyItemDetailsService().execute(session.getIp() + session.getPort() + "archivos");
         }else{
             Toast.makeText(getApplicationContext(), R.string.error_emptyFields, Toast.LENGTH_LONG).show();
         }
@@ -115,10 +111,6 @@ public class ListItemDetailsActivity extends AppCompatActivity {
             httpGet.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpGet.setHeader("Content-Type", "application/json");
             httpGet.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             HttpResponse response = httpClient.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -133,10 +125,12 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to get metadata of item");
+                Log.e("Item metadata", "status code: " + statusCode);
+                Utility.appendToErrorLog("Item metadata", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            Log.e("Item metadata", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Item metadata", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -151,53 +145,67 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
-                Object label = jsonObject.get("etiqueta");
+                Object label = jsonObject.getJSONArray("etiqueta");
                 Object lastModDate = jsonObject.get("fecha_ulti_modi");
                 Object lastModUser = jsonObject.get("usuario_ulti_modi");
+                //Object version = jsonObject.get("version");
+                //Object created = jsonObject.get("fecha_creacion");
+                //Object shareWith = jsonObject.get("compartido_con");
                 if(status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
-                    labelET.setText(label.toString());
-                    lastModDateET.setText(lastModDate.toString()); ;
-                    lastModUserET.setText(lastModUser.toString());
-                    ownerET.setText(name + " " + surname);
+                    Log.i("Item metadata", message.toString());
+                    Utility.appendToInfoLog("Item metadata", message.toString());
+                    Log.d("Item metadata", jsonObject.toString());
+                    Utility.appendToDebugLog("Item metadata", jsonObject.toString());
                     nameET.setText(itemName);
-                    locationET.setText("tmp/" + email + "/");
+                    labelET.setText(label.toString());
+                    createdET.setText("11/10/2015");
+                    //createdEt.setText(created.toString());
+                    modifiedET.setText(lastModDate.toString() + "by" + lastModUser.toString()); ;
+                    ownerET.setText(name + " " + surname);
+                    shareWithET.setText("Manuel Iglesias");
+                    //shareWithET.setText(shareWith.toString());
+                    locationET.setText(actualItemPath);
+                    actualVersion = 1;
+                    //actualVersion = String.valueOf(version.toString());
+                } else {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Item metadata", message.toString());
+                    Utility.appendToErrorLog("Item metadata", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("Item metadata", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Item metadata", e.getLocalizedMessage());
             }
         }
     }
 
     public String putModifyItemDetails(String URL) {
-        String name = nameET.getText().toString();
         String label = labelET.getText().toString();
-        String lastModDate = lastModDateET.getText().toString();
-        String lastModUser = lastModUserET.getText().toString();
-        String owner = ownerET.getText().toString();
         String location = locationET.getText().toString();
-
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
         HttpPut httpPut = new HttpPut(URL);
         JSONObject json = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        SimpleDateFormat sdf = new SimpleDateFormat("ddmmyyyyy_HHmmss");
+        String currentDateAndTime = sdf.format(new Date());
         try {
-            json.put("nombre",Utility.getNameFromFile(name));
-            json.put("extension",Utility.getExtensionFromFile(name));
-            json.put("etiqueta",label);
-            json.put("fecha_ulti_modi",lastModDate);
-            json.put("usuario_ulti_modi",lastModUser);
-            json.put("propietario",owner);
+            jsonArray.put(label);
+            json.put("nombre",Utility.getNameFromFile(itemName));
+            json.put("extension",Utility.getExtensionFromFile(itemName));
+            json.put("etiqueta",jsonArray);
+            json.put("fecha_ulti_modi",currentDateAndTime);
+            json.put("usuario_ulti_modi",name + " " + surname);
+            json.put("propietario",name + " " + surname);
             json.put("baja_logica","no");
             json.put("direccion",location);
+            //actualizo la version
+            //json.put("version", actualVersion + 1);
             json.put("path",actualItemPath);
             httpPut.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPut.setHeader("Content-Type", "application/json");
             httpPut.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             HttpResponse response = httpClient.execute(httpPut);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -212,10 +220,12 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to modify metadata of item");
+                Log.e("Modify metadata", "status code: " + statusCode);
+                Utility.appendToErrorLog("Modify metadata", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            Log.e("Modify metadata", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Modify metadata", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -232,16 +242,19 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                 Object message = jsonObject.get("mensaje");
                 if(status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Modify metadata", message.toString());
+                    Utility.appendToInfoLog("Modify metadata", message.toString());
+                    Log.d("Modify metadata", jsonObject.toString());
+                    Utility.appendToDebugLog("Modify metadata", jsonObject.toString());
                     navigatetoMainActivity();
-                    labelET.setText(labelET.getText().toString());
-                    lastModDateET.setText(lastModDateET.getText().toString()); ;
-                    lastModUserET.setText(lastModUserET.getText().toString());
-                    ownerET.setText(name + " " + surname);
-                    nameET.setText(itemName);
-                    locationET.setText("tmp/" + email + "/");
+                } else {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Modify metadata", message.toString());
+                    Utility.appendToErrorLog("Modify metadata", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("Modify metadata", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Modify metadata", e.getLocalizedMessage());
             }
         }
     }

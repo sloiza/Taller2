@@ -10,7 +10,6 @@ import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,10 +21,8 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Random;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
@@ -46,7 +43,10 @@ public class RegisterActivity extends AppCompatActivity {
     String picturePath;
     Bitmap profilePic;
     TextInputLayout inputLayoutEmail, inputLayoutPassword, inputLayoutUsername, inputLayoutSurname, inputLayoutPlace;
+    String name, email, password, city, surname;
     private static int RESULT_LOAD_IMAGE = 1;
+    CircleImageView imageView;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,42 +66,35 @@ public class RegisterActivity extends AppCompatActivity {
         pwdET = (EditText)findViewById(R.id.newPassword_message);
         surnameET = (EditText)findViewById(R.id.surname_message);
         cityET = (EditText)findViewById(R.id.place_message);
-    }
 
-    public void loadPicture(View view) {
-        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, RESULT_LOAD_IMAGE);
+        imageView = (CircleImageView) findViewById(R.id.imgView);
+        imageView.setImageResource(R.drawable.profile_default);
+
+        session = new SessionManager(getApplicationContext());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_register, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up borderbutton, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     /** Called when the user clicks the register borderbutton */
     public void registerMessage(View view) {
-        String name = nameET.getText().toString();
-        String email = emailET.getText().toString();
-        String password = pwdET.getText().toString();
-        String city = cityET.getText().toString();
-        String surname = surnameET.getText().toString();
+        name = nameET.getText().toString();
+        email = emailET.getText().toString();
+        password = pwdET.getText().toString();
+        city = cityET.getText().toString();
+        surname = surnameET.getText().toString();
         if(Utility.isNotNull(name) && Utility.isNotNull(email) && Utility.isNotNull(password)
                 && Utility.isNotNull(surname) && Utility.isNotNull(city)){
             if(!Utility.validateEmail(email)){
@@ -109,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
                 emailET.setError(getString(R.string.email_error));
             }else{
                 if(Utility.validatePassword(password)){
-                    new getUserSignUpService().execute("http://192.168.1.9:8080/usuario?");
+                    new postUserSignUpService().execute(session.getIp() + session.getPort() + "usuario?");
                 } else {
                     pwdET.requestFocus();
                     pwdET.setError(getString(R.string.password_error));
@@ -120,38 +113,25 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public String getUserSignUp(String URL) {
-        String name = nameET.getText().toString();
-        String email = emailET.getText().toString();
-        String password = pwdET.getText().toString();
-        String city = cityET.getText().toString();
-        String surname = surnameET.getText().toString();
-        profilePic = BitmapFactory.decodeFile(picturePath);
-        String encodedImage = Utility.bitmapToString(profilePic);
-
+    public String postUserSignUp(String URL) {
+        String encodedImage = String.valueOf(R.drawable.profile_default);
+        if(profilePic.getByteCount() > 0){
+            encodedImage = Utility.bitmapToString(profilePic);
+        }
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(URL);
         JSONObject json = new JSONObject();
-        int min = 1;
-        int max = 1000;
-        Random random = new Random();
-        int id = random.nextInt(max - min + 1) + min;
         try {
             json.put("nombre", name);
             json.put("apellido", surname);
             json.put("mail", email);
-            json.put("id", id);
             json.put("lugar", city);
             json.put("password", password);
             json.put("foto", encodedImage);
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
             httpPost.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             HttpResponse response = httpClient.execute(httpPost);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -166,34 +146,48 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to download file");
+                Log.e("User sign up", "service status code:" + statusCode);
+                Utility.appendToErrorLog("User sign up", "status code:" + statusCode);
             }
         } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            Log.e("User sign up", e.getLocalizedMessage());
+            Utility.appendToErrorLog("User sign up", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
 
-    private class getUserSignUpService extends AsyncTask<String, Void, String> {
+    private class postUserSignUpService extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... urls) {
-            return getUserSignUp(urls[0]);
+            return postUserSignUp(urls[0]);
         }
 
         protected void onPostExecute(String result) {
             try {
                 JSONObject jsonObject = new JSONObject(result);
+                JSONObject json = new JSONObject();
+                json.put("nombre", name);
+                json.put("apellido", surname);
+                json.put("mail", email);
+                json.put("lugar", city);
+                json.put("password", password);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
-                Log.d("result", result);
-                Log.d("Status", status.toString());
-                Log.d("Message", message.toString());
                 if(status.equals("ok")) {
                     setDefaultValues();
-                    Toast.makeText(getApplicationContext(), R.string.success_register, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("User sign up", message.toString());
+                    Utility.appendToInfoLog("User sign up", message.toString());
+                    Log.d("User sign up", json.toString());
+                    Utility.appendToDebugLog("User sign up", json.toString());
                     navigatetoLoginActivity();
+                } else {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("User sign up", message.toString());
+                    Utility.appendToErrorLog("User sign up", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("User sign up", e.getLocalizedMessage());
+                Utility.appendToErrorLog("User sign up", e.getLocalizedMessage());
             }
         }
     }
@@ -206,6 +200,11 @@ public class RegisterActivity extends AppCompatActivity {
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(loginIntent);
+    }
+
+    public void loadPicture(View view) {
+        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, RESULT_LOAD_IMAGE);
     }
 
     @Override
@@ -223,10 +222,8 @@ public class RegisterActivity extends AppCompatActivity {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             picturePath = cursor.getString(columnIndex);
             cursor.close();
-
-            CircleImageView imageView = (CircleImageView) findViewById(R.id.imgView);
-            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
+            profilePic = BitmapFactory.decodeFile(picturePath);
+            imageView.setImageBitmap(profilePic);
         }
 
 

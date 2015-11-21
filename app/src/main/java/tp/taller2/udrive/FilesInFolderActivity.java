@@ -32,13 +32,12 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,10 +46,11 @@ import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.StatusLine;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.entity.InputStreamEntity;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
-public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRefreshLayout.OnRefreshListener,
+public class FilesInFolderActivity extends AppCompatActivity implements  AbsListView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener,
         ShareItemDialogFragment.ShareItemDialogListener, NewFolderDialogFragment.NewFolderDialogListener{
 
     List<String> filesList = new ArrayList<>();
@@ -60,6 +60,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
     HashMap<String, String> user;
     String email;
     SessionManager session;
+    String name, surname;
     String itemName;
     SwipeRefreshLayout swipeRefreshLayout;
     private static int FILE_SELECT_CODE = 1;
@@ -74,8 +75,6 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_files_in_folder);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-
 
         lv = (ListView) findViewById(R.id.list_view);
         session = new SessionManager(getApplicationContext());
@@ -92,7 +91,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         Utility.setDynamicHeight(folderlv);
 
         registerForContextMenu(folderlv);
-
+        folderlv.setOnItemClickListener(this);
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -101,12 +100,14 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         session = new SessionManager(getApplicationContext());
         user = session.getUserDetails();
         email = user.get(SessionManager.KEY_EMAIL);
+        name = user.get(SessionManager.KEY_NAME);
+        surname = user.get(SessionManager.KEY_SURNAME);
 
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        //swipeRefreshLayout.setRefreshing(true);
-                                        new getFolderFilesService().execute("http://192.168.1.9:8080/carpetas");
+                                        swipeRefreshLayout.setRefreshing(true);
+                                        new getFolderFilesService().execute(session.getIp() + session.getPort() + "carpetas");
                                     }
                                 }
         );
@@ -151,24 +152,19 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
     }
 
     private void shareCurrentItem() {
-        Toast.makeText(getApplicationContext(), "Share item click", Toast.LENGTH_LONG).show();
         showShareFileDialog();
     }
 
     private void deleteCurrentItem() {
-        Toast.makeText(getApplicationContext(), "Delete item click", Toast.LENGTH_LONG).show();
         if(!Utility.getExtensionFromFile(itemClick).isEmpty()){
-            Toast.makeText(getApplicationContext(), "Delete file", Toast.LENGTH_LONG).show();
-            new deleteFileService().execute("http://192.168.1.9:8080/archivos");
+            new deleteFileService().execute(session.getIp() + session.getPort() + "archivos");
         } else {
-            Toast.makeText(getApplicationContext(), "Delete folder", Toast.LENGTH_LONG).show();
-            new deleteFolderService().execute("http://192.168.1.9:8080/carpetas");
+            new deleteFolderService().execute(session.getIp() + session.getPort() + "carpetas");
         }
     }
 
     private void downloadCurrentItem() {
-        Toast.makeText(getApplicationContext(), "Download item click", Toast.LENGTH_LONG).show();
-        //new getDownloadFileService().execute("http://192.168.0.16:8080/descargar");
+        //new getDownloadFileService().execute(session.getIp() + session.getPort() + "descargar");
     }
 
     public void showShareFileDialog() {
@@ -180,15 +176,21 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
     public void onRefresh() {
         filesList.clear();
         foldersList.clear();
-        new getFolderFilesService().execute("http://192.168.1.9:8080/carpetas");
+        new getFolderFilesService().execute(session.getIp() + session.getPort() + "carpetas");
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(getApplicationContext(),FilesInFolderActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("folderName", foldersList.get(position));
+        startActivity(intent);
     }
 
     public String getFolderFiles(String URL) {
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(URL);
-        HashMap<String, String> user = session.getUserDetails();
-        String email = user.get(SessionManager.KEY_EMAIL);
         JSONObject json = new JSONObject();
         try {
             json.put("nombre", itemName);
@@ -210,10 +212,12 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to download file");
+                Log.e("Folder files", "service status code: " + statusCode);
+                Utility.appendToErrorLog("Folder files", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            Log.e("Folder files", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Folder files", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -232,6 +236,8 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 JSONArray folderArray;
                 if(status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Folder files", message.toString());
+                    Utility.appendToInfoLog("Folder files", message.toString());
                     if(jsonObject.has("carpetas")){
                         folderArray = jsonObject.getJSONArray("carpetas");
                         for (int i=0; i<folderArray.length(); i++) {
@@ -248,10 +254,16 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                             filesList.add(fileName);
                         }
                     }
+                    Log.d("Folder files", jsonObject.toString());
+                    Utility.appendToDebugLog("Folder files", jsonObject.toString());
                     ArrayAdapter<String> files = new ArrayAdapter<>(getApplicationContext(),R.layout.list_item,filesList);
                     lv.setAdapter(files);
                     ArrayAdapter<String> folders = new ArrayAdapter<>(getApplicationContext(),R.layout.list_item,foldersList);
                     folderlv.setAdapter(folders);
+                } else {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Folder files", message.toString());
+                    Utility.appendToErrorLog("Folder files", message.toString());
                 }
             } catch (Exception e) {
                 Log.d("ReadJSONTask", e.getLocalizedMessage());
@@ -282,10 +294,12 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 }
                 inputStream.close();
             } else {
-                Log.d("Error", "Failed to download file");
+                Log.e("Folder download file", "status code: " + statusCode);
+                Utility.appendToErrorLog("Folder download file", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("Error", e.getLocalizedMessage());
+            Log.e("Folder download file", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Folder download file", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -301,7 +315,9 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 JSONObject jsonObject = new JSONObject(result);
                 //devuelve los bytes
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("Folder download file", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Folder download file", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Folder download file", e.getLocalizedMessage());
             }
         }
     }
@@ -320,10 +336,6 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             HttpResponse response = httpClient.execute(httpDelete);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -338,10 +350,12 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 }
                 inputStream.close();
             } else {
-                Log.d("Error", "Failed to delete file");
+                Log.e("Folder delete file", "status code: " + statusCode);
+                Utility.appendToErrorLog("Folder delete file", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("Error", e.getLocalizedMessage());
+            Log.e("Folder delete file", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Folder delete file", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -358,9 +372,18 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 Object message = jsonObject.get("mensaje");
                 if(status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Folder delete file", message.toString());
+                    Utility.appendToInfoLog("Folder delete file", message.toString());
+                    Log.d("Folder delete file", jsonObject.toString());
+                    Utility.appendToDebugLog("Folder delete file", jsonObject.toString());
+                } else {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Folder delete file", message.toString());
+                    Utility.appendToErrorLog("Folder delete file", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("Error", e.getLocalizedMessage());
+                Log.e("Folder delete file", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Folder delete file", e.getLocalizedMessage());
             }
         }
     }
@@ -378,10 +401,6 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             HttpResponse response = httpClient.execute(httpDelete);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -396,10 +415,12 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 }
                 inputStream.close();
             } else {
-                Log.d("Error", "Failed to delete folder");
+                Log.e("Folder delete folder", "status code: " + statusCode);
+                Utility.appendToErrorLog("Folder delete folder", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("Error", e.getLocalizedMessage());
+            Log.e("Folder delete folder", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Folder delete folder", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -416,28 +437,31 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 Object message = jsonObject.get("mensaje");
                 if(status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Folder delete folder", message.toString());
+                    Utility.appendToInfoLog("Folder delete folder", message.toString());
+                    Log.d("Folder delete folder", jsonObject.toString());
+                    Utility.appendToDebugLog("Folder delete folder", jsonObject.toString());
+                } else {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Folder delete folder", message.toString());
+                    Utility.appendToErrorLog("Folder delete folder", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("Error", e.getLocalizedMessage());
+                Log.e("Folder delete folder", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Folder delete folder", e.getLocalizedMessage());
             }
         }
     }
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        // User touched the dialog's positive button
          if (dialog.getTag().equals("newFolder")) {
-             Log.d("dialogInput", dialogInput);
-            new postNewFolderService().execute("http://192.168.1.9:8080/carpetas");
+            new postNewFolderService().execute(session.getIp() + session.getPort() + "carpetas");
         } else if (dialog.getTag().equals("shareUsers")) {
-            Log.d("itemName", itemClick);
-            Log.d("dialogInput", dialogInput);
              if(!Utility.getExtensionFromFile(itemClick).isEmpty()){
-                 Toast.makeText(getApplicationContext(), "share file", Toast.LENGTH_LONG).show();
-                 new shareFileService().execute("http://192.168.1.9:8080/compartirArchivo");
+                 new shareFileService().execute(session.getIp() + session.getPort() + "compartirArchivo");
              } else {
-                 new shareFolderService().execute("http://192.168.1.9:8080/compartirCarpeta");
-                 Toast.makeText(getApplicationContext(), "share folder", Toast.LENGTH_LONG).show();
+                 new shareFolderService().execute(session.getIp() + session.getPort() + "compartirCarpeta");
              }
         }
     }
@@ -458,7 +482,6 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
     }
 
     public void showNewFolderDialog() {
-        // Create an instance of the dialog fragment and show it
         DialogFragment dialog = new NewFolderDialogFragment();
         dialog.show(getFragmentManager(), "newFolder");
     }
@@ -471,11 +494,9 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-
         try {
             startActivityForResult(Intent.createChooser(intent, "Select a File to Upload"), FILE_SELECT_CODE);
         } catch (android.content.ActivityNotFoundException ex) {
-            // Potentially direct the user to the Market with a Dialog
             Toast.makeText(getApplicationContext(), "Please install a File Manager.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -484,184 +505,33 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FILE_SELECT_CODE && resultCode == -1 && null != data) {
-            // Get the Uri of the selected file
             Uri uri = data.getData();
-            // Get the file instance
             filePath = uri.getPath();
-            // Initiate the upload
-            new UploadFileMetadatosToServer().execute();
+            SimpleDateFormat sdf = new SimpleDateFormat("ddmmyyyyy_HHmmss");
+            String currentDateAndTime = sdf.format(new Date());
+            File file = new File(filePath);
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put("file");
+            //json.put("fecha_creacion", currentDateAndTime);
+            //json.put("version", 1);
+            //json.put("compartido_con", "");
+            new UploadFileToServer().execute(session.getIp() + session.getPort() + "archivos?nombre=" + Utility.getNameFromFile(file.getName())
+                    + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta="  + jsonArray
+                    + "&fecha_ulti_modi=" + currentDateAndTime + "&usuario_ulti_modi=" + name + " " + surname
+                    + "&propietario=" + name + " " + surname + "&baja_logica=no&direccion=" + "tmp/" + email + "/" + itemName + "/");
         }
     }
 
-    /**
-     * Uploading the file to server
-     */
-    class UploadFileToServer extends AsyncTask<Void, Integer, String> {
-        @Override
-        protected String doInBackground(Void... params) {
-            return uploadFile();
-        }
-
-        @SuppressWarnings("deprecation")
-        private String uploadFile() {
-            String responseString;
-            HttpURLConnection con;
-            URL url;
-
-            try {
-                AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
-                        new AndroidMultiPartEntity.ProgressListener() {
-
-                            @Override
-                            public void transferred(long num) {
-                                publishProgress((int) ((num / (float) totalSize) * 100));
-                            }
-                        });
-
-                File file = new File(filePath);
-                url = new URL("http://192.168.1.9:8080/archivos?");
-                con = (HttpURLConnection) url.openConnection();
-                con.setDoOutput(true);
-                con.setFixedLengthStreamingMode(file.length());
-
-                OutputStream out = con.getOutputStream();
-                out.write(Utility.convertFileToByteArray(file));
-                out.flush();
-                out.close();
-                int statusCode = con.getResponseCode();
-                if (statusCode == 200) {
-                    responseString = con.getResponseMessage();
-                } else {
-                    responseString = "Error occurred! Http Status Code: " + statusCode;
-                }
-            } catch (IOException e) {
-                responseString = e.toString();
-            }
-            return responseString;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            //try {
-            Log.d("respuesta: ", result);
-            //JSONObject jsonObject = new JSONObject(result);
-            //Object status = jsonObject.get("estado");
-            //Object message = jsonObject.get("mensaje");
-            //if (status.equals("ok")) {
-            Toast.makeText(getApplicationContext(), "Upload file success", Toast.LENGTH_LONG).show();
-            //} else {
-            //    Toast.makeText(getApplicationContext(), "upload file error", Toast.LENGTH_LONG).show();
-            //}
-            //} catch (JSONException e) {
-            // e.printStackTrace();
-            //}
-
-            super.onPostExecute(result);
-        }
-
-    }
-
-    /**
-     * Uploading the file to server
-     */
-    class UploadFileMetadatosToServer extends AsyncTask<Void, Integer, String> {
-
-        @Override
-        protected String doInBackground(Void... params) {
-            return uploadFileMetadatos();
-        }
-
-        @SuppressWarnings("deprecation")
-        private String uploadFileMetadatos() {
-            String responseString = "";
-            HttpURLConnection con;
-            URL url;
-
-            try {
-                AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
-                        new AndroidMultiPartEntity.ProgressListener() {
-
-                            @Override
-                            public void transferred(long num) {
-                                publishProgress((int) ((num / (float) totalSize) * 100));
-                            }
-                        });
-
-                url = new URL("http://192.168.1.9:8080/archivos?");
-                con = (HttpURLConnection) url.openConnection();
-                con.setDoOutput(true);
-
-                JSONObject json = new JSONObject();
-                File file = new File(filePath);
-                json.put("nombre", Utility.getNameFromFile(file.getName()));
-                json.put("extension", Utility.getExtensionFromFile(filePath));
-                json.put("etiqueta", "archivo");
-                json.put("fecha_ulti_modi", "26102015");
-                json.put("usuario_ulti_modi", "1234");
-                json.put("propietario", email);
-                json.put("baja_logica", "no");
-                json.put("direccion", "tmp/" + email + "/" + itemName + "/");
-
-                OutputStream out = con.getOutputStream();
-                out.write(json.toString().getBytes());
-                out.flush();
-                out.close();
-                int statusCode = con.getResponseCode();
-                if (statusCode == 200) {
-                    responseString = con.getResponseMessage();
-                    Log.d("respuesta metadatos", responseString);
-                } else {
-                    responseString = "Error occurred! Http Status Code: " + statusCode;
-                }
-            } catch (IOException e) {
-                responseString = e.toString();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return responseString;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            //try {
-            Log.d("respuesta: ", result);
-            //JSONObject jsonObject = new JSONObject(result);
-            //Object status = jsonObject.get("estado");
-            //Object message = jsonObject.get("mensaje");
-            //if (status.equals("ok")) {
-            new UploadFileToServer().execute();
-            //} else {
-            //    Toast.makeText(getApplicationContext(), "upload file error", Toast.LENGTH_LONG).show();
-            //}
-            //} catch (JSONException e) {
-            //  e.printStackTrace();
-            //}
-
-            super.onPostExecute(result);
-        }
-
-    }
-
-    public String postNewFolder(String URL) {
+    public String uploadFile(String URL) {
+        File file = new File(filePath);
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(URL);
-        JSONObject json = new JSONObject();
         try {
-            json.put("nombre", dialogInput);
-            json.put("etiqueta", "carpeta");
-            json.put("fecha_ulti_modi", "26102015");
-            json.put("usuario_ulti_modi", "0");
-            json.put("propietario", email);
-            json.put("baja_logica", "no");
-            json.put("direccion", "tmp/" + email + "/" + itemName);
-            httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
-            httpPost.setHeader("Content-Type", "application/json");
-            httpPost.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
+            InputStreamEntity reqEntity = new InputStreamEntity(new FileInputStream(file), -1);
+            reqEntity.setContentType("binary/octet-stream");
+            reqEntity.setChunked(true); // Send in multiple parts if needed
+            httpPost.setEntity(reqEntity);
             HttpResponse response = httpClient.execute(httpPost);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -676,10 +546,92 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to create new folder");
+                Log.e("Folder Upload file", "service status code: " + statusCode);
+                Utility.appendToErrorLog("Folder Upload file", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            Log.e("Folder Upload file", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Folder Upload file", e.getLocalizedMessage());
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
+     * Uploading the file to server
+     */
+    class UploadFileToServer extends AsyncTask<String, Void, String> {
+
+        protected String doInBackground(String... urls) {
+            return uploadFile(urls[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                Object status = jsonObject.get("estado");
+                Object message = jsonObject.get("mensaje");
+                if (status.equals("ok")) {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Folder Upload file", message.toString());
+                    Utility.appendToInfoLog("Folder Upload file", message.toString());
+                    Log.d("Folder Upload file", jsonObject.toString());
+                    Utility.appendToDebugLog("Folder Upload file", jsonObject.toString());
+                    session.updateStorageUsed(0.3f);
+                } else {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Folder Upload file", message.toString());
+                    Utility.appendToErrorLog("Folder Upload file", message.toString());
+                }
+            } catch (JSONException e) {
+                Log.e("Folder Upload file", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Folder Upload file", e.getLocalizedMessage());
+            }
+        }
+    }
+
+    public String postNewFolder(String URL) {
+        StringBuilder stringBuilder = new StringBuilder();
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(URL);
+        JSONObject json = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        SimpleDateFormat sdf = new SimpleDateFormat("ddmmyyyyy_HHmmss");
+        String currentDateAndTime = sdf.format(new Date());
+        try {
+            jsonArray.put("carpeta");
+            json.put("nombre", dialogInput);
+            json.put("etiqueta", jsonArray);
+            json.put("fecha_ulti_modi", currentDateAndTime);
+            //json.put("fecha_creacion", currentDateAndTime);
+            //json.put("compartido_con", "");
+            json.put("usuario_ulti_modi", name + " " + surname);
+            json.put("propietario", name + " " + surname);
+            json.put("baja_logica", "no");
+            json.put("direccion", "tmp/" + email + "/" + itemName);
+            httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
+            httpPost.setHeader("Content-Type", "application/json");
+            httpPost.setHeader("Accept-Encoding", "application/json");
+            HttpResponse response = httpClient.execute(httpPost);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+                InputStream inputStream = entity.getContent();
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                inputStream.close();
+            } else {
+                Log.e("Folder New folder", "service status code: " + statusCode);
+                Utility.appendToErrorLog("Folder New folder", "status code: " + statusCode);
+            }
+        } catch (Exception e) {
+            Log.e("Folder New folder", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Folder New folder", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -696,9 +648,18 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 Object message = jsonObject.get("mensaje");
                 if (status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Folder New folder", message.toString());
+                    Utility.appendToInfoLog("Folder New folder", message.toString());
+                    Log.d("Folder New folder", jsonObject.toString());
+                    Utility.appendToDebugLog("Folder New folder", jsonObject.toString());
+                } else {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Folder New folder", message.toString());
+                    Utility.appendToErrorLog("Folder New folder", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("Folder New folder", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Folder New folder", e.getLocalizedMessage());
             }
         }
     }
@@ -707,23 +668,17 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(URL);
-        HashMap<String, String> user = session.getUserDetails();
-        String email = user.get(SessionManager.KEY_EMAIL);
         JSONObject json = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         try {
             jsonArray.put(dialogInput);
-            json.put("nombre", Utility.getNameFromFile(itemClick));
-            json.put("extension", Utility.getExtensionFromFile(itemClick));
-            json.put("direccion", "tmp/" + email + "/" + itemName);
+            json.put("nombre", Utility.getNameFromFile(itemName));
+            json.put("extension", Utility.getExtensionFromFile(itemName));
+            json.put("direccion", "tmp/" + email + "/");
             json.put("usuarios", jsonArray);
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
             httpPost.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             HttpResponse response = httpClient.execute(httpPost);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -738,10 +693,12 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to download file");
+                Log.e("Folder Share file", "service status code: " + statusCode);
+                Utility.appendToErrorLog("Folder Share file", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            Log.e("Folder Share file", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Folder Share file", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -756,81 +713,92 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
                 JSONObject jsonObject = new JSONObject(result);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
-                Log.d("result", result);
-                Log.d("Status", status.toString());
-                Log.d("Message", message.toString());
                 if (status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Folder Share file", message.toString());
+                    Utility.appendToInfoLog("Folder Share file", message.toString());
+                    Log.d("Folder Share file", jsonObject.toString());
+                    Utility.appendToDebugLog("Folder Share file", jsonObject.toString());
+                } else {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Folder Share file", message.toString());
+                    Utility.appendToErrorLog("Folder Share file", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("Folder Share file", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Folder Share file", e.getLocalizedMessage());
             }
         }
     }
 
-        public String shareFolder(String URL) {
-            StringBuilder stringBuilder = new StringBuilder();
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(URL);
-            JSONObject json = new JSONObject();
-            JSONArray jsonArray = new JSONArray();
-            try {
-                jsonArray.put(dialogInput);
-                json.put("nombre", itemClick);
-                json.put("direccion", "tmp/" + email + "/" + itemName);
-                json.put("usuarios", jsonArray);
-                httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
-                httpPost.setHeader("Content-Type", "application/json");
-                httpPost.setHeader("Accept-Encoding", "application/json");
-            } catch (Exception e) {
-                e.printStackTrace();
+    public String shareFolder(String URL) {
+        StringBuilder stringBuilder = new StringBuilder();
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(URL);
+        JSONObject json = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        try {
+            jsonArray.put(dialogInput);
+            json.put("nombre", itemName);
+            json.put("direccion", "tmp/" + email + "/");
+            json.put("usuarios", jsonArray);
+            httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
+            httpPost.setHeader("Content-Type", "application/json");
+            httpPost.setHeader("Accept-Encoding", "application/json");
+            HttpResponse response = httpClient.execute(httpPost);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+                InputStream inputStream = entity.getContent();
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                inputStream.close();
+            } else {
+                Log.e("Folder Share folder", "service status code: " + statusCode);
+                Utility.appendToErrorLog("Folder Share folder", "status code: " + statusCode);
             }
+        } catch (Exception e) {
+            Log.e("Folder Share folder", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Folder Share folder", e.getLocalizedMessage());
+        }
+        return stringBuilder.toString();
+    }
+
+    private class shareFolderService extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... urls) {
+            return shareFolder(urls[0]);
+        }
+
+        protected void onPostExecute(String result) {
             try {
-                HttpResponse response = httpClient.execute(httpPost);
-                StatusLine statusLine = response.getStatusLine();
-                int statusCode = statusLine.getStatusCode();
-                if (statusCode == 200) {
-                    HttpEntity entity = response.getEntity();
-                    InputStream inputStream = entity.getContent();
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(inputStream));
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        stringBuilder.append(line);
-                    }
-                    inputStream.close();
+                JSONObject jsonObject = new JSONObject(result);
+                Object status = jsonObject.get("estado");
+                Object message = jsonObject.get("mensaje");
+                if (status.equals("ok")) {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Folder Share folder", message.toString());
+                    Utility.appendToInfoLog("Folder Share folder", message.toString());
+                    Log.d("Folder Share folder", jsonObject.toString());
+                    Utility.appendToDebugLog("Folder Share folder", jsonObject.toString());
                 } else {
-                    Log.d("JSON", "Failed to share folder");
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Folder Share folder", message.toString());
+                    Utility.appendToErrorLog("Folder Share folder", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("readJSONFeed", e.getLocalizedMessage());
-            }
-            return stringBuilder.toString();
-        }
-
-        private class shareFolderService extends AsyncTask<String, Void, String> {
-            protected String doInBackground(String... urls) {
-                return shareFolder(urls[0]);
-            }
-
-            protected void onPostExecute(String result) {
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    Object status = jsonObject.get("estado");
-                    Object message = jsonObject.get("mensaje");
-                    if (status.equals("ok")) {
-                        Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-                    Log.d("ReadJSONTask", e.getLocalizedMessage());
-                }
+                Log.e("Folder Share folder", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Folder Share folder", e.getLocalizedMessage());
             }
         }
-
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
@@ -851,7 +819,6 @@ public class FilesInFolderActivity extends AppCompatActivity implements  SwipeRe
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Take appropriate action for each action item click
         switch (item.getItemId()) {
             case R.id.action_search:
                 return true;

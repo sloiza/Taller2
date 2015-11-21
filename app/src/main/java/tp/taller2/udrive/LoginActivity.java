@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText passwordET;
     SessionManager session;
     TextInputLayout inputLayoutEmail, inputLayoutPassword;
-
+    String email, password, ip, port;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +52,41 @@ public class LoginActivity extends AppCompatActivity {
         session = new SessionManager(getApplicationContext());
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_login, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+    }
+
+    /** Called when the user clicks the login */
+    public void loginMessage(View view) {
+        email = emailET.getText().toString();
+        password = passwordET.getText().toString();
+        if(Utility.isNotNull(email) && Utility.isNotNull(password)){
+            if(!Utility.validateEmail(email)){
+                emailET.requestFocus();
+                emailET.setError(getString(R.string.email_error));
+            }else{
+                if(Utility.validatePassword(password)){
+                    new getUserLoginService().execute(session.getIp() + session.getPort() + "usuario?");
+                }else{
+                    passwordET.requestFocus();
+                    passwordET.setError(getString(R.string.password_error));
+                }
+            }
+        } else{
+            Toast.makeText(getApplicationContext(), R.string.error_emptyFields, Toast.LENGTH_LONG).show();
+        }
+    }
+
     public String getUserLogin(String URL) {
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
-        String email = emailET.getText().toString();
-        String password = passwordET.getText().toString();
         HttpGet httpGet = new HttpGet(URL);
         JSONObject json = new JSONObject();
         try {
@@ -80,10 +109,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to download file");
+                Log.e("User login", "service status code: " + statusCode);
+                Utility.appendToErrorLog("User login", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            Log.e("User login", e.getLocalizedMessage());
+            Utility.appendToErrorLog("User login", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -105,63 +136,24 @@ public class LoginActivity extends AppCompatActivity {
                 Object city = jsonObject.get("lugar");
                 Object picture = jsonObject.get("foto");
                 if(status.equals("ok")) {
-                    session.createLoginSession(email.toString(), name.toString(), surname.toString(), city.toString(), password.toString(), picture.toString());
-                    Toast.makeText(getApplicationContext(), R.string.success_login, Toast.LENGTH_LONG).show();
+                    session.createLoginSession(email.toString(), name.toString(), surname.toString(),
+                            city.toString(), password.toString(), picture.toString(), 0.0f,
+                            session.getIp(), session.getPort());
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("User login", message.toString());
+                    Utility.appendToInfoLog("User login", message.toString());
+                    Log.d("User login", jsonObject.toString());
+                    Utility.appendToDebugLog("User login", jsonObject.toString());
                     navigatetoHomeActivity();
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.error_login, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("User login", message.toString());
+                    Utility.appendToErrorLog("User login", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("User login", e.getLocalizedMessage());
+                Utility.appendToErrorLog("User login", e.getLocalizedMessage());
             }
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up borderbutton, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /** Called when the user clicks the login */
-    public void loginMessage(View view) {
-        String email = emailET.getText().toString();
-        String password = passwordET.getText().toString();
-        if(Utility.isNotNull(email) && Utility.isNotNull(password)){
-            if(!Utility.validateEmail(email)){
-                emailET.requestFocus();
-                emailET.setError(getString(R.string.email_error));
-            }else{
-                if(Utility.validatePassword(password)){
-                    new getUserLoginService().execute("http://192.168.1.9:8080/usuario?");
-                }else{
-                    passwordET.requestFocus();
-                    passwordET.setError(getString(R.string.password_error));
-                }
-            }
-        } else{
-            Toast.makeText(getApplicationContext(), R.string.error_emptyFields, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 
@@ -177,8 +169,7 @@ public class LoginActivity extends AppCompatActivity {
     //Called when the user clicks the sing up
     public void singUpMessage(View view) {
         Intent registerIntent = new Intent(this, RegisterActivity.class);
-        registerIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        registerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        registerIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(registerIntent);
         finish();
     }

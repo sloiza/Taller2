@@ -40,6 +40,7 @@
     <string name="preferences_subtitle">Change your preferences</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="ipPortTitle"><u>Enter the IP address under which the server is running and port:</u></string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

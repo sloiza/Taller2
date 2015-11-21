@@ -13,7 +13,6 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -29,14 +28,11 @@ import com.loopj.android.http.HttpGet;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,7 +94,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                                     @Override
                                     public void run() {
                                         swipeRefreshLayout.setRefreshing(true);
-                                        new getUserFilesService().execute("http://192.168.1.9:8080/");
+                                        new getUserFilesService().execute(session.getIp() + session.getPort());
                                     }
                                 }
         );
@@ -110,7 +106,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
     public void onRefresh() {
         filesList.clear();
         foldersList.clear();
-        new getUserFilesService().execute("http://192.168.1.9:8080/");
+        new getUserFilesService().execute(session.getIp() + session.getPort());
     }
 
     @Override
@@ -157,15 +153,14 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
 
     private void deleteCurrentItem() {
         if(!Utility.getExtensionFromFile(itemName).isEmpty()){
-            new deleteFileService().execute("http://192.168.1.9:8080/archivos");
+            new deleteFileService().execute(session.getIp() + session.getPort() + "archivos");
         } else {
-            new deleteFolderService().execute("http://192.168.1.9:8080/carpetas");
+            new deleteFolderService().execute(session.getIp() + session.getPort() + "carpetas");
         }
     }
 
     private void downloadCurrentItem() {
-        Toast.makeText(getContext(), "Download item click", Toast.LENGTH_LONG).show();
-        new getDownloadFileService().execute("http://192.168.1.9:8080/descargar");
+        new getDownloadFileService().execute(session.getIp() + session.getPort() + "descargar");
     }
 
     public void showShareFileDialog() {
@@ -197,10 +192,12 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                 }
                 inputStream.close();
             } else {
-                Log.d("Error", "Failed to get user files");
+                Log.e("User files", "status code: " + statusCode);
+                Utility.appendToErrorLog("User files", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("Error", e.getLocalizedMessage());
+            Log.e("User files", e.getLocalizedMessage());
+            Utility.appendToErrorLog("User files", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -219,6 +216,10 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                 JSONArray folderArray;
                 if(status.equals("ok")) {
                     Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("User files", message.toString());
+                    Utility.appendToInfoLog("User files", message.toString());
+                    Log.d("User files", jsonObject.toString());
+                    Utility.appendToDebugLog("User files", jsonObject.toString());
                     if(jsonObject.has("carpetas")){
                         folderArray = jsonObject.getJSONArray("carpetas");
                         for (int i=0; i<folderArray.length(); i++) {
@@ -240,9 +241,14 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                     lv.setAdapter(files);
                     folderlv.setAdapter(folders);
                     swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("User files", message.toString());
+                    Utility.appendToErrorLog("User files", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("Error", e.getLocalizedMessage());
+                Log.e("User files", e.getLocalizedMessage());
+                Utility.appendToErrorLog("User files", e.getLocalizedMessage());
             }
         }
     }
@@ -256,33 +262,34 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
             json.put("nombre", Utility.getNameFromFile(itemName));
             json.put("direccion", "tmp/" + email + "/");
             json.put("extension", Utility.getExtensionFromFile(itemName));
+            httpGet.setEntity(new StringEntity(json.toString(), "UTF-8"));
+            httpGet.setHeader("Content-Type", "application/json");
+            httpGet.setHeader("Accept-Encoding", "application/json");
             HttpResponse response = httpClient.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
             if (statusCode == 200) {
                 HttpEntity entity = response.getEntity();
                 InputStream inputStream = entity.getContent();
-                FileOutputStream out = new FileOutputStream("/sdcard/aaaaaa.pdf");
-
-                int read = 0;
-                byte[] buffer = new byte[32768];
-                while((read = inputStream.read(buffer)) > 0){
-                    out.write(buffer, 0, read);
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
                 }
-                out.close();
                 inputStream.close();
             } else {
-                Log.d("Error", "Failed to download file");
+                Log.e("Download file", "status code: " + statusCode);
+                Utility.appendToErrorLog("Download file", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("Error", e.getLocalizedMessage());
+            Log.e("Download file", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Download file", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
 
-
-
-        private class getDownloadFileService extends AsyncTask<String, Void, String> {
+    private class getDownloadFileService extends AsyncTask<String, Void, String> {
 
           protected String doInBackground(String... urls) {
             return getDownloadFile(urls[0]);
@@ -290,16 +297,31 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
 
         protected void onPostExecute(String result) {
             try {
-                //JSONObject jsonObject = new JSONObject(result);
+                JSONObject jsonObject = new JSONObject(result);
                 //devuelve los bytes
-                Log.d("result", result);
-                FileOutputStream out = new FileOutputStream("/sdcard/download.pdf");
-                out.write(result.getBytes());
-                out.close();
-                out.flush();
-                out.close();
+                if(jsonObject.has("estado")){
+                    Object estado = jsonObject.get("estado");
+                    Object message = jsonObject.get("mensaje");
+                    if(estado.equals("no-existe")){
+                        Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                        Log.e("Download file", message.toString());
+                        Utility.appendToErrorLog("Download file", message.toString());
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Download file success", Toast.LENGTH_LONG).show();
+                    Log.i("Download file", "Download file success");
+                    Utility.appendToInfoLog("Download file", "Download file success");
+                    FileOutputStream out = new FileOutputStream("/sdcard/" + itemName);
+                    Log.d("Download file success", "sdcard/" + itemName);
+                    Utility.appendToDebugLog("Download file success", "sdcard/" + itemName);
+                    byte[] buffer = result.getBytes();
+                    out.write(buffer);
+                    out.flush();
+                    out.close();
+                }
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("Download file", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Download file", e.getLocalizedMessage());
             }
         }
     }
@@ -318,10 +340,6 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             HttpResponse response = httpClient.execute(httpDelete);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -336,10 +354,12 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                 }
                 inputStream.close();
             } else {
-                Log.d("Error", "Failed to delete file");
+                Log.e("Delete file", "status code: " + statusCode);
+                Utility.appendToErrorLog("Delete file", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("Error", e.getLocalizedMessage());
+            Log.e("Delete file", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Delete file", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -356,9 +376,19 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                 Object message = jsonObject.get("mensaje");
                 if(status.equals("ok")) {
                     Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Delete file", message.toString());
+                    Utility.appendToInfoLog("Delete file", message.toString());
+                    Log.d("Delete file", jsonObject.toString());
+                    Utility.appendToDebugLog("Delete file", jsonObject.toString());
+                    session.updateStorageUsed(session.getUserStorageUsed() - 0.3f);
+                } else {
+                    Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Delete file", message.toString());
+                    Utility.appendToErrorLog("Delete file", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("Error", e.getLocalizedMessage());
+                Log.e("Delete file", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Delete file", e.getLocalizedMessage());
             }
         }
     }
@@ -376,10 +406,6 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             HttpResponse response = httpClient.execute(httpDelete);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -394,10 +420,12 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                 }
                 inputStream.close();
             } else {
-                Log.d("Error", "Failed to delete folder");
+                Log.e("Delete folder", "status code: " + statusCode);
+                Utility.appendToErrorLog("Delete folder", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("Error", e.getLocalizedMessage());
+            Log.e("Delete folder", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Delete folder", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -414,9 +442,18 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                 Object message = jsonObject.get("mensaje");
                 if(status.equals("ok")) {
                     Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Delete folder", message.toString());
+                    Utility.appendToInfoLog("Delete folder", message.toString());
+                    Log.d("Delete folder", jsonObject.toString());
+                    Utility.appendToDebugLog("Delete folder", jsonObject.toString());
+                } else {
+                    Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Delete folder", message.toString());
+                    Utility.appendToErrorLog("Delete folder", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("Error", e.getLocalizedMessage());
+                Log.e("Delete folder", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Delete folder", e.getLocalizedMessage());
             }
         }
     }

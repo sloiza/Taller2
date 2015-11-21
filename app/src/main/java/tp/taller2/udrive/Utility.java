@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -12,9 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -101,8 +104,7 @@ public class Utility {
     public static Bitmap stringToBitmap(String encodedString) {
         try {
             byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         } catch (Exception e) {
             Log.i("WARNING: ", e.getMessage());
             return null;
@@ -165,5 +167,65 @@ public class Utility {
         params.height = height + (mListView.getDividerHeight() * (mListAdapter.getCount() - 1));
         mListView.setLayoutParams(params);
         mListView.requestLayout();
+    }
+
+    public static void appendToDebugLog(String activity, String text){
+    File logFile = new File(Environment.getExternalStorageDirectory() +  "/clientDebugLog.log");
+        if (!logFile.exists()) {
+            try {
+                logFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
+            buf.append(activity + " - " + text);
+            buf.newLine();
+            buf.flush();
+            buf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void appendToErrorLog(String activity, String text){
+        File logFile = new File(Environment.getExternalStorageDirectory() +  "/clientErrorLog.log");
+        if (!logFile.exists()) {
+            try {
+                logFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
+            buf.append(activity + " - " + text);
+            buf.newLine();
+            buf.flush();
+            buf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void appendToInfoLog(String activity, String text){
+        File logFile = new File(Environment.getExternalStorageDirectory() +  "/clientInfoLog.log");
+        if (!logFile.exists()) {
+            try {
+                logFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
+            buf.append(activity + " - " + text);
+            buf.newLine();
+            buf.flush();
+            buf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -64,7 +64,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             query = intent.getStringExtra(SearchManager.QUERY);
-            new getSearchFilesService().execute("http://192.168.1.9:8080/buscar?" + query);
+            new getSearchFilesService().execute(session.getIp() + session.getPort() + "buscar?" + query);
         }
     }
 
@@ -92,10 +92,12 @@ public class SearchResultsActivity extends AppCompatActivity {
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to get search filas");
+                Log.e("Search", "status code: " + statusCode);
+                Utility.appendToErrorLog("Search", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            Log.e("Search", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Search", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -113,6 +115,10 @@ public class SearchResultsActivity extends AppCompatActivity {
                 Object message = jsonObject.get("mensaje");
                 if(status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Search", message.toString());
+                    Utility.appendToInfoLog("Search", message.toString());
+                    Log.d("Search", jsonObject.toString());
+                    Utility.appendToDebugLog("Search", jsonObject.toString());
                     if(jsonObject.has("archivos")){
                         fileArray = jsonObject.getJSONArray("archivos");
                         for (int i=0; i<fileArray.length(); i++) {
@@ -123,9 +129,14 @@ public class SearchResultsActivity extends AppCompatActivity {
                     }
                     ArrayAdapter<String> files = new ArrayAdapter<>(getApplicationContext(),R.layout.list_item,filesList);
                     lv.setAdapter(files);
+                } else {
+                    Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Search", message.toString());
+                    Utility.appendToErrorLog("Search", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("Search", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Search", e.getLocalizedMessage());
             }
         }
     }
