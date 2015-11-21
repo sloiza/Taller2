@@ -70,8 +70,19 @@ ConexionServidor::Respuesta OperacionesUsuario::post(Utiles::Bytes* contenido, s
 	carpetaNueva.guardar();
 
 	// creo la carpeta compartida
-	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoDeCompartida;
-	contenidoDeCompartida.setPath( usuarioNuevo.getEmail() + "/" + InfoOperaciones::compartidos );
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta compartida;
+	compartida.setPath( usuarioNuevo.getEmail() + "/" + InfoOperaciones::compartidos );
+	compartida.guardar();
+
+	// creo la papelera
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta papelera;
+	papelera.setPath( usuarioNuevo.getEmail() + "/" + InfoOperaciones::papelera );
+	papelera.guardar();
+
+	// creo la carpeta q contiene todos los archivos del usuario
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta carpetaConTodosLosArchivosDelUsuario;
+	carpetaConTodosLosArchivosDelUsuario.setPath( usuarioNuevo.getEmail() + "/" + InfoOperaciones::carpetaArchivosPorUsuario );
+	carpetaConTodosLosArchivosDelUsuario.guardar();
 
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Registrado correctamente!");
@@ -80,9 +91,21 @@ ConexionServidor::Respuesta OperacionesUsuario::post(Utiles::Bytes* contenido, s
 }
 ConexionServidor::Respuesta OperacionesUsuario::put(Utiles::Bytes* contenido, std::string query)
 {
+	ConexionServidor::BaseDeDatos::User usuario(contenido->getStringDeBytes());
 	ConexionServidor::Respuesta respuesta;
-	respuesta.setEstado("error");
-	respuesta.setMensaje("operacion no implementada.");
+
+	std::string valorRecuperado = usuario.recuperar();
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("Usuario inexistente.");
+		return respuesta;
+	}
+
+	usuario.guardar();
+
+	respuesta.setEstado("ok");
+	respuesta.setMensaje("Usuario modificado correctamente!");
 	return respuesta;
 }
 
@@ -96,7 +119,7 @@ bool OperacionesUsuario::existeUsuarioConLosMismosDatos(std::string contenido)
 	ConexionServidor::BaseDeDatos::User usuario(contenido);
 	std::string valorRecuperado = usuario.recuperar();
 
-	std::cout <<"valor recupeardo: " << valorRecuperado << "\n";
+	//std::cout <<"valor recupeardo: " << valorRecuperado << "\n";
 
 	return ( valorRecuperado.compare("vacio") == 0) ? false : true;
 }

@@ -14,6 +14,7 @@
 
 // Operaciones
 #include "IOperable.h"
+#include "InfoOperaciones.h"
 
 // STL
 #include <iostream>
@@ -37,6 +38,8 @@ public:
 
 	void imprimir();
 
+
+	void agregarCarpetaALaListaDeArchivosPorCarpeta(std::string contenido);
 };
 };
 };

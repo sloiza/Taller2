@@ -1,22 +1,21 @@
 /*
- * OperacionCompartirCarpeta.h
+ * OperacionesPapelera.h
  *
- *  Created on: 30/10/2015
+ *  Created on: 16/11/2015
  *      Author: manuel
  */
 
-#ifndef OPERACIONCOMPARTIRCARPETA_H_
-#define OPERACIONCOMPARTIRCARPETA_H_
+#ifndef OPERACIONESPAPELERA_H_
+#define OPERACIONESPAPELERA_H_
 
-// conexion
-#include "../conexion/Respuesta.h"
 // Operaciones
 #include "IOperable.h"
 #include "InfoOperaciones.h"
-// entidades
-#include "../bd/entidades/User.h"
+// entidadaes
 #include "../bd/entidades/ContenidoPorCarpeta.h"
-#include "../bd/entidades/CarpetaCompartirConUsuarios.h"
+#include "../bd/entidades/User.h"
+#include "../bd/entidades/ArchivoLogico.h"
+#include "../bd/entidades/CarpetaLogica.h"
 // STL
 #include <iostream>
 #include <string>
@@ -27,11 +26,11 @@ namespace ConexionServidor
 namespace Operaciones
 {
 
-class OperacionCompartirCarpeta: public IOperable
+class OperacionesPapelera : public IOperable
 {
 public:
-	OperacionCompartirCarpeta();
-	virtual ~OperacionCompartirCarpeta();
+	OperacionesPapelera();
+	virtual ~OperacionesPapelera();
 
 	ConexionServidor::Respuesta delet(Utiles::Bytes* contenido, std::string query);
 	ConexionServidor::Respuesta get(Utiles::Bytes* contenido, std::string query);
@@ -40,12 +39,10 @@ public:
 
 	void imprimir();
 
-	void compartirCarpetaConUsuario(std::string mail, std::string carpeta );
-
-	std::string nombreClase();
+	void restaurarCarpeta(Utiles::Bytes* contenido, std::string mailDeUsuario);
 
 };
 };
 };
 
-#endif /* OPERACIONCOMPARTIRCARPETA_H_ */
+#endif /* OPERACIONESPAPELERA_H_ */

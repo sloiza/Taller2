@@ -12,6 +12,7 @@
 // request
 #include "../conexion/request/URI.h"
 // operaciones
+#include "OperacionBusqueda.h"
 #include "OperacionCompartirArchivo.h"
 #include "OperacionCompartirCarpeta.h"
 #include "OperacionDescargarArchivo.h"
@@ -20,7 +21,10 @@
 #include "OperacionesCarpetas.h"
 #include "OperacionErrorURL.h"
 #include "OperacionPrincipal.h"
+#include "OperacionesPapelera.h"
 #include "InfoOperaciones.h"
+// utiles
+#include "../utiles/Log.h"
 
 // STL
 #include <iostream>
@@ -44,7 +48,9 @@ public:
 		CARPETAS,
 		COMPARTIR_ARCHIVO,
 		COMPARTIR_CARPETA,
-		DESCARGAR
+		DESCARGAR,
+		PAPELERA,
+		BUSCAR
 	};
 
 	struct Recurso
@@ -68,6 +74,8 @@ public:
 	static std::vector<std::string> getCampos();
 
 	static IOperable* crearOperacion(InfoOperaciones::OPERACIONES tipo);
+
+	static std::string nombreClase();
 
 private:
 	static std::vector<std::string> campos;

@@ -54,7 +54,7 @@ class rocks_db{
 	private:
 		DB* db = NULL;
 		Options options;
-		string dbpath = "../dbTest";
+		string dbpath = "rocksDB";
 		Status st;
 		vector<ColumnFamilyDescriptor> column_families;
 		vector<ColumnFamilyHandle*> handles;

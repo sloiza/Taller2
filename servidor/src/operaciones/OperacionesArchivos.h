@@ -17,6 +17,7 @@
 #include "../bd/entidades/ContenidoPorCarpeta.h"
 // Operaciones
 #include "IOperable.h"
+#include "InfoOperaciones.h"
 
 // STL
 #include <iostream>
@@ -42,14 +43,9 @@ public:
 	void imprimir();
 
 	static ConexionServidor::BaseDeDatos::Archivo* archivoTemporal;
-	static bool estoyEsperandoLosBytes;
-	static void cambiarFlag();
-	static void settearContenidoSegunFlag(Utiles::Bytes*);
-	static void resettearArchivoTemporalSegunFlag();
-	static ConexionServidor::Respuesta respuestaSegunFlag();
-	static bool error;
 	static bool sobreescribir;
 	static void agregarArchivoALaListaDeArchivosPorCarpeta(std::string);
+	static void agregarArchivoALaListaDeArchivosDeUsuario(std::string);
 
 };
 };

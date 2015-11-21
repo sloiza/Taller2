@@ -30,6 +30,7 @@ public:
 	void testSettearYRecuperarCampoCorrectamente();
 	void testAgregarValoresYRecuperarListaDeValoresCorrectamente();
 	void testBorrarValorDeListaCorrectamente();
+	void testBorrarTodosLosValoresCorrectamente();
 
 	void testGetValorPorDefaultCorrecto();
 	void testCambiarContenidoCorrectamente();
@@ -86,6 +87,11 @@ TEST_F(JsonInfoTest, cambiarContenidoCorrectamente)
 {
 	JsonInfoTest test;
 	test.testCambiarContenidoCorrectamente();
+}
+TEST_F(JsonInfoTest, borrarTodoCorrectamente)
+{
+	JsonInfoTest test;
+	test.testBorrarTodosLosValoresCorrectamente();
 }
 
 };

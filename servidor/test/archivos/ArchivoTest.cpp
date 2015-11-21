@@ -22,7 +22,6 @@ const std::string ArchivoTest::archivoEjemplo3 =
 "\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\", \"direccion\":\"tmp/\"}";
 
 char ArchivoTest::bytes[] = "estosSonUnosBytesDePrueba";
-//int ArchivoTest::tamanio = 21;
 
 ArchivoTest::ArchivoTest() : archivo1(NULL)
 {

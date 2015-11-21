@@ -23,7 +23,6 @@ const std::string ArchivoLogicoTest::archivoEjemplo =
 "{\"nombre\":\"foto_09082015\",\"extension\":\"jpg\",\"etiqueta\":\"imagen\", \"fecha_ulti_modi\":\"26102015\","
 "\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\"}";
 
-
 void ArchivoLogicoTest::testCrearYRecuperarEnBDCorrectamente()
 {
 	this->archivo->guardar();
@@ -73,6 +72,21 @@ void ArchivoLogicoTest::testModificarAtributoCorrectamente()
 	std::string nombreNuevo = this->archivo->getNombre();
 
 	EXPECT_STREQ("foto_26102015", nombreNuevo.c_str());
+}
+
+void ArchivoLogicoTest::testSetearPathCorrectamente()
+{
+	this->archivo->setPath("esto/es/un/path/cualquier/archivo.txt");
+
+	EXPECT_STREQ( "esto/es/un/path/cualquier/", archivo->getDireccion().c_str() );
+	EXPECT_STREQ( "archivo", archivo->getNombre().c_str() );
+	EXPECT_STREQ( "txt", archivo->getExtension().c_str() );
+
+	this->archivo->setPath("esto/es/un/path/cualquier/archivo.con-extension+extrania.txt+[23");
+
+	EXPECT_STREQ( "esto/es/un/path/cualquier/", archivo->getDireccion().c_str() );
+	EXPECT_STREQ( "archivo.con-extension+extrania", archivo->getNombre().c_str() );
+	EXPECT_STREQ( "txt+[23", archivo->getExtension().c_str() );
 }
 
 void ArchivoLogicoTest::setUp()

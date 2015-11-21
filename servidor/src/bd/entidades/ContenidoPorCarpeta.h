@@ -37,7 +37,7 @@ public:
 	virtual ~ContenidoPorCarpeta();
 
 	void setPath(std::string), setNombre(std::string), setDireccion(std::string), agregarArchivo(std::string), agregarCarpeta(std::string);
-	void eliminarArchivo(std::string), eliminarCarpeta(std::string);
+	void eliminarArchivo(std::string), eliminarCarpeta(std::string), eliminarTodosLosArchivos(), eliminarTodasLosCarpetas();
 
 	std::string getPath(), getNombre(), getDireccion();
 	std::vector<std::string> getArchivos(), getCarpetas();

@@ -25,7 +25,6 @@ CreadorDeOperaciones::~CreadorDeOperaciones()
 void CreadorDeOperaciones::crearArbolDeRecursos()
 {
 	Recurso* principal = new Recurso();
-	//principal->nombre = "principal";
 	principal->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::PRINCIPAL];
 	principal->tipo = InfoOperaciones::PRINCIPAL;
 
@@ -57,6 +56,14 @@ void CreadorDeOperaciones::crearArbolDeRecursos()
 	descargarArchivo->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::DESCARGAR];
 	descargarArchivo->tipo = InfoOperaciones::DESCARGAR;
 
+	Recurso* papelera = new Recurso();
+	papelera->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::PAPELERA];
+	papelera->tipo = InfoOperaciones::PAPELERA;
+
+	Recurso* busqueda = new Recurso();
+	busqueda->nombre = InfoOperaciones::nombresRecursos[InfoOperaciones::BUSCAR];
+	busqueda->tipo = InfoOperaciones::BUSCAR;
+
 	principal->hijos.push_back(usuarios);
 	principal->hijos.push_back(baul);
 	//usuarios->hijos.push_back(perfil);
@@ -64,6 +71,8 @@ void CreadorDeOperaciones::crearArbolDeRecursos()
 	principal->hijos.push_back(compartirArchivo);
 	principal->hijos.push_back(compartirCarpeta);
 	principal->hijos.push_back(descargarArchivo);
+	principal->hijos.push_back(papelera);
+	principal->hijos.push_back(busqueda);
 
 	raiz = principal;
 }
@@ -83,14 +92,13 @@ IOperable* CreadorDeOperaciones::getOperacion(ConexionServidor::Request::URI* ur
     campos = uri->getRecursosDividos();
 
     std::cout << "uri: " << uri->getURI() << "\n";
-    //std::cout << "campos.size(): " << campos.size() << "\n";
 
     return reconocerUriRecursivamente(raiz, 1);
 }
 
 IOperable* CreadorDeOperaciones::reconocerUriRecursivamente(Recurso* recurso, int nivel)
 {
-    if ( campos.size() == nivel )
+    if ( campos.size() == (unsigned int) nivel )
     {
     	return crearOperacion( recurso->tipo );
     }
@@ -119,7 +127,13 @@ IOperable* CreadorDeOperaciones::crearOperacion(InfoOperaciones::OPERACIONES tip
 		case InfoOperaciones::COMPARTIR_ARCHIVO: return new OperacionCompartirArchivo();
 		case InfoOperaciones::COMPARTIR_CARPETA: return new OperacionCompartirCarpeta();
 		case InfoOperaciones::DESCARGAR: return new OperacionDescargarArchivo();
-		default: return new OperacionErrorURL();
+		case InfoOperaciones::PAPELERA: return new OperacionesPapelera();
+		case InfoOperaciones::BUSCAR: return new OperacionBusqueda();
+		default:
+			{
+				Utiles::Log::instancia()->warn("URL no mapeada.", nombreClase() );
+				return new OperacionErrorURL();
+			}
 	}
 }
 
@@ -143,4 +157,7 @@ void CreadorDeOperaciones::liberarRecusivamente(Recurso* recurso)
 	}
 }
 
-
+std::string CreadorDeOperaciones::nombreClase()
+{
+	return "CreadorDeOperaciones";
+}

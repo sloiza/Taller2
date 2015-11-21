@@ -113,6 +113,21 @@ void JsonInfoTest::testCambiarContenidoCorrectamente()
 	EXPECT_EQ(true, this->info->estadoOk());
 }
 
+void JsonInfoTest::testBorrarTodosLosValoresCorrectamente()
+{
+	this->info->agregarValorAAtributo("mails", "nuevoMail@tests.com");
+
+	std::vector<std::string> valores = this->info->getListaDeValorDeAtributo("mails", "default");
+
+	EXPECT_EQ(3, valores.size());
+
+	this->info->borrarValoresDeAtributo("mails");
+
+	valores = this->info->getListaDeValorDeAtributo("mails", "default");
+
+	EXPECT_EQ(0, valores.size());
+}
+
 void JsonInfoTest::setUp()
 {
 	this->info = new ConexionServidor::BaseDeDatos::JsonInfo(jsonEjemplo);

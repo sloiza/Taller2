@@ -52,7 +52,50 @@ void ArchivoLogico::setDireccion(std::string direccion)
 {
 	this->info->setAtributo(etiquetas[DIRECCION], direccion);
 }
+void ArchivoLogico::setPath(std::string path)
+{
+	std::vector<std::string> campos = Utiles::Metodos::split(path , '/');
 
+	int tamanio = campos.size();
+
+	std::string direccion = "";
+	std::string nombre = "";
+	std::string extension = "";
+
+	if ( campos[0].compare("") == 0 )
+	{// si el primer campo es vacio, entonces quiere decir q la direccion es vacia.
+		this->setDireccion("");
+	}
+	else
+	{
+		for ( int i = 0; i < tamanio-1 ;  i++)
+		{
+			direccion += campos[i] + "/";
+		}
+		this->setDireccion(direccion);
+	}
+
+
+	std::vector<std::string> nombreYExtension = Utiles::Metodos::split(campos[campos.size()-1], '.');
+
+	if ( nombreYExtension.size() == 1 )
+	{// si el vector "nombreYExtension" tiene tamanio 1, entonces no hay extension.
+		this->setNombre( nombreYExtension[0] );
+		this->setExtension( "" );
+		return;
+	}
+
+	int i;
+	int tamanioNombre = nombreYExtension.size();
+	for ( i = 0; i < tamanioNombre-2 ;  i++)
+	{
+		nombre += nombreYExtension[i] + ".";
+	}
+	nombre += nombreYExtension[i];
+	this->setNombre(nombre);
+
+	this->setExtension(nombreYExtension[tamanioNombre-1]);
+}
 std::string ArchivoLogico::getNombre()
 {
 	return this->info->getAtributo(etiquetas[NOMBRE], "nombreDefault");

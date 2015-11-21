@@ -27,7 +27,7 @@ void ContenidoPorCarpeta::setPath(std::string path)
 	int tamanio = campos.size();
 
 	if ( campos[tamanio-1].compare("") == 0 )
-	{// si el ultimo camio es vacio, entonces quiere decir q el path me llego con una '/' al final.
+	{// si el ultimo campo es vacio, entonces quiere decir q el path me llego con una '/' al final.
 	 //	entonces le resto 1 a 'tamanio' para no tener esa barra en cuenta.
 		tamanio--;
 	}
@@ -73,6 +73,14 @@ void ContenidoPorCarpeta::eliminarArchivo(std::string archivoAEliminar)
 void ContenidoPorCarpeta::eliminarCarpeta(std::string carpetaAEliminar)
 {
 	this->info->borrarValorDeAtributo(etiquetas[CARPETAS], carpetaAEliminar);
+}
+void ContenidoPorCarpeta::eliminarTodosLosArchivos()
+{
+	this->info->borrarValoresDeAtributo(etiquetas[ARCHIVOS]);
+}
+void ContenidoPorCarpeta::eliminarTodasLosCarpetas()
+{
+	this->info->borrarValoresDeAtributo(etiquetas[CARPETAS]);
 }
 
 std::string ContenidoPorCarpeta::getPath()

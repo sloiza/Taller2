@@ -1,16 +1,12 @@
 /*
- * Servidor.h
+ * ServidorMultihilo.h
  *
- *  Created on: 16/9/2015
+ *  Created on: 19/11/2015
  *      Author: manuel
  */
 
-#ifndef SERVIDOR_H_
-#define SERVIDOR_H_
-
-// STL
-#include <iostream>
-#include <signal.h>
+#ifndef SERVIDORMULTIHILO_H_
+#define SERVIDORMULTIHILO_H_
 
 // Conexion
 #include "HandlerEventos.h"
@@ -20,34 +16,41 @@
 // operaciones
 #include "../operaciones/CreadorDeOperaciones.h"
 
+// STL
+#include <iostream>
+#include <signal.h>
+
 namespace ConexionServidor
 {
 
-class Servidor
+class ServidorMultihilo
 {
-
 public:
-	Servidor();
-	virtual ~Servidor();
+
+	ServidorMultihilo();
+	virtual ~ServidorMultihilo();
 
 	void crear();
-	void crear(int puerto);
+	void setNumeroDeHilos(int);
 	void setPuerto(int);
 	void setOpcion(std::string nombre, std::string valor);
-	int escuchar(int);
+	static void* servir(void *server);
+	void comenzarAEscuchar();
 	bool estaCorriendo();
 	void destruir();
+
+	std::string nombreClase();
 
 protected:
 	static void handlerSenial(int);
 
 private:
-	struct mg_server* servidorMG;
+	std::vector<struct mg_server*> servidores;
 	int puerto;
 	HandlerEventos handler;
 	static bool corriendo;
-};
 
 };
+};
 
-#endif /* SERVIDOR_H_ */
+#endif /* SERVIDORMULTIHILO_H_ */

@@ -49,6 +49,7 @@ public:
 			getUltimoUsuarioModif(), getPropietario(), getBajaLogica(), getDireccion(), getNombreYExtension();
 
 	std::string getPath();
+	void setPath(std::string);
 
 	// Metodos de EntidadDB
 	virtual std::string getValor();

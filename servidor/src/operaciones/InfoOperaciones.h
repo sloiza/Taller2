@@ -30,7 +30,9 @@ public:
 		CARPETAS,
 		COMPARTIR_ARCHIVO,
 		COMPARTIR_CARPETA,
-		DESCARGAR
+		DESCARGAR,
+		PAPELERA,
+		BUSCAR
 	};
 
 	static const std::string nombresRecursos[];
@@ -38,6 +40,10 @@ public:
 	static const std::string carpetaRaiz;
 
 	static const std::string compartidos;
+
+	static const std::string papelera;
+
+	static const std::string carpetaArchivosPorUsuario;
 };
 };
 };

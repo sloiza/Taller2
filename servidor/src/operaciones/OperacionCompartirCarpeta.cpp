@@ -18,6 +18,7 @@ ConexionServidor::Respuesta OperacionCompartirCarpeta::delet(Utiles::Bytes* cont
 	ConexionServidor::Respuesta respuesta;
 	respuesta.setEstado("error");
 	respuesta.setMensaje("operacion no implementada.");
+	Utiles::Log::instancia()->warn("PUT /compartirCarpeta: no implementado.", this->nombreClase() );
 	return respuesta;
 }
 ConexionServidor::Respuesta OperacionCompartirCarpeta::get(Utiles::Bytes* contenido, std::string query)
@@ -34,19 +35,21 @@ ConexionServidor::Respuesta OperacionCompartirCarpeta::get(Utiles::Bytes* conten
 	{
 		respuesta.setEstado("no-existe");
 		respuesta.setMensaje("No existe carpeta para el usuario.");
+		Utiles::Log::instancia()->warn("No existe carpeta compartida para: " + usuario.getEmail(), this->nombreClase() );
 		return respuesta;
 	}
 
 	respuesta.setContenido(valorRecuperado);
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Mis Compartidos/ accedida correctamente!");
+	Utiles::Log::instancia()->info("Acceso a 'mis compartidos' de: " + usuario.getEmail(), this->nombreClase() );
 	return respuesta;
 }
 ConexionServidor::Respuesta OperacionCompartirCarpeta::post(Utiles::Bytes* contenido, std::string query)
 {
 	ConexionServidor::BaseDeDatos::CarpetaCompartirConUsuarios carpetaYUsuarios( contenido->getStringDeBytes() );
 
-	std::string carpeta = carpetaYUsuarios.getNombreCarpeta();
+	std::string carpeta = carpetaYUsuarios.getPathCarpeta();
 	for ( std::string mailUsuario : carpetaYUsuarios.getUsuariosACompartirles() )
 	{
 		compartirCarpetaConUsuario( mailUsuario,  carpeta);
@@ -62,6 +65,7 @@ ConexionServidor::Respuesta OperacionCompartirCarpeta::put(Utiles::Bytes* conten
 	ConexionServidor::Respuesta respuesta;
 	respuesta.setEstado("error");
 	respuesta.setMensaje("operacion no implementada.");
+	Utiles::Log::instancia()->warn("PUT /compartirCarpeta: no implementado.", this->nombreClase() );
 	return respuesta;
 }
 
@@ -86,4 +90,9 @@ void OperacionCompartirCarpeta::compartirCarpetaConUsuario(std::string mailUsuar
 	contenidoDeCarpeta.agregarCarpeta( carpeta );
 
 	contenidoDeCarpeta.guardar();
+}
+
+std::string OperacionCompartirCarpeta::nombreClase()
+{
+	return "OperacionCompartirCarpeta";
 }
