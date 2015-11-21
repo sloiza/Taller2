@@ -9,8 +9,6 @@
 
 using namespace ConexionServidor::Operaciones;
 
-bool OperacionesArchivos::estoyEsperandoLosBytes = false;
-bool OperacionesArchivos::error = false;
 bool OperacionesArchivos::sobreescribir = false;
 ConexionServidor::BaseDeDatos::Archivo* OperacionesArchivos::archivoTemporal = new ConexionServidor::BaseDeDatos::Archivo();
 
@@ -95,21 +93,28 @@ ConexionServidor::Respuesta OperacionesArchivos::get(Utiles::Bytes* contenido, s
 }
 ConexionServidor::Respuesta OperacionesArchivos::post(Utiles::Bytes* contenido, std::string query)
 {
-	if ( query.compare("modificar") == 0 )
+	ConexionServidor::Respuesta respuesta;
+	std::string datosLogicos = query;
+
+	ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico = new ConexionServidor::BaseDeDatos::ArchivoLogico( query );
+	bool resultadoAltaLogica = this->acciones.darDeAltaArchivoLogico( archivoLogico );
+
+	ConexionServidor::BaseDeDatos::Archivo* archivo = new ConexionServidor::BaseDeDatos::Archivo( query );
+	archivo->setBytes( contenido );
+	bool resultadoAltaFisica= this->acciones.darDeAltaArchivoFisico( archivo );
+
+	if (resultadoAltaLogica == false || resultadoAltaFisica == false )
 	{
-		sobreescribir = true;
+		respuesta.setEstado("error");
+		respuesta.setMensaje("Error al dar de alta el archivo.");
+		return respuesta;
 	}
-	else
-	{
-		sobreescribir = false;
-	}
-	settearContenidoSegunFlag(contenido);
 
-	Respuesta respuesta = respuestaSegunFlag();
+	agregarArchivoALaListaDeArchivosPorCarpeta( datosLogicos );
+	agregarArchivoALaListaDeArchivosDeUsuario( datosLogicos );
 
-	resettearArchivoTemporalSegunFlag();
-
-	cambiarFlag();
+	respuesta.setEstado("ok");
+	respuesta.setMensaje("Archivo dado de alta correctamente!");
 
 	return respuesta;
 }
@@ -138,104 +143,6 @@ void OperacionesArchivos::imprimir()
 	std::cout << "archivos\n";
 }
 
-void OperacionesArchivos::cambiarFlag()
-{
-	if ( estoyEsperandoLosBytes )
-	{
-		estoyEsperandoLosBytes = false;
-	}
-	else
-	{
-		estoyEsperandoLosBytes = true;
-	}
-}
-
-void OperacionesArchivos::settearContenidoSegunFlag(Utiles::Bytes* contenido)
-{
-	if ( estoyEsperandoLosBytes )
-	{// estaba esperando q me lleguen los bytes para escribir el archivo fisicamente. entonces los recibo y los escribo y dejo de esperarlos.
-		archivoTemporal->setBytes( contenido );
-
-		if ( error )
-		{// si hubo error en la llamada anterior, no escribo ni guardo nada.
-			return;
-		}
-
-		if ( sobreescribir )
-		{// si lo voy a sobreescribir, entonces lo elimino y lo guardo solo fisicamente
-			archivoTemporal->eliminarFisicamente();
-			archivoTemporal->guardarFisicamente();
-		}
-		else
-		{// si no estoy sobreescribiendo, lo estoy creando, entonces lo guardo tanto fisica como logicamente.
-			archivoTemporal->guardar();
-			agregarArchivoALaListaDeArchivosPorCarpeta( archivoTemporal->getContenido() );
-			agregarArchivoALaListaDeArchivosDeUsuario( archivoTemporal->getContenido() );
-		}
-
-	}
-	else
-	{// no estaba esperando bytes, es decir q ahora inicio los datos logicos y me qedo esperando los bytes.
-		archivoTemporal = new ConexionServidor::BaseDeDatos::Archivo(contenido->getStringDeBytes());
-	}
-}
-void OperacionesArchivos::resettearArchivoTemporalSegunFlag()
-{
-	if ( estoyEsperandoLosBytes )
-	{// si estaba esperando los bytes, entonces termino la operacion. libero la memoria del archivo temporal.
-		delete archivoTemporal;
-	}
-	else
-	{// si no estaba esperando los bytes no hago nada, solo espero a la proxima llamada q me llegan los bytes.
-
-	}
-}
-ConexionServidor::Respuesta OperacionesArchivos::respuestaSegunFlag()
-{
-	ConexionServidor::Respuesta respuesta;
-	if ( estoyEsperandoLosBytes )
-	{// si estaba esperando los bytes, aviso si escribo el archivo fiscamente o no, segun haya habido error en la llamada anterior.
-
-		if ( archivoTemporal->existeFisicamente() && archivoTemporal->contenidoValido() && error == false )
-		{//
-			respuesta.setEstado("ok");
-			respuesta.setMensaje("Bytes de archivo escritos correctamente!");
-		}
-		else
-		{
-			respuesta.setEstado("error");
-			respuesta.setMensaje("No se guardo fisicamente el archivo.");
-		}
-	}
-	else
-	{// si no estaba esperando los bytes, cheqeo q los datos logicos sean validos.
-		if ( archivoTemporal->existeFisicamente() && !sobreescribir )
-		{// si ya existe un archivo con el mismo path y no lo quiero modificar, aviso q ya existe un archivo con esos datos.
-			respuesta.setEstado("archivo-existente");
-			respuesta.setMensaje("Ya existe el archivo.");
-			error = true;
-			return respuesta;
-		}
-		else
-		{
-			error = false;
-		}
-
-		if ( archivoTemporal->contenidoValido() )
-		{
-			respuesta.setEstado("ok");
-			respuesta.setMensaje("Metadatos de archivo reconocidos correctamente!");
-			error = false;
-		}
-		else
-		{
-			respuesta.setEstado("datos-no-validos");
-			respuesta.setMensaje("Metadatos no validos.");
-			error = true;
-		}
-	}
-	return respuesta;
-}
 
 void OperacionesArchivos::agregarArchivoALaListaDeArchivosPorCarpeta(std::string contenido)
 {

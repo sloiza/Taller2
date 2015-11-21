@@ -13,6 +13,8 @@
 
 // utiles
 #include "../utiles/Bytes.h"
+// operaciones
+#include "Acciones.h"
 
 // STL
 #include <string>
@@ -34,6 +36,10 @@ public:
 	virtual ConexionServidor::Respuesta put(Utiles::Bytes* contenido, std::string query) = 0;
 
 	virtual void imprimir() = 0;
+
+protected:
+
+	Acciones acciones;
 };
 };
 };
