@@ -3,8 +3,6 @@ RUN  apt-get -y install software-properties-common
 RUN  add-apt-repository --yes ppa:ubuntu-toolchain-r/test
 RUN  add-apt-repository -y ppa:george-edison55/cmake-3.x
 RUN  add-apt-repository -y ppa:fkrull/deadsnakes
-RUN  update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 50
-RUN  update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50
 RUN  apt-get update
 RUN  apt-get install -y wget
 RUN  apt-get install -y cmake
