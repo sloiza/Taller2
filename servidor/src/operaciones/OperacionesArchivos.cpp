@@ -18,54 +18,21 @@ OperacionesArchivos::~OperacionesArchivos() {}
 
 ConexionServidor::Respuesta OperacionesArchivos::delet(Utiles::Bytes* contenido, std::string query)
 {
-	// 1) settear baja_logica = si
-	ConexionServidor::BaseDeDatos::ArchivoLogico archivoLogico( contenido->getStringDeBytes() );
-	std::string valorRecuperado = archivoLogico.recuperar();
+	ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico = new ConexionServidor::BaseDeDatos::ArchivoLogico( contenido->getStringDeBytes() );
+
+	bool resultadoBajaLogica = this->acciones.darDeBajaArchivoLogico( archivoLogico );
+
+	bool resultadoSacarDeCarpetaLogica = this->acciones.sacarArchivoLogicoDeSuCarpetaLogica( archivoLogico );
+
+	bool resultadoAgregarloAPapelera = this->acciones.agregarArchivoLogicoAPapelera( archivoLogico );
+
 	ConexionServidor::Respuesta respuesta;
-	if ( valorRecuperado.compare("vacio") == 0 )
+	if ( resultadoBajaLogica == false || resultadoSacarDeCarpetaLogica == false || resultadoAgregarloAPapelera == false)
 	{
-		respuesta.setEstado("no-existe");
-		respuesta.setMensaje("Archivo inexistente.");
+		respuesta.setEstado("error");
+		respuesta.setMensaje("Error al dar de baja el archivo.");
 		return respuesta;
 	}
-	archivoLogico.setContenido( valorRecuperado );
-
-	archivoLogico.setBajaLogica("si");
-	archivoLogico.guardar();
-
-	// 2) sacarlo de contenidoPorCarpeta
-	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoEnCarpeta;
-	contenidoEnCarpeta.setPath( archivoLogico.getDireccion() );
-	valorRecuperado = contenidoEnCarpeta.recuperar();
-	if ( valorRecuperado.compare("vacio") == 0 )
-	{
-		respuesta.setEstado("no-existe");
-		respuesta.setMensaje("Carpeta inexistente.");
-		return respuesta;
-	}
-	contenidoEnCarpeta.setContenido( valorRecuperado );
-
-	//contenidoEnCarpeta.eliminarArchivo( archivoLogico.getNombreYExtension() );
-	contenidoEnCarpeta.eliminarArchivo( archivoLogico.getPath() );
-
-	contenidoEnCarpeta.guardar();
-	// 3) agregarlo a la papelera
-	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta papelera;
-
-	papelera.setPath( archivoLogico.getPropietario() + "/" + InfoOperaciones::papelera );
-
-//	std::cout << "archivos path papelera: " + archivoLogico.getPropietario() + "/" + InfoOperaciones::papelera << "\n";
-
-	valorRecuperado = papelera.recuperar();
-
-	if ( valorRecuperado.compare("vacio") != 0 )
-	{
-		papelera.setContenido( valorRecuperado );
-	}
-
-	papelera.agregarArchivo( archivoLogico.getPath() );
-
-	papelera.guardar();
 
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Archivo dado de baja correctamente!");
@@ -94,12 +61,12 @@ ConexionServidor::Respuesta OperacionesArchivos::get(Utiles::Bytes* contenido, s
 ConexionServidor::Respuesta OperacionesArchivos::post(Utiles::Bytes* contenido, std::string query)
 {
 	ConexionServidor::Respuesta respuesta;
-	std::string datosLogicos = query;
 
-	ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico = new ConexionServidor::BaseDeDatos::ArchivoLogico( query );
+	ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico = this->acciones.parsearArchivoDeQuery( query );
+
 	bool resultadoAltaLogica = this->acciones.darDeAltaArchivoLogico( archivoLogico );
 
-	ConexionServidor::BaseDeDatos::Archivo* archivo = new ConexionServidor::BaseDeDatos::Archivo( query );
+	ConexionServidor::BaseDeDatos::Archivo* archivo = new ConexionServidor::BaseDeDatos::Archivo( archivoLogico->getContenido() );
 	archivo->setBytes( contenido );
 	bool resultadoAltaFisica= this->acciones.darDeAltaArchivoFisico( archivo );
 
@@ -110,31 +77,49 @@ ConexionServidor::Respuesta OperacionesArchivos::post(Utiles::Bytes* contenido, 
 		return respuesta;
 	}
 
-	agregarArchivoALaListaDeArchivosPorCarpeta( datosLogicos );
-	agregarArchivoALaListaDeArchivosDeUsuario( datosLogicos );
+	bool resultadoAgregarArchivoASuContenido = this->acciones.agregarArchivoLogicoASuCarpetaLogica( archivoLogico );
+	bool resultadoAgregarArchivoAContenidoPorUsuario = this->acciones.agregarArchivoALaListaDeArchivosDeUsuario( archivoLogico );
+	bool resultadoAgregarVersionDeArchivo = this->acciones.crearVersionInicialDeArchivo( archivoLogico );
 
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Archivo dado de alta correctamente!");
+
+	delete archivoLogico;
+	delete archivo;
 
 	return respuesta;
 }
 ConexionServidor::Respuesta OperacionesArchivos::put(Utiles::Bytes* contenido, std::string query)
 {
-	ConexionServidor::BaseDeDatos::ArchivoLogico archivo(contenido->getStringDeBytes());
+	ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogicoNuevo = this->acciones.parsearArchivoDeQuery( query );
+	ConexionServidor::BaseDeDatos::Archivo* archivoFisicoNuevo = new ConexionServidor::BaseDeDatos::Archivo( archivoLogicoNuevo->getContenido() );
+	archivoFisicoNuevo->setBytes( contenido );
 	ConexionServidor::Respuesta respuesta;
 
-	std::string valorRecuperado = archivo.recuperar();
-	if ( valorRecuperado.compare("vacio") == 0 )
+	if ( this->acciones.versionDeUltimoModificadorEstaActualizada( archivoLogicoNuevo ) == false )
 	{
-		respuesta.setEstado("no-existe");
-		respuesta.setMensaje("Usuario inexistente.");
+		respuesta.setEstado("error");
+		respuesta.setMensaje("Version de archivo desactualizada.");
 		return respuesta;
 	}
 
-	archivo.guardar();
+	bool resultadoModificarArchivoLogico = this->acciones.modificarArchivoLogico( archivoLogicoNuevo );
+
+	bool resultadoModificarArchivoFisico = true;
+	if ( contenido->getTamanio() > 0 )
+	{
+		resultadoModificarArchivoFisico = this->acciones.modificarArchivoFisico( archivoFisicoNuevo );
+	}
+
+
+	this->acciones.actualizarVersionDeUltimoModificador( archivoLogicoNuevo );
 
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Archivo modificado correctamente!");
+
+	delete archivoLogicoNuevo;
+	delete archivoFisicoNuevo;
+
 	return respuesta;
 }
 

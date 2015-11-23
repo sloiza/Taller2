@@ -39,13 +39,16 @@ public:
 	CarpetaLogica(std::string);
 	virtual ~CarpetaLogica();
 
-	void setNombre(std::string), setEtiqueta(std::string), setUltimaFechaModif(std::string),
+	void setNombre(std::string), /*setEtiqueta(std::string),*/ setUltimaFechaModif(std::string),
 			setUltimoUsuarioModif(std::string), setPropietario(std::string), setBajaLogica(std::string), setDireccion(std::string);
 
-	std::string getNombre(), getEtiqueta(), getUltimaFechaModif(),
+	std::string getNombre(), /*getEtiqueta(),*/ getUltimaFechaModif(),
 			getUltimoUsuarioModif(), getPropietario(), getBajaLogica(), getDireccion();
 
 	std::string getPath();
+
+	std::vector<std::string> getEtiquetas();
+	void agregarEtiqueta(std::string);
 
 	// Metodos de EntidadDB
 	virtual std::string getValor();

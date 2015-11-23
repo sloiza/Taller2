@@ -35,7 +35,7 @@ void ContenidoPorCarpeta::setPath(std::string path)
 	if ( tamanio == 1 )
 	{ // si el tamanio q me qeda es 1, entonces solo tengo el nombre de la carpeta, en la direccion raiz.
 		this->setNombre( campos[0] );
-		this->setDireccion("");
+		this->setDireccion("/");
 		return;
 	}
 

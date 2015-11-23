@@ -49,11 +49,6 @@ public:
 
 	std::vector<ConexionServidor::BaseDeDatos::ArchivoLogico*> getArchivosAFiltrar(std::vector<std::string> pathsAFiltrar);
 
-	std::vector<std::string> buscarArchivosPorNombre(std::vector<std::string> archivosAFiltrar, std::string query);
-	std::vector<std::string> buscarArchivosPorExtension(std::vector<std::string> archivosAFiltrar, std::string query);
-	std::vector<std::string> buscarArchivosPorEtiqueta(std::vector<std::string> archivosAFiltrar, std::string query);
-	std::vector<std::string> buscarArchivosPorPropietario(std::vector<std::string> archivosAFiltrar, std::string query);
-
 	std::vector<std::string> buscarArchivosPorNombre(std::vector<ConexionServidor::BaseDeDatos::ArchivoLogico*> archivosAFiltrar, std::string query);
 	std::vector<std::string> buscarArchivosPorExtension(std::vector<ConexionServidor::BaseDeDatos::ArchivoLogico*> archivosAFiltrar, std::string query);
 	std::vector<std::string> buscarArchivosPorEtiqueta(std::vector<ConexionServidor::BaseDeDatos::ArchivoLogico*> archivosAFiltrar, std::string query);
