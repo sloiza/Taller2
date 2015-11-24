@@ -7,8 +7,8 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 include_directories(${SRC_DIR})
 include_directories(${GTEST_INCLUDE_DIR})
 
-find_package(Threads REQUIRED)
 find_package(GTest REQUIRED)
+#find_package(Threads REQUIRED)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/test/tmp)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/test/tmp/carpetaVacia)
