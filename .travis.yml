@@ -19,6 +19,7 @@ install:
    - g++ --version
 
 before_script:
+   - HOME=`pwd`
    - wget https://github.com/NickCis/rocksdb/archive/master.zip
    - unzip master.zip
    - cd rocksdb-master
@@ -27,6 +28,7 @@ before_script:
    - sudo make install
    - "cd ../ && sudo rm master.zip"
    - "cd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
+   - cd $HOME
    - mkdir servidor/build
 script: 
   - "cd servidor/build && cmake -DINCLUIR_TEST=ON .. && make && make test"
