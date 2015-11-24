@@ -115,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public String postUserSignUp(String URL) {
         String encodedImage = String.valueOf(R.drawable.profile_default);
-        if(profilePic.getByteCount() > 0){
+        if(profilePic != null){
             encodedImage = Utility.bitmapToString(profilePic);
         }
         StringBuilder stringBuilder = new StringBuilder();

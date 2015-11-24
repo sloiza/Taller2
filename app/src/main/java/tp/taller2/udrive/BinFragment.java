@@ -59,18 +59,12 @@ public class BinFragment extends Fragment implements AbsListView.OnItemClickList
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.ColorPrimary);
 
-        swipeRefreshLayout.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        swipeRefreshLayout.setRefreshing(true);
-                                        new getPaperBinFilesService().execute(session.getIp() + session.getPort() + "papelera");
-                                    }
-                                }
-        );
 
         session = new SessionManager(getContext());
         user = session.getUserDetails();
         email = user.get(SessionManager.KEY_EMAIL);
+
+        new getPaperBinFilesService().execute(session.getIp() + session.getPort() + "papelera");
 
         return view;
     }
@@ -101,6 +95,7 @@ public class BinFragment extends Fragment implements AbsListView.OnItemClickList
 
     @Override
     public void onRefresh() {
+        filesList.clear();
         new getPaperBinFilesService().execute(session.getIp() + session.getPort() + "papelera");
     }
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 public class StorageFragment extends Fragment {
 
     Float storageUsed;
+    SessionManager session;
 
     public static final StorageFragment newInstance(Float storageUsed) {
         StorageFragment f = new StorageFragment();
@@ -25,7 +26,8 @@ public class StorageFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_storage, container, false);
         storageUsed = getArguments().getFloat("storageUsed");
         TextView storage = (TextView) rootView.findViewById(R.id.storageUsed);
-        storage.setText(storageUsed.toString() + "GB");
+        session = new SessionManager(getContext());
+        storage.setText(session.getUserStorageUsed() + "GB");
         return rootView;
     }
 }

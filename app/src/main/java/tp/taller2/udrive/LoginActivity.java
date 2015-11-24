@@ -129,15 +129,21 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
-                Object name = jsonObject.get("nombre");
-                Object surname = jsonObject.get("apellido");
-                Object email = jsonObject.get("mail");
-                Object password = jsonObject.get("password");
-                Object city = jsonObject.get("lugar");
-                Object picture = jsonObject.get("foto");
                 if(status.equals("ok")) {
+                    Object name = jsonObject.get("nombre");
+                    Object surname = jsonObject.get("apellido");
+                    Object email = jsonObject.get("mail");
+                    Object password = jsonObject.get("password");
+                    Object city = jsonObject.get("lugar");
+                    Object picture = null;
+                    String pic;
+                    if(jsonObject.has("foto")){
+                        pic = jsonObject.get("foto").toString();
+                    } else {
+                        pic = String.valueOf(R.drawable.profile_default);
+                    }
                     session.createLoginSession(email.toString(), name.toString(), surname.toString(),
-                            city.toString(), password.toString(), picture.toString(), 0.0f,
+                            city.toString(), password.toString(), pic, 0.0f,
                             session.getIp(), session.getPort());
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.i("User login", message.toString());

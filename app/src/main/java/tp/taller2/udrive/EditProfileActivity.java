@@ -126,7 +126,8 @@ public class EditProfileActivity extends AppCompatActivity {
             cursor.close();
 
             CircleImageView imageView = (CircleImageView) findViewById(R.id.imgView);
-            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            profilePic = BitmapFactory.decodeFile(picturePath);
+            imageView.setImageBitmap(profilePic);
 
         }
     }
@@ -163,8 +164,10 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public String userUpdateProfileAndStartNewSession(String URL) {
-        profilePic = BitmapFactory.decodeFile(picturePath);
-        String encodedImage = Utility.bitmapToString(profilePic);
+        String encodedImage = String.valueOf(R.drawable.profile_default);
+        if(profilePic != null){
+            encodedImage = Utility.bitmapToString(profilePic);
+        }
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(URL);
@@ -233,8 +236,10 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public String userUpdateProfile(String URL) {
-        profilePic = BitmapFactory.decodeFile(picturePath);
-        String encodedImage = Utility.bitmapToString(profilePic);
+        String encodedImage = String.valueOf(R.drawable.profile_default);
+        if(profilePic != null){
+            encodedImage = Utility.bitmapToString(profilePic);
+        }
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
         HttpPut httpPut = new HttpPut(URL);

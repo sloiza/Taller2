@@ -24,14 +24,12 @@
         <ListView
             android:id="@+id/list_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip" >
+            android:layout_height="wrap_content" >
         </ListView>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:layout_marginTop="10dip"
             android:background="@color/background"
             android:textSize="20sp"
             android:padding="10dip"
@@ -43,8 +41,7 @@
         <ListView
             android:id="@+id/folder_list_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip" >
+            android:layout_height="wrap_content">
         </ListView>
     </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -2,6 +2,7 @@ package tp.taller2.udrive;
 
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -28,11 +29,19 @@ import com.loopj.android.http.HttpGet;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +71,8 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        session = new SessionManager(getContext());
+        session.checkLogin();
 
         lv = (ListView) rootView.findViewById(R.id.list_view);
         registerForContextMenu(lv);
@@ -78,27 +89,13 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.ColorPrimary);
 
-        session = new SessionManager(getContext());
         user = session.getUserDetails();
         email = user.get(SessionManager.KEY_EMAIL);
 
         CoordinatorLayout coordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.coordinatorLayout);
         Snackbar snackbar = Snackbar.make(coordinatorLayout, "You are logged in as\n" + email, Snackbar.LENGTH_LONG);
         snackbar.show();
-
-        /**
-         * Showing Swipe Refresh animation on activity create
-         * As animation won't start on onCreate, post runnable is used
-         */
-        swipeRefreshLayout.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        swipeRefreshLayout.setRefreshing(true);
-                                        new getUserFilesService().execute(session.getIp() + session.getPort());
-                                    }
-                                }
-        );
-
+         new getUserFilesService().execute(session.getIp() + session.getPort());
         return rootView;
     }
 
@@ -160,7 +157,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
     }
 
     private void downloadCurrentItem() {
-        new getDownloadFileService().execute(session.getIp() + session.getPort() + "descargar");
+        new getDownloadFileService().execute(session.getIp() + session.getPort() + "descarga");
     }
 
     public void showShareFileDialog() {
@@ -215,7 +212,6 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                 JSONArray fileArray;
                 JSONArray folderArray;
                 if(status.equals("ok")) {
-                    Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.i("User files", message.toString());
                     Utility.appendToInfoLog("User files", message.toString());
                     Log.d("User files", jsonObject.toString());
@@ -253,6 +249,8 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
         }
     }
 
+
+
     public String getDownloadFile(String URL) {
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
@@ -273,6 +271,15 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                 InputStream inputStream = entity.getContent();
                 BufferedReader reader = new BufferedReader(
                         new InputStreamReader(inputStream));
+                FileOutputStream out = new FileOutputStream("/sdcard/" + itemName);
+
+                byte[] buffer = new byte[1024];
+                int count;
+                while ((count = inputStream.read(buffer)) != -1) {
+                    out.write(buffer, 0, count);
+                }
+                out.flush();
+                out.close();
                 String line;
                 while ((line = reader.readLine()) != null) {
                     stringBuilder.append(line);
@@ -297,9 +304,10 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
 
         protected void onPostExecute(String result) {
             try {
-                JSONObject jsonObject = new JSONObject(result);
+                Log.d("result", result);
+                //JSONObject jsonObject = new JSONObject(result);
                 //devuelve los bytes
-                if(jsonObject.has("estado")){
+                /*if(jsonObject.has("estado")){
                     Object estado = jsonObject.get("estado");
                     Object message = jsonObject.get("mensaje");
                     if(estado.equals("no-existe")){
@@ -307,20 +315,20 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                         Log.e("Download file", message.toString());
                         Utility.appendToErrorLog("Download file", message.toString());
                     }
-                } else {
-                    Toast.makeText(getContext(), "Download file success", Toast.LENGTH_LONG).show();
-                    Log.i("Download file", "Download file success");
+                } else {*/
+                Toast.makeText(getContext(), "Download file success", Toast.LENGTH_LONG).show();
+                    /*Log.i("Download file", "Download file success");
                     Utility.appendToInfoLog("Download file", "Download file success");
                     FileOutputStream out = new FileOutputStream("/sdcard/" + itemName);
-                    Log.d("Download file success", "sdcard/" + itemName);
-                    Utility.appendToDebugLog("Download file success", "sdcard/" + itemName);
-                    byte[] buffer = result.getBytes();
-                    out.write(buffer);
-                    out.flush();
-                    out.close();
-                }
+                Log.d("Download file success", "sdcard/" + itemName);
+                Utility.appendToDebugLog("Download file success", "sdcard/" + itemName);
+                    Log.d("result bytes", result.getBytes().toString());
+                Log.d("result lenght", String.valueOf(result.getBytes().length));*/
+
+
+               // }
             } catch (Exception e) {
-                Log.e("Download file", e.getLocalizedMessage());
+                Log.e("Download file", "asdadsad" + e.getLocalizedMessage());
                 Utility.appendToErrorLog("Download file", e.getLocalizedMessage());
             }
         }

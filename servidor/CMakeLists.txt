@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(Servidor)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -pthread -fprofile-arcs -ftest-coverage -DMONGOOSE_ENABLE_THREADS --coverage ")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -pthread -fprofile-arcs -ftest-coverage -DMONGOOSE_ENABLE_THREADS --coverage")
 set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -DMONGOOSE_ENABLE_THREADS")
 
 enable_testing()
@@ -26,8 +26,7 @@ target_link_libraries(servidor /usr/local/lib/librocksdb.a)
 target_link_libraries(servidor /usr/lib/x86_64-linux-gnu/libz.so)
 target_link_libraries(servidor /usr/lib/libsnappy.so)
 target_link_libraries(servidor /usr/lib/x86_64-linux-gnu/libbz2.so)
-#target_link_libraries(servidor /usr/local/lib/libjsoncpp.a)
-
+target_link_libraries(servidor /usr/local/lib/libjsoncpp.a)
 
 if(INCLUIR_TEST)
 	add_subdirectory(test)
