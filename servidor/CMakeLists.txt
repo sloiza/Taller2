@@ -17,9 +17,9 @@ file(GLOB SRC_BD "src/bd/*.cpp")
 file(GLOB SRC_BD_ENTIDADES "src/bd/entidades/*.cpp")
 file(GLOB SRC_ARCHIVOS "src/archivos/*.cpp")
 file(GLOB SRC_OPERACIONES "src/operaciones/*.cpp")
-file(GLOB SRC_JSON "src/json.cpp")
 
-file(GLOB SRC_COMPLETO ${SRC} ${SRC_CONEXION} ${SRC_ARCHIVOS} ${SRC_OPERACIONES} ${SRC_CONEXION_REQUEST} ${SRC_UTILES} ${SRC_BD} ${SRC_BD_ENTIDADES} ${SRC_JSON})
+
+file(GLOB SRC_COMPLETO ${SRC} ${SRC_CONEXION} ${SRC_ARCHIVOS} ${SRC_OPERACIONES} ${SRC_CONEXION_REQUEST} ${SRC_UTILES} ${SRC_BD} ${SRC_BD_ENTIDADES})
 
 add_executable(servidor ${SRC_COMPLETO})
 

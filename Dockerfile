@@ -1,17 +1,18 @@
 FROM ubuntu:14.04
-RUN  apt-get -y install software-properties-common
-RUN  add-apt-repository --yes ppa:ubuntu-toolchain-r/test
-RUN  add-apt-repository -y ppa:george-edison55/cmake-3.x
-RUN  add-apt-repository -y ppa:fkrull/deadsnakes
-RUN  apt-get update
-RUN  apt-get install -y wget
-RUN  apt-get install -y cmake
-RUN  apt-get install -y unzip 
-RUN  apt-get install -y -qq gcc-4.9 g++-4.9 libgtest-dev zlib1g-dev libbz2-dev libsnappy-dev
-RUN  apt-get install -y python2.7
-RUN  apt-get install -y python-pip
-RUN  pip install cpp-coveralls
-RUN  wget https://github.com/sloiza/Taller2/archive/master.zip 
-RUN  unzip master.zip
-CMD  ./Taller2-master/servidor/install_dependencies.sh
-CMD  ./Taller2-master/servidor/build/servidor
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update  && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install python-software-properties && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common && \
+    DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:ubuntu-toolchain-r/test && \
+    DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:george-edison55/cmake-3.x && \
+    DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:fkrull/deadsnakes && \
+    DEBIAN_FRONTEND=noninteractive apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y -qq wget g++ gcc-4.9 g++-4.9 libgflags-dev libsnappy-dev zlib1g-dev libbz2-dev libgtest-dev cmake unzip python2.7 python-pip && \
+	DEBIAN_FRONTEND=noninteractive update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50
+
+
+
+RUN ls && wget https://github.com/sloiza/Taller2/archive/master.zip && ls && unzip master.zip && ls && \
+	cd Taller2-master && chmod +x servidor/install_dependencies.sh  && ./servidor/install_dependencies.sh
+
+CMD cd build && ./servidor
