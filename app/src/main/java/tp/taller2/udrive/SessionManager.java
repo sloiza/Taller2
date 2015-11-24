@@ -12,6 +12,8 @@ public class SessionManager {
     SharedPreferences pref;
     Editor editor;
     Context context;
+    String ipDefault = "http://192.168.0.19";
+    String portDefault = ":8080/";
 
     int PRIVATE_MODE = 0;
 
@@ -24,6 +26,10 @@ public class SessionManager {
     public static final String KEY_CITY = "city";
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_PICTURE = "picture";
+    public static final String KEY_STORAGE = "storage";
+    public static final String KEY_IP = "ip";
+    public static final String KEY_PORT = "port";
+
 
     public SessionManager(Context context) {
         this.context = context;
@@ -34,7 +40,8 @@ public class SessionManager {
     /**
      * Create login session
      * */
-    public void createLoginSession(String email, String name, String surname, String city, String password, String picture){
+    public void createLoginSession(String email, String name, String surname, String city, String password, String picture,
+                                   Float storage, String ip, String port){
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(KEY_EMAIL, email);
         editor.putString(KEY_NAME, name);
@@ -42,6 +49,9 @@ public class SessionManager {
         editor.putString(KEY_CITY, city);
         editor.putString(KEY_PASSWORD, password);
         editor.putString(KEY_PICTURE, picture);
+        editor.putFloat(KEY_STORAGE, storage);
+        editor.putString(KEY_IP, ip);
+        editor.putString(KEY_PORT, port);
         editor.commit();
     }
 
@@ -56,6 +66,8 @@ public class SessionManager {
         user.put(KEY_CITY, pref.getString(KEY_CITY, null));
         user.put(KEY_PASSWORD, pref.getString(KEY_PASSWORD, null));
         user.put(KEY_PICTURE, pref.getString(KEY_PICTURE, null));
+        user.put(KEY_IP, pref.getString(KEY_IP, null));
+        user.put(KEY_PORT, pref.getString(KEY_PORT, null));
         return user;
     }
 
@@ -65,17 +77,10 @@ public class SessionManager {
      * Else won't do anything
      * */
     public void checkLogin(){
-        // Check login status
         if(!this.isLoggedIn()){
-            // user is not logged in redirect him to Login Activity
             Intent i = new Intent(context, LoginActivity.class);
-            // Closing all the Activities
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            // Add new Flag to start new Activity
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            // Staring Login Activity
             context.startActivity(i);
         }
     }
@@ -84,19 +89,11 @@ public class SessionManager {
      * Clear session details
      * */
     public void logoutUser(){
-        // Clearing all data from Shared Preferences
         editor.clear();
         editor.commit();
-
-        // After logout redirect user to Login Activity
         Intent i = new Intent(context, LoginActivity.class);
-        // Closing all the Activities
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        // Add new Flag to start new Activity
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        // Staring Login Activity
         context.startActivity(i);
     }
 
@@ -106,4 +103,29 @@ public class SessionManager {
     public boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
     }
+
+    public float getUserStorageUsed(){
+        return pref.getFloat(KEY_STORAGE, 0);
+    }
+
+    public void updateStorageUsed(Float storage){
+        editor.putFloat(KEY_STORAGE, storage);
+        editor.commit();
+    }
+
+    public void updateIpAndPort(String ip, String port){
+        editor.putString(KEY_IP, ip);
+        editor.putString(KEY_PORT, port);
+        editor.commit();
+    }
+
+    public String getIp(){
+        return pref.getString(KEY_IP, ipDefault);
+    }
+
+    public String getPort(){
+        return pref.getString(KEY_PORT, portDefault);
+    }
+
+
 }

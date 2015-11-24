@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -39,7 +40,7 @@ import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
-public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class ShareFragment extends Fragment implements AbsListView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener{
 
     List<String> filesList = new ArrayList<>();
     private ListView lv;
@@ -49,9 +50,7 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     String email;
     String itemName;
     SwipeRefreshLayout swipeRefreshLayout;
-
     SessionManager session;
-
 
     public ShareFragment(){}
 
@@ -68,6 +67,7 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         Utility.setDynamicHeight(folderlv);
 
         registerForContextMenu(folderlv);
+        folderlv.setOnItemClickListener(this);
 
         session = new SessionManager(getContext());
         user = session.getUserDetails();
@@ -81,11 +81,10 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                                     @Override
                                     public void run() {
                                         swipeRefreshLayout.setRefreshing(true);
-                                        new getShareFilesService().execute("http://192.168.1.9:8080/compartirArchivo");
+                                        new getShareFilesService().execute(session.getIp() + session.getPort() + "compartirArchivo");
                                     }
                                 }
         );
-
 
         return rootView;
     }
@@ -129,24 +128,19 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void shareCurrentItem() {
-        Toast.makeText(getContext(), "Share item click", Toast.LENGTH_LONG).show();
         showShareFileDialog();
     }
 
     private void deleteCurrentItem() {
-        Toast.makeText(getContext(), "Delete item click", Toast.LENGTH_LONG).show();
         if(!Utility.getExtensionFromFile(itemName).isEmpty()){
-            Toast.makeText(getContext(), "Delete file", Toast.LENGTH_LONG).show();
-            new deleteFileService().execute("http://192.168.1.9:8080/archivos");
+            new deleteFileService().execute(session.getIp() + session.getPort() + "archivos");
         } else {
-            Toast.makeText(getContext(), "Delete folder", Toast.LENGTH_LONG).show();
-            new deleteFolderService().execute("http://192.168.1.9:8080/carpetas");
+            new deleteFolderService().execute(session.getIp() + session.getPort() + "carpetas");
         }
     }
 
     private void downloadCurrentItem() {
-        Toast.makeText(getContext(), "Download item click", Toast.LENGTH_LONG).show();
-        //new getDownloadFileService().execute("http://192.168.0.16:8080/descargar");
+        //new getDownloadFileService().execute(session.getIp() + session.getPort() + "descargar");
     }
 
     public void showShareFileDialog() {
@@ -180,17 +174,27 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 }
                 inputStream.close();
             } else {
-                Log.d("JSON", "Failed to download file");
+                Log.e("Share", "status code: " + statusCode);
+                Utility.appendToErrorLog("Share With Me", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            Log.e("Share With Me", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Share With Me", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
 
     @Override
     public void onRefresh() {
-        new getShareFilesService().execute("http://192.168.1.9:8080/compartirArchivos");
+        new getShareFilesService().execute(session.getIp() + session.getPort() + "compartirArchivos");
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(getContext(),FilesInFolderActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("folderName", foldersList.get(position));
+        startActivity(intent);
     }
 
     private class getShareFilesService extends AsyncTask<String, Void, String> {
@@ -207,6 +211,10 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 JSONArray folderArray;
                 if(status.equals("ok")) {
                     Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("Share With Me", message.toString());
+                    Utility.appendToInfoLog("Share With Me", message.toString());
+                    Log.d("Share With Me", jsonObject.toString());
+                    Utility.appendToDebugLog("Share With Me", jsonObject.toString());
                     if(jsonObject.has("carpetas")){
                         folderArray = jsonObject.getJSONArray("carpetas");
                         for (int i=0; i<folderArray.length(); i++) {
@@ -227,9 +235,14 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                     lv.setAdapter(files);
                     ArrayAdapter<String> folders = new ArrayAdapter<>(getActivity(),R.layout.list_item,foldersList);
                     folderlv.setAdapter(folders);
+                } else {
+                    Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Share With Me", message.toString());
+                    Utility.appendToErrorLog("Share With Me", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("ReadJSONTask", e.getLocalizedMessage());
+                Log.e("Share With Me", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Share With Me", e.getLocalizedMessage());
             }
         }
     }
@@ -248,10 +261,6 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             HttpResponse response = httpClient.execute(httpDelete);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -266,10 +275,12 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 }
                 inputStream.close();
             } else {
-                Log.d("Error", "Failed to delete file");
+                Log.e("ShareWithMe delete file", "status code: " + statusCode);
+                Utility.appendToErrorLog("ShareWithMe delete file", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("Error", e.getLocalizedMessage());
+            Log.e("ShareWithMe delete file", e.getLocalizedMessage());
+            Utility.appendToErrorLog("ShareWithMe delete file", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -286,9 +297,18 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 Object message = jsonObject.get("mensaje");
                 if(status.equals("ok")) {
                     Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("ShareWithMe delete file", message.toString());
+                    Utility.appendToInfoLog("ShareWithMe delete file", message.toString());
+                    Log.d("ShareWithMe delete file", jsonObject.toString());
+                    Utility.appendToDebugLog("ShareWithMe delete file", jsonObject.toString());
+                } else {
+                    Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("ShareWithMe delete file", message.toString());
+                    Utility.appendToErrorLog("ShareWithMe delete file", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("Error", e.getLocalizedMessage());
+                Log.e("ShareWithMe delete file", e.getLocalizedMessage());
+                Utility.appendToErrorLog("ShareWithMe delete file", e.getLocalizedMessage());
             }
         }
     }
@@ -306,10 +326,6 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             HttpResponse response = httpClient.execute(httpDelete);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -324,10 +340,12 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 }
                 inputStream.close();
             } else {
-                Log.d("Error", "Failed to delete folder");
+                Log.e("ShrWithMe deleteFolder", "status code: " + statusCode);
+                Utility.appendToErrorLog("ShrWithMe deleteFolder", "status code: " + statusCode);
             }
         } catch (Exception e) {
-            Log.d("Error", e.getLocalizedMessage());
+            Log.e("ShrWithMe deleteFolder", e.getLocalizedMessage());
+            Utility.appendToErrorLog("ShrWithMe deleteFolder", e.getLocalizedMessage());
         }
         return stringBuilder.toString();
     }
@@ -344,9 +362,18 @@ public class ShareFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 Object message = jsonObject.get("mensaje");
                 if(status.equals("ok")) {
                     Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.i("ShrWithMe deleteFolder", message.toString());
+                    Utility.appendToInfoLog("ShrWithMe deleteFolder", message.toString());
+                    Log.d("ShrWithMe deleteFolder", jsonObject.toString());
+                    Utility.appendToDebugLog("ShrWithMe deleteFolder", jsonObject.toString());
+                } else {
+                    Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
+                    Log.e("ShrWithMe deleteFolder", message.toString());
+                    Utility.appendToErrorLog("ShrWithMe deleteFolder", message.toString());
                 }
             } catch (Exception e) {
-                Log.d("Error", e.getLocalizedMessage());
+                Log.e("ShrWithMe deleteFolder", e.getLocalizedMessage());
+                Utility.appendToErrorLog("ShrWithMe deleteFolder", e.getLocalizedMessage());
             }
         }
     }

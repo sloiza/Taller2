@@ -17,17 +17,9 @@ before_install:
    - sudo apt-get install -y cmake
    - sudo apt-get install -y unzip 
    - sudo apt-get install -y python-pip
+   - sudo apt-get install libgtest-dev
    - sudo pip install cpp-coveralls
    - sudo apt-get install -y python2.7
-   - wget https://github.com/open-source-parsers/jsoncpp/archive/master.zip
-   - unzip master.zip
-   - cd jsoncpp-master/
-   - sudo python amalgamate.py
-   - mkdir -p build/debug
-   - cd build/debug
-   - cmake -DCMAKE_BUILD_TYPE=debug -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF -DARCHIVE_INSTALL_DIR=. -G "Unix Makefiles" ../..
-   - "make && sudo make install"
-   - "cd ../.. && sudo rm master.zip"
    - wget https://github.com/NickCis/rocksdb/archive/master.zip
    - unzip master.zip
    - cd rocksdb-master
@@ -35,7 +27,7 @@ before_install:
    - make shared_lib
    - sudo make install
    - "cd ../ && sudo rm master.zip"
-   - "cd /usr/src/gtest && cmake . && cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
+   - "cd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
 
 before_script:
   - mkdir servidor/build

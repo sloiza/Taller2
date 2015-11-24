@@ -26,4 +26,13 @@
             android:title="Log out" />
     </group>
 
+    <group
+        android:id="@+id/menu_ip"
+        android:checkableBehavior="single">
+
+        <item android:id="@+id/nav_ip"
+            android:icon="@android:drawable/ic_menu_save"
+            android:title="Set Ip/Port"/>
+    </group>
+
 </menu>

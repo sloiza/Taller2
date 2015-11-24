@@ -39,33 +39,34 @@
             android:textColor="#000000"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_layout_lastModDate"
+        android:id="@+id/input_layout_created"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <EditText android:id="@+id/itemLastModDate"
+        <EditText android:id="@+id/itemCreated"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:text="11/11/2015"
-            android:hint="Modify on"
+            android:hint="Created"
+            android:editable="false"
             android:textStyle="normal"
             android:padding="10dip"
             android:textColor="#000000"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_layout_lastModUser"
+        android:id="@+id/input_layout_modified"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <EditText android:id="@+id/itemLastModUser"
+        <EditText android:id="@+id/itemModified"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:text="Matias Carreras"
-            android:hint="Modify by"
+            android:text="11/11/2015 by Matias Carreras"
+            android:hint="Modified"
             android:editable="false"
             android:textStyle="normal"
             android:padding="10dip"
@@ -89,6 +90,23 @@
             android:textColor="#000000"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_shareWith"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText android:id="@+id/itemShareWith"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:text="Manuel Iglesias"
+            android:hint="Share with"
+            android:editable="false"
+            android:textStyle="normal"
+            android:padding="10dip"
+            android:textColor="#000000"/>
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
         android:id="@+id/input_layout_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -100,7 +118,6 @@
             android:layout_marginRight="30dp"
             android:text="tmp/mncarreras@gmail.com/"
             android:hint="Location"
-            android:editable="false"
             android:textStyle="normal"
             android:padding="10dip"
             android:textColor="#000000"/>
@@ -109,7 +126,7 @@
         android:layout_width="100dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_height="50dp"
         android:layout_gravity="end"
         android:onClick="editItemDetails"
