@@ -31,10 +31,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -103,14 +107,8 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
         name = user.get(SessionManager.KEY_NAME);
         surname = user.get(SessionManager.KEY_SURNAME);
 
-        swipeRefreshLayout.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        swipeRefreshLayout.setRefreshing(true);
-                                        new getFolderFilesService().execute(session.getIp() + session.getPort() + "carpetas");
-                                    }
-                                }
-        );
+        new getFolderFilesService().execute(session.getIp() + session.getPort() + "carpetas");
+
     }
 
     @Override
@@ -260,6 +258,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
                     lv.setAdapter(files);
                     ArrayAdapter<String> folders = new ArrayAdapter<>(getApplicationContext(),R.layout.list_item,foldersList);
                     folderlv.setAdapter(folders);
+                    swipeRefreshLayout.setRefreshing(false);
                 } else {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.e("Folder files", message.toString());
@@ -507,7 +506,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
         if (requestCode == FILE_SELECT_CODE && resultCode == -1 && null != data) {
             Uri uri = data.getData();
             filePath = uri.getPath();
-            SimpleDateFormat sdf = new SimpleDateFormat("ddmmyyyyy_HHmmss");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             String currentDateAndTime = sdf.format(new Date());
             File file = new File(filePath);
             JSONArray jsonArray = new JSONArray();
@@ -516,44 +515,75 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
             //json.put("version", 1);
             //json.put("compartido_con", "");
             new UploadFileToServer().execute(session.getIp() + session.getPort() + "archivos?nombre=" + Utility.getNameFromFile(file.getName())
-                    + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta="  + jsonArray
-                    + "&fecha_ulti_modi=" + currentDateAndTime + "&usuario_ulti_modi=" + name + " " + surname
-                    + "&propietario=" + name + " " + surname + "&baja_logica=no&direccion=" + "tmp/" + email + "/" + itemName + "/");
+                    + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=file"
+                    + "&fecha_ulti_modi=" + currentDateAndTime + "&usuario_ulti_modi=" + email
+                    + "&propietario=" + email + "&baja_logica=no&direccion=" + "tmp/" + email + "/" + itemName + "/");
         }
     }
 
-    public String uploadFile(String URL) {
-        File file = new File(filePath);
-        StringBuilder stringBuilder = new StringBuilder();
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(URL);
-        try {
-            InputStreamEntity reqEntity = new InputStreamEntity(new FileInputStream(file), -1);
-            reqEntity.setContentType("binary/octet-stream");
-            reqEntity.setChunked(true); // Send in multiple parts if needed
-            httpPost.setEntity(reqEntity);
-            HttpResponse response = httpClient.execute(httpPost);
-            StatusLine statusLine = response.getStatusLine();
-            int statusCode = statusLine.getStatusCode();
-            if (statusCode == 200) {
-                HttpEntity entity = response.getEntity();
-                InputStream inputStream = entity.getContent();
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
-                inputStream.close();
-            } else {
-                Log.e("Folder Upload file", "service status code: " + statusCode);
-                Utility.appendToErrorLog("Folder Upload file", "status code: " + statusCode);
+    public String uploadFile(String urlServer) {
+        HttpURLConnection connection = null;
+        DataOutputStream outputStream = null;
+        DataInputStream inputStream = null;
+        String serverResponseMessage = "";
+        int serverResponseCode;
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary =  "*****";
+
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1*1024*1024;
+
+        try
+        {
+            FileInputStream fileInputStream = new FileInputStream(new File(filePath) );
+
+            URL url = new URL(urlServer);
+            connection = (HttpURLConnection) url.openConnection();
+
+            // Allow Inputs &amp; Outputs.
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setUseCaches(false);
+
+            // Set HTTP method to POST.
+            connection.setRequestMethod("POST");
+
+            connection.setRequestProperty("Connection", "Keep-Alive");
+            connection.setRequestProperty("Content-Type", "multipart/form-data;boundary="+boundary);
+
+            outputStream = new DataOutputStream( connection.getOutputStream() );
+
+            bytesAvailable = fileInputStream.available();
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            buffer = new byte[bufferSize];
+
+            // Read file
+            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+            while (bytesRead > 0)
+            {
+                outputStream.write(buffer, 0, bufferSize);
+                bytesAvailable = fileInputStream.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
             }
-        } catch (Exception e) {
-            Log.e("Folder Upload file", e.getLocalizedMessage());
-            Utility.appendToErrorLog("Folder Upload file", e.getLocalizedMessage());
+
+            // Responses from the server (code and message)
+            serverResponseCode = connection.getResponseCode();
+            serverResponseMessage = connection.getResponseMessage();
+            Log.d("response upload", connection.getResponseMessage());
+            Toast.makeText(getApplicationContext(), serverResponseMessage, Toast.LENGTH_LONG).show();
+            fileInputStream.close();
+            outputStream.flush();
+            outputStream.close();
         }
-        return stringBuilder.toString();
+        catch (Exception ex)
+        {
+            //Exception handling
+        }
+        return serverResponseMessage;
     }
 
     /**
@@ -599,6 +629,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
         SimpleDateFormat sdf = new SimpleDateFormat("ddmmyyyyy_HHmmss");
         String currentDateAndTime = sdf.format(new Date());
         try {
+            Log.d("dialogInput", dialogInput);
             jsonArray.put("carpeta");
             json.put("nombre", dialogInput);
             json.put("etiqueta", jsonArray);
@@ -608,7 +639,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
             json.put("usuario_ulti_modi", name + " " + surname);
             json.put("propietario", name + " " + surname);
             json.put("baja_logica", "no");
-            json.put("direccion", "tmp/" + email + "/" + itemName);
+            json.put("direccion", "tmp/" + email + "/" + itemName + "/");
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
             httpPost.setHeader("Accept-Encoding", "application/json");

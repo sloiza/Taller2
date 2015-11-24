@@ -77,14 +77,9 @@ public class ShareFragment extends Fragment implements AbsListView.OnItemClickLi
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.ColorPrimary);
 
-        swipeRefreshLayout.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        swipeRefreshLayout.setRefreshing(true);
-                                        new getShareFilesService().execute(session.getIp() + session.getPort() + "compartirArchivo");
-                                    }
-                                }
-        );
+
+        new getShareFilesService().execute(session.getIp() + session.getPort() + "compartirArchivo");
+
 
         return rootView;
     }
@@ -186,6 +181,8 @@ public class ShareFragment extends Fragment implements AbsListView.OnItemClickLi
 
     @Override
     public void onRefresh() {
+        filesList.clear();
+        foldersList.clear();
         new getShareFilesService().execute(session.getIp() + session.getPort() + "compartirArchivos");
     }
 

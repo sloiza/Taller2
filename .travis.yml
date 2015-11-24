@@ -11,14 +11,15 @@ before_install:
    - sudo add-apt-repository -y ppa:george-edison55/cmake-3.x
    - sudo add-apt-repository -y ppa:fkrull/deadsnakes
    - sudo apt-get update
-   - sudo apt-get install -y -qq gcc-4.9 g++-4.9 clang-3.5 libgtest-dev zlib1g-dev libbz2-dev libsnappy-dev
-   - sudo apt-get install -y wget cmake unzip python-pip python2.7 libgtest-dev
+   - sudo apt-get install -y -qq gcc-5 g++-4.9 clang-3.5 libgtest-dev zlib1g-dev libbz2-dev libsnappy-dev
+   - sudo apt-get install -y wget cmake unzip python-pip python2.7 libgtest-dev lcov
    - sudo pip install cpp-coveralls
 install:
    - export CXX="g++-4.9"
    - g++ --version
 
 before_script:
+   - HOME=`pwd`
    - wget https://github.com/NickCis/rocksdb/archive/master.zip
    - unzip master.zip
    - cd rocksdb-master
@@ -26,7 +27,9 @@ before_script:
    - make shared_lib
    - sudo make install
    - "cd ../ && sudo rm master.zip"
+   - sudo ln -s /usr/local/bin/g++-5 /usr/local/bin/g++
    - "cd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
+   - cd $HOME
    - mkdir servidor/build
 script: 
   - "cd servidor/build && cmake -DINCLUIR_TEST=ON .. && make && make test"
