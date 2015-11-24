@@ -75,6 +75,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         locationET = (EditText)findViewById(R.id.itemLocation);
         shareWithET = (EditText)findViewById(R.id.itemShareWith);
         createdET = (EditText)findViewById(R.id.itemCreated);
+        ownerET = (EditText)findViewById(R.id.itemOwner);
 
         session = new SessionManager(getApplicationContext());
         user = session.getUserDetails();
@@ -85,6 +86,10 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         itemName = intent.getStringExtra("itemName");
         actualItemPath = "tmp/" + email + "/";
+
+        nameET.setText(itemName);
+        ownerET.setText(email);
+        locationET.setText(actualItemPath);
 
         new getItemMetadataService().execute(session.getIp() + session.getPort() + "archivos");
     }
@@ -161,13 +166,11 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                     labelET.setText(label.toString());
                     createdET.setText("11/10/2015");
                     //createdEt.setText(created.toString());
-                    modifiedET.setText(lastModDate.toString() + "by" + lastModUser.toString()); ;
-                    ownerET.setText(name + " " + surname);
-                    shareWithET.setText("Manuel Iglesias");
+                    modifiedET.setText(lastModDate.toString() + " by " + lastModUser.toString()); ;
+                    ownerET.setText(email);
+                    shareWithET.setText("miglesias@gmail.com");
                     //shareWithET.setText(shareWith.toString());
-                    locationET.setText(actualItemPath);
-                    actualVersion = 1;
-                    //actualVersion = String.valueOf(version.toString());
+                    locationET.setText("tmp/" + lastModUser.toString() + "/");
                 } else {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.e("Item metadata", message.toString());
@@ -188,7 +191,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         HttpPut httpPut = new HttpPut(URL);
         JSONObject json = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        SimpleDateFormat sdf = new SimpleDateFormat("ddmmyyyyy_HHmmss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         String currentDateAndTime = sdf.format(new Date());
         try {
             jsonArray.put(label);
@@ -196,12 +199,10 @@ public class ListItemDetailsActivity extends AppCompatActivity {
             json.put("extension",Utility.getExtensionFromFile(itemName));
             json.put("etiqueta",jsonArray);
             json.put("fecha_ulti_modi",currentDateAndTime);
-            json.put("usuario_ulti_modi",name + " " + surname);
-            json.put("propietario",name + " " + surname);
+            json.put("usuario_ulti_modi",email);
+            json.put("propietario",email);
             json.put("baja_logica","no");
             json.put("direccion",location);
-            //actualizo la version
-            //json.put("version", actualVersion + 1);
             json.put("path",actualItemPath);
             httpPut.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPut.setHeader("Content-Type", "application/json");

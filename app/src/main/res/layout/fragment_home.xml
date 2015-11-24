@@ -59,6 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:layout_gravity="bottom|end"
+        app:fab_labelsPosition="left"
         app:fab_addButtonColorPressed="@color/ColorPrimary"
         app:fab_addButtonStrokeVisible="true"
         app:fab_addButtonColorNormal="@color/ColorPrimary">
@@ -83,6 +84,7 @@
             android:onClick="newFolder"
             app:fab_stroke_visible="true"
             app:fab_icon="@drawable/ic_menu_folder"
+            android:tag="sdsdasds"
             app:fab_title="New folder"/>
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 </android.support.design.widget.CoordinatorLayout>

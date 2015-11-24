@@ -126,6 +126,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                             String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
                             filesList.add(fileName);
                         }
+                    } else {
+                        filesList.add("No results for your search");
                     }
                     ArrayAdapter<String> files = new ArrayAdapter<>(getApplicationContext(),R.layout.list_item,filesList);
                     lv.setAdapter(files);

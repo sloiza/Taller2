@@ -25,15 +25,25 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.internal.http.multipart.MultipartEntity;
+
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -373,7 +383,7 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == FILE_SELECT_CODE && resultCode == -1 && null != data) {
             Uri uri = data.getData();
             filePath = uri.getPath();
-            SimpleDateFormat sdf = new SimpleDateFormat("ddmmyyyyy_HHmmss");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             String currentDateAndTime = sdf.format(new Date());
             File file = new File(filePath);
             JSONArray jsonArray = new JSONArray();
@@ -382,50 +392,84 @@ public class MainActivity extends AppCompatActivity
             //json.put("version", 1);
             //json.put("compartido_con", "");
             new UploadFileToServer().execute(ipAddress + serverPort + "archivos?nombre=" + Utility.getNameFromFile(file.getName())
-                    + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta="  + jsonArray
-                    + "&fecha_ulti_modi=" + currentDateAndTime + "&usuario_ulti_modi=" + name + " " + surname
-                    + "&propietario=" + name + " " + surname + "&baja_logica=no&direccion=" + "tmp/" + email + "/");
+                    + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=file"
+                    + "&fecha_ulti_modi=22/11/2015" + "&usuario_ulti_modi=" + email
+                    + "&propietario=" + email + "&baja_logica=no&direccion=" + "tmp/" + email + "/");
         }
     }
 
-    public String uploadFile(String URL) {
-        File file = new File(filePath);
-        StringBuilder stringBuilder = new StringBuilder();
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(URL);
-        try {
-            InputStreamEntity reqEntity = new InputStreamEntity(new FileInputStream(file), -1);
-            reqEntity.setContentType("binary/octet-stream");
-            reqEntity.setChunked(true); // Send in multiple parts if needed
-            httpPost.setEntity(reqEntity);
-            HttpResponse response = httpClient.execute(httpPost);
-            StatusLine statusLine = response.getStatusLine();
-            int statusCode = statusLine.getStatusCode();
-            if (statusCode == 200) {
-                HttpEntity entity = response.getEntity();
-                InputStream inputStream = entity.getContent();
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
-                inputStream.close();
-            } else {
-                Log.e("Upload file", "service status code: " + statusCode);
-                Utility.appendToErrorLog("Upload file", "status code: " + statusCode);
+    public String uploadFile(String urlServer) {
+        HttpURLConnection connection;
+        DataOutputStream outputStream;
+        StringBuilder sb = null;
+        int serverResponseCode;
+
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1*1024*1024;
+
+        try
+        {
+            FileInputStream fileInputStream = new FileInputStream(new File(filePath) );
+
+            URL url = new URL(urlServer);
+            connection = (HttpURLConnection) url.openConnection();
+
+            // Allow Inputs &amp; Outputs.
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setUseCaches(false);
+
+            // Set HTTP method to POST.
+            connection.setRequestMethod("POST");
+
+            connection.setRequestProperty("Connection", "Keep-Alive");
+            connection.setRequestProperty("Content-Type", "multipart/form-data");
+
+            outputStream = new DataOutputStream( connection.getOutputStream() );
+
+            bytesAvailable = fileInputStream.available();
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            buffer = new byte[bufferSize];
+
+            // Read file
+            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+            while (bytesRead > 0)
+            {
+                outputStream.write(buffer, 0, bufferSize);
+                bytesAvailable = fileInputStream.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
             }
-        } catch (Exception e) {
-            Log.e("Upload file", e.getLocalizedMessage());
-            Utility.appendToErrorLog("Upload file", e.getLocalizedMessage());
+
+            // Responses from the server (code and message)
+            serverResponseCode = connection.getResponseCode();
+            InputStream is;
+            if (serverResponseCode >= 400) {
+                is = connection.getErrorStream();
+            } else {
+                is = connection.getInputStream();
+            }
+            sb = new StringBuilder();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+            }
+            Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_LONG).show();
+            fileInputStream.close();
+            outputStream.flush();
+            outputStream.close();
         }
-        return stringBuilder.toString();
+        catch (Exception ex)
+        {
+            //Exception handling
+        }
+        return sb.toString();
     }
 
-    /**
-     * Uploading the file to server
-     */
-    class UploadFileToServer extends AsyncTask<String, Void, String> {
+     class UploadFileToServer extends AsyncTask<String, Void, String> {
 
         protected String doInBackground(String... urls) {
             return uploadFile(urls[0]);
@@ -590,13 +634,14 @@ public class MainActivity extends AppCompatActivity
         HttpPost httpPost = new HttpPost(URL);
         JSONObject json = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        SimpleDateFormat sdf = new SimpleDateFormat("ddmmyyyyy_HHmmss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         String currentDateAndTime = sdf.format(new Date());
         try {
             jsonArray.put("carpeta");
             json.put("nombre", dialogInput);
             json.put("etiqueta", jsonArray);
             json.put("fecha_ulti_modi", currentDateAndTime);
+            Log.d("date", currentDateAndTime);
             //json.put("fecha_creacion", currentDateAndTime);
             //json.put("compartido_con", "");
             json.put("usuario_ulti_modi", name + " " + surname);
