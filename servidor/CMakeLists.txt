@@ -30,7 +30,7 @@ target_link_libraries(servidor /usr/local/lib/libjsoncpp.a)
 
 if(INCLUIR_TEST)
 	add_subdirectory(test)
-	target_link_libraries(servidor /usr/lib/gcc/x86_64-linux-gnu/4.8/libgcov.a)
+	#target_link_libraries(servidor /usr/lib/gcc/x86_64-linux-gnu/4.8/libgcov.a)
 endif()
 
 install(TARGETS servidor DESTINATION bin)
