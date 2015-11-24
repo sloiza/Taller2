@@ -111,79 +111,6 @@ std::vector<ConexionServidor::BaseDeDatos::ArchivoLogico*> OperacionBusqueda::ge
 	return resultado;
 }
 
-std::vector<std::string> OperacionBusqueda::buscarArchivosPorNombre(std::vector<std::string> paths, std::string query)
-{
-	std::vector<std::string> resultado;
-	for ( unsigned int i = 0 ; i < paths.size() ; i++)
-	{
-		ConexionServidor::BaseDeDatos::ArchivoLogico archivoActual;
-		archivoActual.setPath( paths[i] );
-
-		std::string valorRecuperado = archivoActual.recuperar();
-		archivoActual.setContenido( valorRecuperado );
-
-		if ( archivoActual.getNombre().compare(query) == 0 )
-		{
-			resultado.push_back( paths[i] );
-		}
-	}
-	return resultado;
-}
-std::vector<std::string> OperacionBusqueda::buscarArchivosPorEtiqueta(std::vector<std::string> paths, std::string query)
-{
-	std::vector<std::string> resultado;
-	for ( unsigned int i = 0 ; i < paths.size() ; i++)
-	{
-		ConexionServidor::BaseDeDatos::ArchivoLogico archivoActual;
-		archivoActual.setPath( paths[i] );
-
-		std::string valorRecuperado = archivoActual.recuperar();
-		archivoActual.setContenido( valorRecuperado );
-
-		if ( archivoActual.getEtiqueta().compare(query) == 0 )
-		{
-			resultado.push_back( paths[i] );
-		}
-	}
-	return resultado;
-}
-std::vector<std::string> OperacionBusqueda::buscarArchivosPorExtension(std::vector<std::string> paths, std::string query)
-{
-	std::vector<std::string> resultado;
-	for ( unsigned int i = 0 ; i < paths.size() ; i++)
-	{
-		ConexionServidor::BaseDeDatos::ArchivoLogico archivoActual;
-		archivoActual.setPath( paths[i] );
-
-		std::string valorRecuperado = archivoActual.recuperar();
-		archivoActual.setContenido( valorRecuperado );
-
-		if ( archivoActual.getExtension().compare(query) == 0 )
-		{
-			resultado.push_back( paths[i] );
-		}
-	}
-	return resultado;
-}
-std::vector<std::string> OperacionBusqueda::buscarArchivosPorPropietario(std::vector<std::string> paths, std::string query)
-{
-	std::vector<std::string> resultado;
-	for ( unsigned int i = 0 ; i < paths.size() ; i++)
-	{
-		ConexionServidor::BaseDeDatos::ArchivoLogico archivoActual;
-		archivoActual.setPath( paths[i] );
-
-		std::string valorRecuperado = archivoActual.recuperar();
-		archivoActual.setContenido( valorRecuperado );
-
-		if ( archivoActual.getPropietario().compare(query) == 0 )
-		{
-			resultado.push_back( paths[i] );
-		}
-	}
-	return resultado;
-}
-
 std::vector<std::string> OperacionBusqueda::buscarArchivosPorNombre(std::vector<ConexionServidor::BaseDeDatos::ArchivoLogico*> archivos, std::string query)
 {
 	std::vector<std::string> resultado;
@@ -201,9 +128,13 @@ std::vector<std::string> OperacionBusqueda::buscarArchivosPorEtiqueta(std::vecto
 	std::vector<std::string> resultado;
 	for ( unsigned int i = 0 ; i < archivos.size() ; i++)
 	{
-		if ( archivos[i]->getEtiqueta().compare(query) == 0 )
+		std::vector<std::string> etiquetas = archivos[i]->getEtiquetas();
+		for ( unsigned int i = 0 ; i < etiquetas.size() ; i++)
 		{
-			resultado.push_back( archivos[i]->getPath() );
+			if ( etiquetas[i].compare(query) == 0 )
+			{
+				resultado.push_back( archivos[i]->getPath() );
+			}
 		}
 	}
 	return resultado;

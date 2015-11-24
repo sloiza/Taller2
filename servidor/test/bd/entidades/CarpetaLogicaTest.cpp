@@ -10,7 +10,7 @@
 using namespace Test;
 
 const std::string CarpetaLogicaTest::carpetaEjemplo =
-"{\"nombre\":\"carpetaTest\", \"etiqueta\":\"vacaciones\", \"fecha_ulti_modi\":\"03112015\","
+"{\"nombre\":\"carpetaTest\", \"etiqueta\":[ \"vacaciones\" ], \"fecha_ulti_modi\":\"03112015\","
 "\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\", \"direccion\":\"tmp/\"}";
 
 CarpetaLogicaTest::CarpetaLogicaTest() : carpeta(NULL)
@@ -40,10 +40,10 @@ void CarpetaLogicaTest::testModificarEnBDCorrectamente()
 	this->carpeta->guardar();
 
 	EXPECT_STREQ("carpetaTest", this->carpeta->getNombre().c_str());
-	EXPECT_STREQ("vacaciones", this->carpeta->getEtiqueta().c_str());
+	EXPECT_STREQ("vacaciones", this->carpeta->getEtiquetas()[0].c_str());
 
 	this->carpeta->setNombre("carpetaTest_bis");
-	this->carpeta->setEtiqueta("vacaciones 2014");
+	this->carpeta->agregarEtiqueta("trabajo");
 
 	this->carpeta->modificar();
 
@@ -53,7 +53,7 @@ void CarpetaLogicaTest::testModificarEnBDCorrectamente()
 	carpetaNueva.setContenido(contenidoNuevo);
 
 	EXPECT_STREQ("carpetaTest_bis", carpetaNueva.getNombre().c_str());
-	EXPECT_STREQ("vacaciones 2014", carpetaNueva.getEtiqueta().c_str());
+	EXPECT_STREQ("trabajo", carpetaNueva.getEtiquetas()[1].c_str());
 }
 
 void CarpetaLogicaTest::testEliminarEnBDCorrectamente()

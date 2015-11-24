@@ -76,9 +76,13 @@ void Carpeta::setNombre(std::string nombre)
 	this->carpetaLogica->setNombre(nombre);
 	this->contenido->setNombre(nombre);
 }
-void Carpeta::setEtiqueta(std::string etiqueta)
+//void Carpeta::setEtiqueta(std::string etiqueta)
+//{
+//	this->carpetaLogica->setEtiqueta(etiqueta);
+//}
+void Carpeta::agregarEtiqueta(std::string etiqueta)
 {
-	this->carpetaLogica->setEtiqueta(etiqueta);
+	this->carpetaLogica->agregarEtiqueta(etiqueta);
 }
 void Carpeta::setUltimaFechaModif(std::string ultimaFechaModif)
 {
@@ -106,9 +110,13 @@ std::string Carpeta::getNombre()
 {
 	return this->carpetaLogica->getNombre();
 }
-std::string Carpeta::getEtiqueta()
+//std::string Carpeta::getEtiqueta()
+//{
+//	return this->carpetaLogica->getEtiqueta();
+//}
+std::vector<std::string> Carpeta::getEtiquetas()
 {
-	return this->carpetaLogica->getEtiqueta();
+	return this->carpetaLogica->getEtiquetas();
 }
 std::string Carpeta::getUltimaFechaModif()
 {

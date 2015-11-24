@@ -1,3 +1,9 @@
 #!#bin/bash
 
-curl --data-binary "@pathDelArchivoARecuperar.json" -X GET "http://localhost:8080/archivos"
+pathEntero=$1
+dir=${pathEntero%/*}/
+nombreYExt=${pathEntero##*/}
+ext=${nombreYExt##*.}
+nombre=${nombreYExt%.*}
+
+curl --data-binary "{ \"nombre\":\"${nombre}\",\"extension\":\"${ext}\",\"direccion\":\"archivos/manu@gmail.com/\" }" -X GET "http://localhost:8080/archivos"

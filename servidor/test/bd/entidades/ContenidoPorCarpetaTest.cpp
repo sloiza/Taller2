@@ -78,6 +78,10 @@ void ContenidoPorCarpetaTest::testSetearPathCorrectamente()
 
 	EXPECT_STREQ("este/es/otro/path/", this->contenido->getDireccion().c_str());
 	EXPECT_STREQ("SinBarra", this->contenido->getNombre().c_str());
+
+	this->contenido->setPath("path/");
+	EXPECT_STREQ("/", this->contenido->getDireccion().c_str());
+	EXPECT_STREQ("path", this->contenido->getNombre().c_str());
 }
 void ContenidoPorCarpetaTest::testDevolvePathCorrecto()
 {
