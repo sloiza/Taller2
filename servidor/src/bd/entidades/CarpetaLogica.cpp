@@ -24,10 +24,10 @@ void CarpetaLogica::setNombre(std::string nombre)
 {
 	this->info->setAtributo(etiquetas[NOMBRE], nombre);
 }
-void CarpetaLogica::setEtiqueta(std::string etiqueta)
-{
-	this->info->setAtributo(etiquetas[ETIQUETA], etiqueta);
-}
+//void CarpetaLogica::setEtiqueta(std::string etiqueta)
+//{
+//	this->info->setAtributo(etiquetas[ETIQUETA], etiqueta);
+//}
 void CarpetaLogica::setUltimaFechaModif(std::string ultimaFechaModif)
 {
 	this->info->setAtributo(etiquetas[FECHA_ULTIMA_MODI], ultimaFechaModif);
@@ -48,15 +48,19 @@ void CarpetaLogica::setDireccion(std::string direccion)
 {
 	this->info->setAtributo(etiquetas[DIRECCION], direccion);
 }
+void CarpetaLogica::agregarEtiqueta(std::string etiqueta)
+{
+	this->info->agregarValorAAtributo(etiquetas[ETIQUETA], etiqueta);
+}
 
 std::string CarpetaLogica::getNombre()
 {
 	return this->info->getAtributo(etiquetas[NOMBRE], "nombreDefault");
 }
-std::string CarpetaLogica::getEtiqueta()
-{
-	return this->info->getAtributo(etiquetas[ETIQUETA], "etiquetaDefault");
-}
+//std::string CarpetaLogica::getEtiqueta()
+//{
+//	return this->info->getAtributo(etiquetas[ETIQUETA], "etiquetaDefault");
+//}
 std::string CarpetaLogica::getUltimaFechaModif()
 {
 	return this->info->getAtributo(etiquetas[FECHA_ULTIMA_MODI], "fechaDefault");
@@ -82,6 +86,12 @@ std::string CarpetaLogica::getPath()
 {
 	return this->getDireccion() + this->getNombre();
 }
+
+std::vector<std::string> CarpetaLogica::getEtiquetas()
+{
+	return this->info->getListaDeValorDeAtributo(etiquetas[ETIQUETA], "etiquetaDefault");
+}
+
 
 // Metodos de EntidadDB
 std::string CarpetaLogica::getValor()

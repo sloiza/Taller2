@@ -47,6 +47,9 @@ public:
 	// Metodos de EntidadDB
 	virtual std::string getValor();
 
+	std::vector<std::string> getEtiquetas();
+	void agregarEtiqueta(std::string);
+
 protected:
 	// Metodos de EntidadDB
 	virtual std::string getColumnaDeFamilia();

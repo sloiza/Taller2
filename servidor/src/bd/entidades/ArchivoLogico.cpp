@@ -9,7 +9,7 @@
 
 using namespace ConexionServidor::BaseDeDatos;
 
-const std::string ArchivoLogico::etiquetas[] = {"nombre", "extension", "etiqueta", "fecha_ulti_modi", "usuario_ulti_modi", "propietario", "baja_logica", "direccion" };
+const std::string ArchivoLogico::etiquetas[] = {"nombre", "extension", "etiqueta", "fecha_ulti_modi", "usuario_ulti_modi", "propietario", "baja_logica", "direccion", "version" };
 
 ArchivoLogico::ArchivoLogico() {}
 
@@ -28,9 +28,13 @@ void ArchivoLogico::setExtension(std::string extension)
 {
 	this->info->setAtributo(etiquetas[EXTENSION], extension);
 }
-void ArchivoLogico::setEtiqueta(std::string etiqueta)
+//void ArchivoLogico::setEtiqueta(std::string etiqueta)
+//{
+//	this->info->setAtributo(etiquetas[ETIQUETA], etiqueta);
+//}
+void ArchivoLogico::agregarEtiqueta(std::string etiqueta)
 {
-	this->info->setAtributo(etiquetas[ETIQUETA], etiqueta);
+	this->info->agregarValorAAtributo(etiquetas[ETIQUETA], etiqueta);
 }
 void ArchivoLogico::setUltimaFechaModif(std::string ultimaFechaModif)
 {
@@ -51,6 +55,10 @@ void ArchivoLogico::setBajaLogica(std::string bajaLogica)
 void ArchivoLogico::setDireccion(std::string direccion)
 {
 	this->info->setAtributo(etiquetas[DIRECCION], direccion);
+}
+void ArchivoLogico::setVersion(std::string version)
+{
+	this->info->setAtributo(etiquetas[VERSION], version);
 }
 void ArchivoLogico::setPath(std::string path)
 {
@@ -104,10 +112,10 @@ std::string ArchivoLogico::getExtension()
 {
 	return this->info->getAtributo(etiquetas[EXTENSION], "extensionDefault");
 }
-std::string ArchivoLogico::getEtiqueta()
-{
-	return this->info->getAtributo(etiquetas[ETIQUETA], "etiquetaDefault");
-}
+//std::string ArchivoLogico::getEtiqueta()
+//{
+//	return this->info->getAtributo(etiquetas[ETIQUETA], "etiquetaDefault");
+//}
 std::string ArchivoLogico::getUltimaFechaModif()
 {
 	return this->info->getAtributo(etiquetas[FECHA_ULTIMA_MODI], "fechaDefault");
@@ -128,6 +136,10 @@ std::string ArchivoLogico::getDireccion()
 {
 	return this->info->getAtributo(etiquetas[DIRECCION], "direccionDefault");
 }
+std::string ArchivoLogico::getVersion()
+{
+	return this->info->getAtributo(etiquetas[VERSION], "versionDefault");
+}
 
 std::string ArchivoLogico::getNombreYExtension()
 {
@@ -136,6 +148,11 @@ std::string ArchivoLogico::getNombreYExtension()
 std::string ArchivoLogico::getPath()
 {
 	return this->getDireccion() + this->getNombre() + "." + this->getExtension();
+}
+
+std::vector<std::string> ArchivoLogico::getEtiquetas()
+{
+	return this->info->getListaDeValorDeAtributo(etiquetas[ETIQUETA], "etiquetaDefault");
 }
 
 // Metodos de EntidadDB

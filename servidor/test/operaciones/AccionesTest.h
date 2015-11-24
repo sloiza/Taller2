@@ -26,11 +26,18 @@ public:
 	virtual ~AccionesTest();
 
 	static const std::string archivoEjemplo;
+	static const std::string queryEjemplo;
 	static char bytes[];
 	static const int tamanio = 25;
 
 	void testAltaLogicaArchivoCorrectamente();
 	void testAltaFisicaArchivoCorrectamente();
+	void testDarDeBajaArchivoLogicoCorrectamente();
+	void testAgregarArchivoLogicoASuCarpetaLogicaCorrectamente();
+	void testSacarArchivoLogicoDeSuCarpetaLogicaCorrectamente();
+	void testAgregarArchivoLogicoAPapeleraCorrectamente();
+
+	void testParsearArchivoDeQueryCorrectamente();
 
 	void TestBody() {};
 
@@ -55,6 +62,31 @@ TEST_F(AccionesTest, altaFisica)
 {
 	AccionesTest test;
 	test.testAltaFisicaArchivoCorrectamente();
+}
+TEST_F(AccionesTest, bajaLogica)
+{
+	AccionesTest test;
+	test.testDarDeBajaArchivoLogicoCorrectamente();
+}
+TEST_F(AccionesTest, agregarASuCarpeta)
+{
+	AccionesTest test;
+	test.testAgregarArchivoLogicoASuCarpetaLogicaCorrectamente();
+}
+TEST_F(AccionesTest, sacarDeSuCarpeta)
+{
+	AccionesTest test;
+	test.testSacarArchivoLogicoDeSuCarpetaLogicaCorrectamente();
+}
+TEST_F(AccionesTest, agregarAPapelera)
+{
+	AccionesTest test;
+	test.testAgregarArchivoLogicoAPapeleraCorrectamente();
+}
+TEST_F(AccionesTest, parsearQuery)
+{
+	AccionesTest test;
+	test.testParsearArchivoDeQueryCorrectamente();
 }
 };
 

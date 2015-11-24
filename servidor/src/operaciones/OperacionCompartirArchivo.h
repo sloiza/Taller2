@@ -11,6 +11,7 @@
 // Operaciones
 #include "IOperable.h"
 #include "InfoOperaciones.h"
+#include "Acciones.h"
 // entidades
 #include "../bd/entidades/User.h"
 #include "../bd/entidades/ContenidoPorCarpeta.h"
@@ -42,6 +43,10 @@ public:
 	void compartirArchivoConUsuario(std::string mail, std::string carpeta );
 
 	std::string nombreClase();
+
+private:
+
+	ConexionServidor::Operaciones::Acciones acciones;
 };
 };
 };

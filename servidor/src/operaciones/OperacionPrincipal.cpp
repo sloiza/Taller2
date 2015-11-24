@@ -25,7 +25,9 @@ ConexionServidor::Respuesta OperacionPrincipal::get(Utiles::Bytes* contenido, st
 	ConexionServidor::BaseDeDatos::User usuario( contenido->getStringDeBytes() );
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoDeCarpeta;
 
-	contenidoDeCarpeta.setPath( "tmp/" + usuario.getEmail() );
+	contenidoDeCarpeta.setPath( InfoOperaciones::carpetaRaiz + usuario.getEmail() );
+
+	Utiles::Log::instancia()->debug("accedido a contenido principal: '" + contenidoDeCarpeta.getPath() + "'.", "OperacinPrincipal");
 
 	std::string valorRecuperado = contenidoDeCarpeta.recuperar();
 
