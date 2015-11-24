@@ -36,10 +36,19 @@ ConexionServidor::Respuesta OperacionDescargarArchivo::get(Utiles::Bytes* conten
 	ConexionServidor::BaseDeDatos::User* usuarioQueDescarga = new ConexionServidor::BaseDeDatos::User( contenido->getStringDeBytes() );
 	this->acciones.actualizarVersionDelQueDescarga( archivoLogico, usuarioQueDescarga );
 
+// INICIO ------ CODIGO QUE USO SI DEVUELVO EL ARCHIVO CON mg_send_file -------- //
+//	respuesta.setEstado("ok");
+//	respuesta.setMensaje("Archivo descargado correctamente!");
+//	respuesta.setEsDescarga(true);
+//	respuesta.setPathDelArchivoADescargar( archivoFisico.getPath() );
+// FIN --------- CODIGO QUE USO SI DEVUELVO EL ARCHIVO CON mg_send_file -------- //
+
+// INICIO ------ CODIGO QUE USO SI DEVUELVO EL ARCHIVO POR JSON -------- //
+	archivoFisico.recuperar();
+	respuesta.setBytes( archivoFisico.getBytes()->getStringDeBytes() );
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Archivo descargado correctamente!");
-	respuesta.setEsDescarga(true);
-	respuesta.setPathDelArchivoADescargar( archivoFisico.getPath() );
+// FIN --------- CODIGO QUE USO SI DEVUELVO EL ARCHIVO POR JSON -------- //
 
 	delete archivoLogico;
 	delete usuarioQueDescarga;
