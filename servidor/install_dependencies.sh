@@ -9,6 +9,7 @@ if [ ! -d "rocksdb-master/" ]; then
 	rm master.zip
 	cd rocksdb-master
 	make static_lib
+	sudo cp librocksdb /usr/local/lib/
 	ls
 fi
 cd /usr/src/gtest
