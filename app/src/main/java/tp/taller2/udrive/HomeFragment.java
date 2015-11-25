@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Base64;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -157,7 +158,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
     }
 
     private void downloadCurrentItem() {
-        new getDownloadFileService().execute(session.getIp() + session.getPort() + "descarga");
+        new getDownloadFileService().execute(session.getIp() + session.getPort() + "descargar");
     }
 
     public void showShareFileDialog() {
@@ -258,7 +259,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
         JSONObject json = new JSONObject();
         try {
             json.put("nombre", Utility.getNameFromFile(itemName));
-            json.put("direccion", "tmp/" + email + "/");
+            json.put("direccion", "archivos/" + email + "/");
             json.put("extension", Utility.getExtensionFromFile(itemName));
             httpGet.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpGet.setHeader("Content-Type", "application/json");
@@ -271,15 +272,6 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
                 InputStream inputStream = entity.getContent();
                 BufferedReader reader = new BufferedReader(
                         new InputStreamReader(inputStream));
-                FileOutputStream out = new FileOutputStream("/sdcard/" + itemName);
-
-                byte[] buffer = new byte[1024];
-                int count;
-                while ((count = inputStream.read(buffer)) != -1) {
-                    out.write(buffer, 0, count);
-                }
-                out.flush();
-                out.close();
                 String line;
                 while ((line = reader.readLine()) != null) {
                     stringBuilder.append(line);
@@ -304,31 +296,16 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
 
         protected void onPostExecute(String result) {
             try {
-                Log.d("result", result);
-                //JSONObject jsonObject = new JSONObject(result);
-                //devuelve los bytes
-                /*if(jsonObject.has("estado")){
-                    Object estado = jsonObject.get("estado");
-                    Object message = jsonObject.get("mensaje");
-                    if(estado.equals("no-existe")){
-                        Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
-                        Log.e("Download file", message.toString());
-                        Utility.appendToErrorLog("Download file", message.toString());
-                    }
-                } else {*/
+                FileOutputStream out = new FileOutputStream("/sdcard/" + itemName);
+                byte[] data = Base64.decode(result, Base64.DEFAULT);
+                out.write(data);
+                out.flush();
+                out.close();
                 Toast.makeText(getContext(), "Download file success", Toast.LENGTH_LONG).show();
-                    /*Log.i("Download file", "Download file success");
-                    Utility.appendToInfoLog("Download file", "Download file success");
-                    FileOutputStream out = new FileOutputStream("/sdcard/" + itemName);
-                Log.d("Download file success", "sdcard/" + itemName);
-                Utility.appendToDebugLog("Download file success", "sdcard/" + itemName);
-                    Log.d("result bytes", result.getBytes().toString());
-                Log.d("result lenght", String.valueOf(result.getBytes().length));*/
-
-
-               // }
+                Log.i("Download file", "Download file success");
+                Utility.appendToInfoLog("Download file", "Download file success");
             } catch (Exception e) {
-                Log.e("Download file", "asdadsad" + e.getLocalizedMessage());
+                Log.e("Download file", e.getLocalizedMessage());
                 Utility.appendToErrorLog("Download file", e.getLocalizedMessage());
             }
         }
@@ -344,7 +321,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
             json.put("extension", Utility.getExtensionFromFile(itemName));
             json.put("propietario",email);
             json.put("baja_logica","si");
-            json.put("direccion","tmp/" + email + "/");
+            json.put("direccion","archivos/" + email + "/");
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
@@ -410,7 +387,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
             json.put("nombre", itemName);
             json.put("propietario",email);
             json.put("baja_logica","si");
-            json.put("direccion","tmp/" + email + "/");
+            json.put("direccion","archivos/" + email + "/");
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
@@ -469,7 +446,6 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getContext(), "folder click", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getContext(),FilesInFolderActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("folderName", foldersList.get(position));
