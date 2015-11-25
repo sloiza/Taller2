@@ -6,7 +6,7 @@ rm -f warn.log
 rm -f trace.log
 rm -f error.log
 
-cd build/test
+cd /Taller2-master/servidor/build/test
 ./tests
 
 rm -r -f rocksDB/
