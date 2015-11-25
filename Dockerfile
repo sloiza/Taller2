@@ -16,4 +16,4 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update  && \
 
 
 RUN ls && wget https://github.com/sloiza/Taller2/archive/master.zip && ls && unzip master.zip && ls && \
-	cd Taller2-master && chmod +x servidor/install_dependencies.sh  && ./servidor/install_dependencies.sh
+	cd Taller2-master && chmod +x servidor/install_dependencies.sh  && ./servidor/install_dependencies.sh && cd
