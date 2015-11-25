@@ -1,11 +1,9 @@
 sudo: required
-
 language:
-  - cpp
+ - cpp
 
 services:
   - docker
-- gcc
 
 before_install:
   - sudo docker build -t samiloiza/udrive:v1 .
