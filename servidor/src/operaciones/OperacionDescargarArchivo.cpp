@@ -45,7 +45,9 @@ ConexionServidor::Respuesta OperacionDescargarArchivo::get(Utiles::Bytes* conten
 
 // INICIO ------ CODIGO QUE USO SI DEVUELVO EL ARCHIVO POR JSON -------- //
 	archivoFisico.recuperar();
-	respuesta.setBytes( archivoFisico.getBytes()->getStringDeBytes() );
+	respuesta.setBytes( archivoFisico.getBytes()->getBytesBase64() );
+
+	respuesta.setEsDescarga(true);
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Archivo descargado correctamente!");
 // FIN --------- CODIGO QUE USO SI DEVUELVO EL ARCHIVO POR JSON -------- //

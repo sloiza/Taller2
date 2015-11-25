@@ -23,6 +23,10 @@ std::string Respuesta::getMensaje()
 {
 	return this->info->getAtributo(etiquetas[MENSAJE], "mensajeDefault");
 }
+std::string Respuesta::getBytes()
+{
+	return this->info->getAtributo(etiquetas[BYTES], "bytesDefault");
+}
 bool Respuesta::getEsDescarga()
 {
 	return this->esDescarga;

@@ -39,9 +39,11 @@ int HandlerEventos::handler(struct mg_connection* conn, enum mg_event ev)
 
 			if ( respuesta.getEsDescarga() )
 			{
-				mg_send_file(conn, respuesta.getPathDelArchivoADescargar().c_str(), NULL);
+				//mg_send_file(conn, respuesta.getPathDelArchivoADescargar().c_str(), NULL);
+				mg_printf_data(conn, respuesta.getBytes().c_str());
 				delete conexion;
-				return MG_MORE;
+				//return MG_MORE;
+				return MG_TRUE;
 			}
 			else
 			{

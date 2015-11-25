@@ -54,6 +54,10 @@ std::string Bytes::getStringDeBytes()
 	std::string stringDeBytes(this->bytes.begin(), this->bytes.end());
 	return stringDeBytes;
 }
+std::string Bytes::getBytesBase64()
+{
+	return base64_encode(this->bytes.data(), this->bytes.size() );
+}
 
 int Bytes::getTamanio()
 {

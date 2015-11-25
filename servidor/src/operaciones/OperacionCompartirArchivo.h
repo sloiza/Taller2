@@ -40,13 +40,9 @@ public:
 
 	void imprimir();
 
-	void compartirArchivoConUsuario(std::string mail, std::string carpeta );
+	bool compartirArchivoConUsuario(std::string mail, std::string carpeta );
 
 	std::string nombreClase();
-
-private:
-
-	ConexionServidor::Operaciones::Acciones acciones;
 };
 };
 };
