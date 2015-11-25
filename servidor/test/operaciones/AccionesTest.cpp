@@ -10,7 +10,7 @@
 using namespace Test;
 
 const std::string AccionesTest::archivoEjemplo =
-"{\"nombre\":\"accionesTest\",\"extension\":\"txt\",\"etiqueta\":\"imagen\", \"fecha_ulti_modi\":\"26102015\","
+"{\"nombre\":\"accionesTesteo\",\"extension\":\"txt\",\"etiqueta\":\"imagen\", \"fecha_ulti_modi\":\"26102015\","
 "\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\", \"direccion\":\"tmp/\"}";
 
 const std::string AccionesTest::queryEjemplo =
