@@ -21,7 +21,7 @@ before_install:
    - cd rocksdb-master
    - make static_lib
    - make shared_lib
-   - sudo make install
+   - sudo mv librocksdb.a /usr/local/lib/
    - sudo ln -s /usr/local/bin/g++-5 /usr/local/bin/g++
    - "cd ../ && sudo rm master.zip"
    - "cd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
