@@ -9,6 +9,7 @@ if [ ! -d "rocksdb-master/" ]; then
 	rm master.zip
 	cd rocksdb-master
 	make static_lib
+	make install
 	sudo cp librocksdb.a /usr/local/lib/
 	ls
 fi
