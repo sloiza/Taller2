@@ -39,7 +39,7 @@ public:
 
 	void imprimir();
 
-	void restaurarCarpeta(Utiles::Bytes* contenido, std::string mailDeUsuario);
+	bool restaurarCarpeta(Utiles::Bytes* contenido, std::string mailDeUsuario);
 
 };
 };

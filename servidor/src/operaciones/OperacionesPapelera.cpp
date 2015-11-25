@@ -29,8 +29,9 @@ ConexionServidor::Respuesta OperacionesPapelera::delet(Utiles::Bytes* contenido,
 		return respuesta;
 	}
 
+	papelera.setContenido( valorRecuperadoPapelera );
 	papelera.eliminarTodosLosArchivos();
-	papelera.guardar();
+	papelera.modificar();
 
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Papelera vaciada correctamente!");
@@ -72,47 +73,45 @@ ConexionServidor::Respuesta OperacionesPapelera::put(Utiles::Bytes* contenido, s
 	ConexionServidor::BaseDeDatos::ArchivoLogico archivoARecuperar( contenido->getStringDeBytes() );
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta papelera;
 
-	papelera.setPath( usuarioAux.getEmail() + "/" + InfoOperaciones::papelera );
-	std::string valorRecuperadoPapelera = papelera.recuperar();
-
 	ConexionServidor::Respuesta respuesta;
-	if ( valorRecuperadoPapelera.compare("vacio") == 0 )
-	{
-		respuesta.setEstado("error");
-		respuesta.setMensaje("No existe papelera para el usuario.");
-		return respuesta;
-	}
-	else
-	{
-		papelera.setContenido( valorRecuperadoPapelera );
-	}
-
 	// si el json llega sin extension, entonces quiere decir q se quiere recuperar una carpeta.
 	if ( archivoARecuperar.getExtension().compare("extensionDefault") == 0 )
 	{
-		restaurarCarpeta(contenido, usuarioAux.getEmail() );
-		respuesta.setEstado("ok");
-		respuesta.setMensaje("Carpeta restaurada correctamente!");
+		if ( restaurarCarpeta(contenido, usuarioAux.getEmail() ) )
+		{
+			respuesta.setEstado("ok");
+			respuesta.setMensaje("Carpeta restaurada correctamente!");
+		}
+		else
+		{
+			respuesta.setEstado("error");
+			respuesta.setMensaje("Error al restaurar carpeta.");
+		}
 		return respuesta;
 	}
 
+	papelera.setPath( usuarioAux.getEmail() + "/" + InfoOperaciones::papelera );
+
+	this->acciones.sacarArchivoLogicoDeContenido( &archivoARecuperar, &papelera );
+
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta carpetaOriginal;
 	carpetaOriginal.setPath( archivoARecuperar.getDireccion() );
-	std::string valorRecuperadoCarpeta = carpetaOriginal.recuperar();
-	if ( valorRecuperadoCarpeta.compare("vacio") != 0 )
+
+	this->acciones.agregarArchivoLogicoAContenido( &archivoARecuperar, &carpetaOriginal );
+
+
+	std::string valorRecuperadoArchivo = archivoARecuperar.recuperar();
+	if ( valorRecuperadoArchivo.compare("vacio") == 0 )
 	{
-		carpetaOriginal.setContenido( valorRecuperadoCarpeta );
+		respuesta.setEstado("error");
+		respuesta.setMensaje("No existe archivo.");
+		return respuesta;
 	}
 
-	// saco el archivo de la papelera
-	papelera.eliminarArchivo( archivoARecuperar.getPath() );
-	papelera.guardar();
+	archivoARecuperar.setContenido( valorRecuperadoArchivo );
 
-	// sete "baja_logica" del archivo en "no", y lo agrego a la carpeta donde estaba originalmente
 	archivoARecuperar.setBajaLogica( "no" );
-	archivoARecuperar.guardar();
-	carpetaOriginal.agregarArchivo( archivoARecuperar.getPath() );
-	carpetaOriginal.guardar();
+	archivoARecuperar.modificar();
 
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Archivo restaurado correctamente!");
@@ -124,29 +123,36 @@ void OperacionesPapelera::imprimir()
 	std::cout << "papelera\n";
 }
 
-void OperacionesPapelera::restaurarCarpeta(Utiles::Bytes* contenido, std::string mail)
+bool OperacionesPapelera::restaurarCarpeta(Utiles::Bytes* contenido, std::string mail)
 {
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta carpetaOriginal;
 	ConexionServidor::BaseDeDatos::CarpetaLogica carpetaARecuperar( contenido->getStringDeBytes() );
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta papelera;
 
 	papelera.setPath( mail + "/" + InfoOperaciones::papelera );
+	bool resSacar =  this->acciones.sacarCarpetaLogicaDeContenido( &carpetaARecuperar, &papelera );
 
-	carpetaOriginal.setPath( carpetaARecuperar.getDireccion() );
-	std::string valorRecuperadoCarpeta = carpetaOriginal.recuperar();
-	if ( valorRecuperadoCarpeta.compare("vacio") != 0 )
+	std::string valorRecuperadoArchivo = carpetaARecuperar.recuperar();
+	if ( valorRecuperadoArchivo.compare("vacio") == 0 )
 	{
-		carpetaOriginal.setContenido( valorRecuperadoCarpeta );
+		return false;
 	}
 
-	// saco el archivo de la papelera
-	papelera.eliminarCarpeta( carpetaARecuperar.getPath() );
-	papelera.guardar();
+	carpetaARecuperar.setContenido( valorRecuperadoArchivo );
 
-	// sete "baja_logica" del archivo en "no", y lo agrego a la carpeta donde estaba originalmente
 	carpetaARecuperar.setBajaLogica( "no" );
-	carpetaARecuperar.guardar();
-	carpetaOriginal.agregarCarpeta( carpetaARecuperar.getPath() );
-	carpetaOriginal.guardar();
+	carpetaARecuperar.modificar();
+
+	carpetaOriginal.setPath( carpetaARecuperar.getDireccion() );
+	bool resAgregar =this->acciones.agregarCarpetaLogicaAContenido( &carpetaARecuperar, &carpetaOriginal );
+
+	if ( resSacar && resAgregar )
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 

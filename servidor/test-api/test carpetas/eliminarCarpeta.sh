@@ -1,3 +1,3 @@
 #!#bin/bash
 
-curl --data-binary "@$1" -X DELETE "http://localhost:8080/carpetas"
+curl --data-binary "{ \"nombre\": \"$1\", \"propietario\": \"manu@gmail.com\", \"direccion\": \"archivos/manu@gmail.com/\" }" -X DELETE "http://localhost:8080/carpetas"

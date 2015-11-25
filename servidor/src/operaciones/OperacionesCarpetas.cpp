@@ -16,6 +16,7 @@ OperacionesCarpetas::~OperacionesCarpetas() {}
 ConexionServidor::Respuesta OperacionesCarpetas::delet(Utiles::Bytes* contenido, std::string query)
 {
 	ConexionServidor::BaseDeDatos::Carpeta carpeta( contenido->getStringDeBytes() );
+	ConexionServidor::BaseDeDatos::CarpetaLogica carpetaLogica( contenido->getStringDeBytes() );
 
 	ConexionServidor::Respuesta respuesta;
 
@@ -35,40 +36,37 @@ ConexionServidor::Respuesta OperacionesCarpetas::delet(Utiles::Bytes* contenido,
 	}
 
 	// 2) sacarlo de contenidoPorCarpeta
-	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoEnCarpeta;
-	contenidoEnCarpeta.setPath( carpeta.getDireccion() );
-	std::string valorRecuperado = contenidoEnCarpeta.recuperar();
-	if ( valorRecuperado.compare("vacio") == 0 )
+	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta carpetaContenedora;
+	carpetaContenedora.setPath( carpeta.getDireccion() );
+	if ( this->acciones.sacarCarpetaLogicaDeContenido( &carpetaLogica, &carpetaContenedora ) == false )
 	{
-		respuesta.setEstado("no-existe");
-		respuesta.setMensaje("Carpeta inexistente.");
+		respuesta.setEstado("error");
+		respuesta.setMensaje("Error al dar de baja la carpeta.");
 		return respuesta;
 	}
-	contenidoEnCarpeta.setContenido( valorRecuperado );
-
-	//contenidoEnCarpeta.eliminarArchivo( archivoLogico.getNombreYExtension() );
-	contenidoEnCarpeta.eliminarCarpeta( carpeta.getPath() );
-
-	contenidoEnCarpeta.guardar();
 
 	// 3) agregarlo a la papelera
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta papelera;
-
 	papelera.setPath( carpeta.getPropietario() + "/" + InfoOperaciones::papelera );
-
-	valorRecuperado = papelera.recuperar();
-
-	if ( valorRecuperado.compare("vacio") != 0 )
+	if ( this->acciones.agregarCarpetaLogicaAContenido( &carpetaLogica,  &papelera) == false )
 	{
-		papelera.setContenido( valorRecuperado );
+		respuesta.setEstado("error");
+		respuesta.setMensaje("Error al dar de baja la carpeta.");
+		return respuesta;
 	}
 
-	papelera.agregarCarpeta( carpeta.getPath() );
+	std::string valorRecuperado = carpetaLogica.recuperar();
 
-	papelera.guardar();
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		respuesta.setEstado("no-existe");
+		respuesta.setMensaje("No existe carpeta.");
+		return respuesta;
+	}
 
-	// ---- //
-	carpeta.eliminar();
+	carpetaLogica.setContenido( valorRecuperado );
+	carpetaLogica.setBajaLogica("si");
+	carpetaLogica.modificar();
 
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Carpeta eliminada correctamente!");
