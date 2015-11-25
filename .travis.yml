@@ -10,6 +10,6 @@ before_install:
 
 script: 
   - sudo docker run -t -i samiloiza/udrive:v1 /bin/bash -c ./Taller2-master/servidor/run_tests.sh
-  - sudo docker run -t -i samiloiza/udrive:v1 /bin/bash -c ./Taller2-master/servidor/coverage.sh
+  # - sudo docker run -t -i samiloiza/udrive:v1 /bin/bash -c ./Taller2-master/servidor/coverage.sh
 
 
