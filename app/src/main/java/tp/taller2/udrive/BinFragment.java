@@ -150,7 +150,6 @@ public class BinFragment extends Fragment implements AbsListView.OnItemClickList
                 JSONArray fileArray;
                 JSONArray folderArray;
                 if(status.equals("ok")) {
-                    Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.i("Paper bin", message.toString());
                     Utility.appendToInfoLog("Paper bin", message.toString());
                     if(jsonObject.has("carpetas")){

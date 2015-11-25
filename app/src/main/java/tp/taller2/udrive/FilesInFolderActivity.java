@@ -192,7 +192,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
         JSONObject json = new JSONObject();
         try {
             json.put("nombre", itemName);
-            json.put("direccion", "tmp/" + email + "/");
+            json.put("direccion", "archivos/" + email + "/");
             httpGet.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpGet.setHeader("Content-Type", "application/json");
             httpGet.setHeader("Accept-Encoding", "application/json");
@@ -277,7 +277,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
         JSONObject json = new JSONObject();
         try {
             json.put("nombre", Utility.getNameFromFile(itemClick));
-            json.put("direccion", "tmp/" + email + "/" + itemName);
+            json.put("direccion", "archivos/" + email + "/" + itemName);
             json.put("extension", Utility.getExtensionFromFile(itemClick));
             HttpResponse response = httpClient.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
@@ -331,7 +331,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
             json.put("extension", Utility.getExtensionFromFile(itemClick));
             json.put("propietario",email);
             json.put("baja_logica","si");
-            json.put("direccion","tmp/" + email + "/" + itemName);
+            json.put("direccion","archivos/" + email + "/" + itemName);
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
@@ -396,7 +396,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
             json.put("nombre", itemClick);
             json.put("propietario",email);
             json.put("baja_logica","si");
-            json.put("direccion","tmp/" + email + "/" + itemName);
+            json.put("direccion","archivos/" + email + "/" + itemName);
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
@@ -516,8 +516,8 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
             //json.put("compartido_con", "");
             new UploadFileToServer().execute(session.getIp() + session.getPort() + "archivos?nombre=" + Utility.getNameFromFile(file.getName())
                     + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=file"
-                    + "&fecha_ulti_modi=" + currentDateAndTime + "&usuario_ulti_modi=" + email
-                    + "&propietario=" + email + "&baja_logica=no&direccion=" + "tmp/" + email + "/" + itemName + "/");
+                    + "&fecha_ulti_modi=24/11/2015" + "&usuario_ulti_modi=" + email
+                    + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/" + itemName + "/");
         }
     }
 
@@ -525,7 +525,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
         HttpURLConnection connection = null;
         DataOutputStream outputStream = null;
         DataInputStream inputStream = null;
-        String serverResponseMessage = "";
+        StringBuilder sb = null;
         int serverResponseCode;
         String lineEnd = "\r\n";
         String twoHyphens = "--";
@@ -572,9 +572,18 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
 
             // Responses from the server (code and message)
             serverResponseCode = connection.getResponseCode();
-            serverResponseMessage = connection.getResponseMessage();
-            Log.d("response upload", connection.getResponseMessage());
-            Toast.makeText(getApplicationContext(), serverResponseMessage, Toast.LENGTH_LONG).show();
+            InputStream is;
+            if (serverResponseCode >= 400) {
+                is = connection.getErrorStream();
+            } else {
+                is = connection.getInputStream();
+            }
+            sb = new StringBuilder();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+            }
             fileInputStream.close();
             outputStream.flush();
             outputStream.close();
@@ -583,7 +592,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
         {
             //Exception handling
         }
-        return serverResponseMessage;
+        return sb.toString();
     }
 
     /**
@@ -607,7 +616,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
                     Utility.appendToInfoLog("Folder Upload file", message.toString());
                     Log.d("Folder Upload file", jsonObject.toString());
                     Utility.appendToDebugLog("Folder Upload file", jsonObject.toString());
-                    session.updateStorageUsed(0.3f);
+                    session.updateStorageUsed(session.getUserStorageUsed() + 0.3f);
                 } else {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.e("Folder Upload file", message.toString());
@@ -639,7 +648,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
             json.put("usuario_ulti_modi", name + " " + surname);
             json.put("propietario", name + " " + surname);
             json.put("baja_logica", "no");
-            json.put("direccion", "tmp/" + email + "/" + itemName + "/");
+            json.put("direccion", "archivos/" + email + "/" + itemName + "/");
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
             httpPost.setHeader("Accept-Encoding", "application/json");
@@ -705,7 +714,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
             jsonArray.put(dialogInput);
             json.put("nombre", Utility.getNameFromFile(itemName));
             json.put("extension", Utility.getExtensionFromFile(itemName));
-            json.put("direccion", "tmp/" + email + "/");
+            json.put("direccion", "archivos/" + email + "/");
             json.put("usuarios", jsonArray);
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
@@ -771,7 +780,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
         try {
             jsonArray.put(dialogInput);
             json.put("nombre", itemName);
-            json.put("direccion", "tmp/" + email + "/");
+            json.put("direccion", "archivos/" + email + "/");
             json.put("usuarios", jsonArray);
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");

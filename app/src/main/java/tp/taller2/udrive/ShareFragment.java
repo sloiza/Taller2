@@ -207,7 +207,6 @@ public class ShareFragment extends Fragment implements AbsListView.OnItemClickLi
                 JSONArray fileArray;
                 JSONArray folderArray;
                 if(status.equals("ok")) {
-                    Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.i("Share With Me", message.toString());
                     Utility.appendToInfoLog("Share With Me", message.toString());
                     Log.d("Share With Me", jsonObject.toString());
@@ -254,7 +253,7 @@ public class ShareFragment extends Fragment implements AbsListView.OnItemClickLi
             json.put("extension", Utility.getExtensionFromFile(itemName));
             json.put("propietario",email);
             json.put("baja_logica","si");
-            json.put("direccion","tmp/" + email + "/");
+            json.put("direccion","archivos/" + email + "/");
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
@@ -319,7 +318,7 @@ public class ShareFragment extends Fragment implements AbsListView.OnItemClickLi
             json.put("nombre", itemName);
             json.put("propietario",email);
             json.put("baja_logica","si");
-            json.put("direccion","tmp/" + email + "/");
+            json.put("direccion","archivos/" + email + "/");
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");

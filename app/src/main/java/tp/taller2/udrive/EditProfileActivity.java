@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -132,7 +134,6 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    /** Called when the user clicks the register borderbutton */
     public void saveProfile(View view) {
         name = nameET.getText().toString();
         email = emailET.getText().toString();
@@ -164,7 +165,8 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public String userUpdateProfileAndStartNewSession(String URL) {
-        String encodedImage = String.valueOf(R.drawable.profile_default);
+        Bitmap bitmap = ((BitmapDrawable)pic.getDrawable()).getBitmap();
+        String encodedImage = Utility.bitmapToString(bitmap);
         if(profilePic != null){
             encodedImage = Utility.bitmapToString(profilePic);
         }
@@ -236,7 +238,8 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public String userUpdateProfile(String URL) {
-        String encodedImage = String.valueOf(R.drawable.profile_default);
+        Bitmap bm=((BitmapDrawable)pic.getDrawable()).getBitmap();
+        String encodedImage = Utility.bitmapToString(bm);
         if(profilePic != null){
             encodedImage = Utility.bitmapToString(profilePic);
         }
