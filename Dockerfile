@@ -7,7 +7,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update  && \
     DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:george-edison55/cmake-3.x && \
     DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:fkrull/deadsnakes && \
     DEBIAN_FRONTEND=noninteractive apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y -qq wget g++ gcc-4.9 g++-4.9 libgflags-dev libsnappy-dev zlib1g-dev libbz2-dev libgtest-dev cmake unzip python2.7 python-pip && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y -qq wget g++ gcc-4.9 g++-4.9 libgflags-dev libsnappy-dev zlib1g-dev libbz2-dev libgtest-dev cmake unzip python2.7 lcov python-pip && \
 	DEBIAN_FRONTEND=noninteractive update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50
 
 
