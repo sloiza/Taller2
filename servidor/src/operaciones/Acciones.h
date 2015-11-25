@@ -42,6 +42,8 @@ public:
 	bool darDeBajaArchivoLogico(ConexionServidor::BaseDeDatos::ArchivoLogico*);
 	bool agregarArchivoLogicoAContenido(ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico, ConexionServidor::BaseDeDatos::ContenidoPorCarpeta* contenido );
 	bool agregarCarpetaLogicaAContenido(ConexionServidor::BaseDeDatos::CarpetaLogica* carpetaLogica, ConexionServidor::BaseDeDatos::ContenidoPorCarpeta* contenido );
+	bool sacarArchivoLogicoDeContenido(ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico, ConexionServidor::BaseDeDatos::ContenidoPorCarpeta* contenido );
+	bool sacarCarpetaLogicaDeContenido(ConexionServidor::BaseDeDatos::CarpetaLogica* carpetaLogica, ConexionServidor::BaseDeDatos::ContenidoPorCarpeta* contenido );
 	bool modificarArchivoLogico(ConexionServidor::BaseDeDatos::ArchivoLogico*);
 	bool modificarArchivoFisico(ConexionServidor::BaseDeDatos::Archivo*);
 	// complejos

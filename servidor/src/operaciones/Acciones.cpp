@@ -20,7 +20,7 @@ bool Acciones::darDeAltaArchivoLogico(ConexionServidor::BaseDeDatos::ArchivoLogi
 
 	if ( valorRecuperado.compare("vacio") != 0 )
 	{// si ya existe un archivo con esos datos devuelvo FALSE.
-		Utiles::Log::instancia()->warn("Archivo logico: '" + archivoLogico->getPath() + "' ya existe.", this->nombreClase());
+		Utiles::Log::instancia()->warn("Archivo logico: '" + archivoLogico->getPath() + "' ya existe.", this->nombreClase() + ".darDeAltaArchivoLogico()");
 		return false;
 	}
 
@@ -33,7 +33,7 @@ bool Acciones::darDeAltaArchivoFisico(ConexionServidor::BaseDeDatos::Archivo* ar
 {
 	if ( archivo->existeFisicamente() )
 	{// si ya existe el archivo devuelvo FALSE.
-		Utiles::Log::instancia()->warn("Ya existe el archivo fisico: '" + archivo->getPath() + "'.", this->nombreClase());
+		Utiles::Log::instancia()->warn("Ya existe el archivo fisico: '" + archivo->getPath() + "'.", this->nombreClase() + ".darDeAltaArchivoFisico()");
 		return false;
 	}
 
@@ -41,7 +41,7 @@ bool Acciones::darDeAltaArchivoFisico(ConexionServidor::BaseDeDatos::Archivo* ar
 
 	if ( archivo->existeFisicamente() == false )
 	{// si no se guardo el archivo devuelvo FALSE.
-		Utiles::Log::instancia()->warn("No se guardo fisicamente el archivo: '" + archivo->getPath() + "'.", this->nombreClase());
+		Utiles::Log::instancia()->warn("No se guardo fisicamente el archivo: '" + archivo->getPath() + "'.", this->nombreClase() + ".darDeAltaArchivoFisico()");
 		return false;
 	}
 
@@ -53,7 +53,7 @@ bool Acciones::darDeBajaArchivoLogico(ConexionServidor::BaseDeDatos::ArchivoLogi
 
 	if ( valorRecuperado.compare("vacio") == 0 )
 	{// si no recupere el archivo, entonces no existe.
-		Utiles::Log::instancia()->warn("No existe el archivo logico: '" + archivoLogico->getPath() + "'.", this->nombreClase());
+		Utiles::Log::instancia()->warn("No existe el archivo logico: '" + archivoLogico->getPath() + "'.", this->nombreClase() + ".darDeBajaArchivoLogico()");
 		return false;
 	}
 
@@ -61,12 +61,13 @@ bool Acciones::darDeBajaArchivoLogico(ConexionServidor::BaseDeDatos::ArchivoLogi
 
 	if ( archivoLogico->getBajaLogica().compare("si") == 0 )
 	{// si ya fue dado de baja logica, devuelvo FALSE.
-		Utiles::Log::instancia()->warn("Ya habia sido dado de baja el archivo logico: '" + archivoLogico->getPath() + "'.", this->nombreClase());
+		Utiles::Log::instancia()->warn("Ya habia sido dado de baja el archivo logico: '" + archivoLogico->getPath() + "'.", this->nombreClase() + ".darDeBajaArchivoLogico()");
 		return false;
 	}
 
 	archivoLogico->setBajaLogica("si");
-	archivoLogico->guardar();
+	//archivoLogico->guardar();
+	archivoLogico->modificar();
 
 	return true;
 }
@@ -80,19 +81,21 @@ bool Acciones::agregarArchivoLogicoAContenido(ConexionServidor::BaseDeDatos::Arc
 	}
 	else
 	{
-		Utiles::Log::instancia()->debug("ContenidoEnCarpeta: '" + contenido->getPath() + "' creado.", this->nombreClase());
+		Utiles::Log::instancia()->debug("ContenidoEnCarpeta: '" + contenido->getPath() + "' no existe.", this->nombreClase() + ".agregarArchivoLogicoAContenido()");
+		return false;
 	}
 
 	if ( this->existeArchivoLogicoEnContenidoDeCarpeta(archivoLogico, contenido) )
 	{
-		Utiles::Log::instancia()->debug("ContenidoEnCarpeta '"+ contenido->getPath() +"' ya contiene al archivo logico '" + archivoLogico->getPath() + "'.", this->nombreClase());
+		Utiles::Log::instancia()->debug("ContenidoEnCarpeta '"+ contenido->getPath() +"' ya contiene al archivo logico '" + archivoLogico->getPath() + "'.", this->nombreClase() + ".agregarArchivoLogicoAContenido()");
 		return false;
 	}
 
 	contenido->agregarArchivo( archivoLogico->getPath() );
-	contenido->guardar();
+	//contenido->guardar();
+	contenido->modificar();
 
-	Utiles::Log::instancia()->debug( "'" + archivoLogico->getPath() + "' agregado a ContenidoEnCarpeta: '" + contenido->getPath() +"'.", this->nombreClase());
+	Utiles::Log::instancia()->debug( "'" + archivoLogico->getPath() + "' agregado a ContenidoEnCarpeta: '" + contenido->getPath() +"'.", this->nombreClase() + ".agregarArchivoLogicoAContenido()");
 
 	return true;
 }
@@ -106,17 +109,77 @@ bool Acciones::agregarCarpetaLogicaAContenido(ConexionServidor::BaseDeDatos::Car
 	}
 	else
 	{
-		Utiles::Log::instancia()->debug("ContenidoEnCarpeta: '" + contenido->getPath() + "' creado.", this->nombreClase());
+		Utiles::Log::instancia()->debug("ContenidoEnCarpeta: '" + contenido->getPath() + "' no existe.", this->nombreClase() + ".agregarCarpetaLogicaAContenido()");
+		return false;
 	}
 
 	if ( this->existeCarpetaLogicaEnContenidoDeCarpeta(careptaLogica, contenido) )
 	{
-		Utiles::Log::instancia()->debug("ContenidoEnCarpeta '"+ contenido->getPath() +"' ya contiene la carpeta logica '" + careptaLogica->getPath() + "'.", this->nombreClase());
+		Utiles::Log::instancia()->debug("ContenidoEnCarpeta '"+ contenido->getPath() +"' ya contiene la carpeta logica '" + careptaLogica->getPath() + "'.", this->nombreClase() + ".agregarCarpetaLogicaAContenido()");
 		return false;
 	}
 
 	contenido->agregarCarpeta( careptaLogica->getPath() );
+	//contenido->guardar();
+	contenido->modificar();
+
+	return true;
+}
+bool Acciones::sacarArchivoLogicoDeContenido(ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico, ConexionServidor::BaseDeDatos::ContenidoPorCarpeta* contenido )
+{
+	std::string valorRecuperado = contenido->recuperar();
+
+	if ( valorRecuperado.compare("vacio") != 0 )
+	{// si recupero algo, entonces lo seteo el contenido recuperado. sino no hace falta.
+		contenido->setContenido(valorRecuperado);
+	}
+	else
+	{
+		Utiles::Log::instancia()->debug("ContenidoEnCarpeta: '" + contenido->getPath() + "' no existe.", this->nombreClase() + ".sacarArchivoLogicoDeContenido()");
+		return false;
+	}
+
+	if ( this->existeArchivoLogicoEnContenidoDeCarpeta( archivoLogico, contenido ) == false )
+	{
+		Utiles::Log::instancia()->debug("ContenidoEnCarpeta '"+ contenido->getPath() +"' no contiene al archivo logico '" + archivoLogico->getPath() + "'.", this->nombreClase() + ".sacarArchivoLogicoDeContenido()");
+		return false;
+	}
+
+	std::vector<std::string> listaArchivos = contenido->getArchivos();
+
+	contenido->eliminarArchivo( archivoLogico->getPath() );
+
 	contenido->guardar();
+	//contenido->modificar();
+
+	return true;
+}
+bool Acciones::sacarCarpetaLogicaDeContenido(ConexionServidor::BaseDeDatos::CarpetaLogica* carpetaLogica, ConexionServidor::BaseDeDatos::ContenidoPorCarpeta* contenido )
+{
+	std::string valorRecuperado = contenido->recuperar();
+
+	if ( valorRecuperado.compare("vacio") != 0 )
+	{// si recupero algo, entonces lo seteo el contenido recuperado. sino no hace falta.
+		contenido->setContenido(valorRecuperado);
+	}
+	else
+	{
+		Utiles::Log::instancia()->debug("ContenidoEnCarpeta: '" + contenido->getPath() + "' no existe.", this->nombreClase() + ".sacarCarpetaLogicaDeContenido()");
+		return false;
+	}
+
+	if ( this->existeCarpetaLogicaEnContenidoDeCarpeta( carpetaLogica, contenido ) == false )
+	{
+		Utiles::Log::instancia()->debug("ContenidoEnCarpeta '"+ contenido->getPath() +"' no contiene a la carpeta logica '" + carpetaLogica->getPath() + "'.", this->nombreClase() + ".sacarCarpetaLogicaDeContenido()");
+		return false;
+	}
+
+	std::vector<std::string> listaArchivos = contenido->getArchivos();
+
+	contenido->eliminarCarpeta( carpetaLogica->getPath() );
+
+	contenido->modificar();
+	//contenido->guardar();
 
 	return true;
 }
@@ -127,12 +190,10 @@ bool Acciones::modificarArchivoLogico(ConexionServidor::BaseDeDatos::ArchivoLogi
 	std::string valorRecuperadoActual = archivoActual.recuperar();
 	if ( valorRecuperadoActual.compare("vacio") == 0 )
 	{
-		Utiles::Log::instancia()->debug("Usuario '" + archivoActual.getPath() +"' no existe logicamente.", this->nombreClase());
+		Utiles::Log::instancia()->debug("Usuario '" + archivoActual.getPath() +"' no existe logicamente.", this->nombreClase() + ".modificarArchivoLogico()");
 		return false;
 	}
 	archivoActual.setContenido(valorRecuperadoActual);
-
-
 
 	std::vector<std::string> etiquetas = archivoActual.getEtiquetas();
 	for ( unsigned int i = 0 ; i < etiquetas.size() ; i++ )
@@ -146,9 +207,9 @@ bool Acciones::modificarArchivoLogico(ConexionServidor::BaseDeDatos::ArchivoLogi
 	archivoLogicoNuevo->setVersion( Utiles::Metodos::toString(versionNueva) );
 	archivoLogicoNuevo->modificar();
 
-	Utiles::Log::instancia()->debug( "version Actual: " + archivoActual.getVersion() + " version Nueva: " + archivoLogicoNuevo->getVersion() + ".", this->nombreClase() );
+	Utiles::Log::instancia()->debug( "version Actual: " + archivoActual.getVersion() + " version Nueva: " + archivoLogicoNuevo->getVersion() + ".", this->nombreClase() + ".modificarArchivoLogico()");
 
-	Utiles::Log::instancia()->debug("Nuevos datos de archivo: \n"+ archivoLogicoNuevo->getContenido(), this->nombreClase());
+	Utiles::Log::instancia()->debug("Nuevos datos de archivo: \n"+ archivoLogicoNuevo->getContenido(), this->nombreClase() + ".modificarArchivoLogico()");
 
 	return true;
 }
@@ -156,7 +217,7 @@ bool Acciones::modificarArchivoFisico(ConexionServidor::BaseDeDatos::Archivo* ar
 {
 	if ( archivoFisicoNuevo->existeFisicamente() == false )
 	{
-		Utiles::Log::instancia()->debug("No existe fisicamente el archivo '"+ archivoFisicoNuevo->getPath() +"' que se quiere modificar.", this->nombreClase());
+		Utiles::Log::instancia()->debug("No existe fisicamente el archivo '"+ archivoFisicoNuevo->getPath() +"' que se quiere modificar.", this->nombreClase() + ".modificarArchivoFisico()");
 		return false;
 	}
 
@@ -165,12 +226,12 @@ bool Acciones::modificarArchivoFisico(ConexionServidor::BaseDeDatos::Archivo* ar
 
 	if ( archivoFisicoNuevo->existeFisicamente() )
 	{
-		Utiles::Log::instancia()->debug("Se modifico fisicamente el archivo '"+ archivoFisicoNuevo->getPath() +"'.", this->nombreClase());
+		Utiles::Log::instancia()->debug("Se modifico fisicamente el archivo '"+ archivoFisicoNuevo->getPath() +"'.", this->nombreClase() + ".modificarArchivoFisico()");
 		return true;
 	}
 	else
 	{
-		Utiles::Log::instancia()->debug("No se guardo fisicamente el archivo '"+ archivoFisicoNuevo->getPath() +"' que se queria modificar.", this->nombreClase());
+		Utiles::Log::instancia()->debug("No se guardo fisicamente el archivo '"+ archivoFisicoNuevo->getPath() +"' que se queria modificar.", this->nombreClase() + ".modificarArchivoFisico()");
 		return false;
 	}
 }
@@ -189,6 +250,7 @@ bool Acciones::sacarArchivoLogicoDeSuCarpetaLogica(ConexionServidor::BaseDeDatos
 {
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta contenidoEnCarpeta;
 	contenidoEnCarpeta.setPath( archivoLogico->getDireccion() );
+
 	std::string valorRecuperado = contenidoEnCarpeta.recuperar();
 	if ( valorRecuperado.compare("vacio") != 0 )
 	{

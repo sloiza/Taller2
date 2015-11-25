@@ -1,12 +1,15 @@
 cmake_minimum_required(VERSION 2.8)
 project(Servidor)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -pthread -fprofile-arcs -ftest-coverage -DMONGOOSE_ENABLE_THREADS --coverage")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -pthread -fprofile-arcs -ftest-coverage -DMONGOOSE_ENABLE_THREADS --coverage")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -pthread -fprofile-arcs -ftest-coverage -g -ggdb -DMONGOOSE_ENABLE_THREADS ")
 set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -DMONGOOSE_ENABLE_THREADS")
 
 enable_testing()
 
 option(INCLUIR_TEST ON)
+
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/archivos/)
 
 # defino una target por carpeta. cada target contiene las clases de cada carpeta.
 file(GLOB SRC src/main.cpp)

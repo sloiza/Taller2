@@ -19,23 +19,32 @@ OperacionesArchivos::~OperacionesArchivos() {}
 ConexionServidor::Respuesta OperacionesArchivos::delet(Utiles::Bytes* contenido, std::string query)
 {
 	ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico = new ConexionServidor::BaseDeDatos::ArchivoLogico( contenido->getStringDeBytes() );
-
-	bool resultadoBajaLogica = this->acciones.darDeBajaArchivoLogico( archivoLogico );
-
-	bool resultadoSacarDeCarpetaLogica = this->acciones.sacarArchivoLogicoDeSuCarpetaLogica( archivoLogico );
-
-	bool resultadoAgregarloAPapelera = this->acciones.agregarArchivoLogicoAPapelera( archivoLogico );
-
 	ConexionServidor::Respuesta respuesta;
-	if ( resultadoBajaLogica == false || resultadoSacarDeCarpetaLogica == false || resultadoAgregarloAPapelera == false)
+
+	if ( this->acciones.darDeBajaArchivoLogico( archivoLogico ) == false )
 	{
 		respuesta.setEstado("error");
-		respuesta.setMensaje("Error al dar de baja el archivo.");
+		respuesta.setMensaje("Error al dar de baja el archivo. 1");
+		return respuesta;
+	}
+
+	if ( this->acciones.sacarArchivoLogicoDeSuCarpetaLogica( archivoLogico ) == false )
+	{
+		respuesta.setEstado("error");
+		respuesta.setMensaje("Error al dar de baja el archivo. 2");
+		return respuesta;
+	}
+
+	if ( this->acciones.agregarArchivoLogicoAPapelera( archivoLogico ) == false )
+	{
+		respuesta.setEstado("error");
+		respuesta.setMensaje("Error al dar de baja el archivo. 3");
 		return respuesta;
 	}
 
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Archivo dado de baja correctamente!");
+
 	return respuesta;
 }
 ConexionServidor::Respuesta OperacionesArchivos::get(Utiles::Bytes* contenido, std::string query)
