@@ -26,7 +26,7 @@ target_link_libraries(servidor /usr/local/lib/librocksdb.a)
 target_link_libraries(servidor /usr/lib/x86_64-linux-gnu/libz.so)
 target_link_libraries(servidor /usr/lib/libsnappy.so)
 target_link_libraries(servidor /usr/lib/x86_64-linux-gnu/libbz2.so)
-target_link_libraries(servidor /usr/local/lib/libjsoncpp.a)
+#target_link_libraries(servidor /usr/local/lib/libjsoncpp.a)
 
 if(INCLUIR_TEST)
 	add_subdirectory(test)
