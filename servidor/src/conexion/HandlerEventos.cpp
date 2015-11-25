@@ -33,9 +33,9 @@ int HandlerEventos::handler(struct mg_connection* conn, enum mg_event ev)
 
 			// si se esta recuperando el usuario, entonces evito imprimir los datos para q no me imprima el string que contiene los bytes
 			// de la imagen.
-			if ( !(conexion->getUri()->getURI().compare("/usuario") == 0 && conexion->getMetodo()->impresion().compare("GET") == 0) )
+			if ( !(conexion->getUri()->getURI().compare("/usuario") == 0 && conexion->getMetodo()->impresion().compare("GET") == 0) &&
+					conexion->getUri()->getURI().compare("/descargar") != 0)
 				std::cout << "respuesta:\n" << respuesta.getContenido() << "\n";
-
 
 			if ( respuesta.getEsDescarga() )
 			{
@@ -49,14 +49,6 @@ int HandlerEventos::handler(struct mg_connection* conn, enum mg_event ev)
 				delete conexion;
 				return MG_TRUE;
 			}
-
-//			Respuesta rta = procesarRequest(conexion);
-//			switch( rta.getResultado() )
-//			  {
-//				  HAY_RESPUESTA: return MG_TRUE;
-//				  NO_HAY_RESPUESTA: return MG_FALSE;
-//				  FALTA_COMPLETAR_RESPUESTA: return MG_MORE;
-//			  }
 		}
 		case MG_CLOSE: return MG_TRUE;
 

@@ -9,7 +9,7 @@
 
 using namespace ConexionServidor;
 
-const std::string Respuesta::etiquetas[] = {"estado", "mensaje" };
+const std::string Respuesta::etiquetas[] = {"estado", "mensaje", "bytes" };
 
 Respuesta::Respuesta() : esDescarga(false) {}
 
@@ -39,6 +39,10 @@ void Respuesta::setEstado(std::string estado)
 void Respuesta::setMensaje(std::string mensaje)
 {
 	this->info->setAtributo(etiquetas[MENSAJE], mensaje);
+}
+void Respuesta::setBytes(std::string bytesEnString)
+{
+	this->info->setAtributo(etiquetas[BYTES], bytesEnString);
 }
 void Respuesta::setEsDescarga(bool esDescarga)
 {

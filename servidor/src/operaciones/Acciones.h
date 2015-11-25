@@ -15,6 +15,7 @@
 #include "../bd/entidades/ContenidoPorCarpeta.h"
 #include "../bd/entidades/VersionDeArchivoPorUsuario.h"
 #include "../bd/entidades/CarpetaLogica.h"
+#include "../bd/entidades/User.h"
 // Operaciones
 #include "InfoOperaciones.h"
 
@@ -53,6 +54,7 @@ public:
 	bool crearVersionInicialDeArchivo(ConexionServidor::BaseDeDatos::ArchivoLogico*);
 	bool versionDeUltimoModificadorEstaActualizada(ConexionServidor::BaseDeDatos::ArchivoLogico*);
 	bool actualizarVersionDeUltimoModificador(ConexionServidor::BaseDeDatos::ArchivoLogico*);
+	bool actualizarVersionDelQueDescarga(ConexionServidor::BaseDeDatos::ArchivoLogico*, ConexionServidor::BaseDeDatos::User* );
 
 	ConexionServidor::BaseDeDatos::ArchivoLogico* parsearArchivoDeQuery( std::string query );
 

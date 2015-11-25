@@ -22,7 +22,7 @@ ConexionServidor::Respuesta OperacionDescargarArchivo::delet(Utiles::Bytes* cont
 }
 ConexionServidor::Respuesta OperacionDescargarArchivo::get(Utiles::Bytes* contenido, std::string query)
 {
-	ConexionServidor::BaseDeDatos::Archivo archivoFisico(contenido->getStringDeBytes() );
+	ConexionServidor::BaseDeDatos::Archivo archivoFisico( contenido->getStringDeBytes() );
 
 	ConexionServidor::Respuesta respuesta;
 	if ( archivoFisico.existeFisicamente() == false)
@@ -32,10 +32,27 @@ ConexionServidor::Respuesta OperacionDescargarArchivo::get(Utiles::Bytes* conten
 		return respuesta;
 	}
 
+	ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico = new ConexionServidor::BaseDeDatos::ArchivoLogico( contenido->getStringDeBytes() );
+	ConexionServidor::BaseDeDatos::User* usuarioQueDescarga = new ConexionServidor::BaseDeDatos::User( contenido->getStringDeBytes() );
+	this->acciones.actualizarVersionDelQueDescarga( archivoLogico, usuarioQueDescarga );
+
+// INICIO ------ CODIGO QUE USO SI DEVUELVO EL ARCHIVO CON mg_send_file -------- //
+//	respuesta.setEstado("ok");
+//	respuesta.setMensaje("Archivo descargado correctamente!");
+//	respuesta.setEsDescarga(true);
+//	respuesta.setPathDelArchivoADescargar( archivoFisico.getPath() );
+// FIN --------- CODIGO QUE USO SI DEVUELVO EL ARCHIVO CON mg_send_file -------- //
+
+// INICIO ------ CODIGO QUE USO SI DEVUELVO EL ARCHIVO POR JSON -------- //
+	archivoFisico.recuperar();
+	respuesta.setBytes( archivoFisico.getBytes()->getStringDeBytes() );
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Archivo descargado correctamente!");
-	respuesta.setEsDescarga(true);
-	respuesta.setPathDelArchivoADescargar( archivoFisico.getPath() );
+// FIN --------- CODIGO QUE USO SI DEVUELVO EL ARCHIVO POR JSON -------- //
+
+	delete archivoLogico;
+	delete usuarioQueDescarga;
+
 	return respuesta;
 }
 ConexionServidor::Respuesta OperacionDescargarArchivo::post(Utiles::Bytes* contenido, std::string query)

@@ -297,7 +297,7 @@ bool Acciones::versionDeUltimoModificadorEstaActualizada(ConexionServidor::BaseD
 	std::string valorRecuperado = versionModificador.recuperar();
 	if ( valorRecuperado.compare("vacio") == 0 )
 	{
-		Utiles::Log::instancia()->debug( "valorRecuperado versionModificador: " + valorRecuperado, this->nombreClase() );
+		Utiles::Log::instancia()->warn( "No existe version del archivo '" + archivoLogico->getPath() + " para el usuario: '" + archivoLogico->getUltimoUsuarioModif() + "'.", this->nombreClase() );
 		return false;
 	}
 	versionModificador.setContenido( valorRecuperado );
@@ -305,7 +305,7 @@ bool Acciones::versionDeUltimoModificadorEstaActualizada(ConexionServidor::BaseD
 	valorRecuperado = archivoLogico->recuperar();
 	if ( valorRecuperado.compare("vacio") == 0 )
 	{
-		Utiles::Log::instancia()->debug( "valorRecuperado archivoLogico: " + valorRecuperado, this->nombreClase() );
+		Utiles::Log::instancia()->warn( "No existe logicamente el archivo '" + archivoLogico->getPath() + "'.", this->nombreClase() );
 		return false;
 	}
 	ConexionServidor::BaseDeDatos::ArchivoLogico archivoAuxversion( valorRecuperado );
@@ -347,6 +347,37 @@ bool Acciones::actualizarVersionDeUltimoModificador(ConexionServidor::BaseDeDato
 	Utiles::Log::instancia()->debug( "Version: '" + versionModificador.getPathArchivo() + "-" + versionModificador.getUsuario() + "' actualizado de " + Utiles::Metodos::toString(versionActual) + " a " + versionModificador.getVersion() + ".", this->nombreClase() );
 
 	return false;
+}
+bool Acciones::actualizarVersionDelQueDescarga(ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico, ConexionServidor::BaseDeDatos::User* usuario)
+{
+	ConexionServidor::BaseDeDatos::VersionDeArchivoPorUsuario versionDescargador;
+	versionDescargador.setUsuario( usuario->getEmail() );
+	versionDescargador.setPathArchivo( archivoLogico->getPath() );
+
+	std::string valorRecuperado = versionDescargador.recuperar();
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		Utiles::Log::instancia()->debug( "valorRecuperado versionModificador: " + valorRecuperado, this->nombreClase() );
+		return false;
+	}
+	versionDescargador.setContenido( valorRecuperado );
+
+	valorRecuperado = archivoLogico->recuperar();
+	if ( valorRecuperado.compare("vacio") == 0 )
+	{
+		Utiles::Log::instancia()->warn( "No existe logicamente el archivo '" + archivoLogico->getPath() + "'.", this->nombreClase() );
+		return false;
+	}
+	archivoLogico->setContenido( valorRecuperado );
+
+	std::string versionActual = versionDescargador.getVersion();
+
+	versionDescargador.setVersion( archivoLogico->getVersion() );
+
+	versionDescargador.modificar();
+
+	Utiles::Log::instancia()->debug( "Version: '" + versionDescargador.getPathArchivo() + "-" + versionDescargador.getUsuario() + "' actualizado de " + versionActual + " a " + versionDescargador.getVersion() + ".", this->nombreClase() );
+	return true;
 }
 
 ConexionServidor::BaseDeDatos::ArchivoLogico* Acciones::parsearArchivoDeQuery( std::string query )

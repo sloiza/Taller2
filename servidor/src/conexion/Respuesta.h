@@ -24,7 +24,8 @@ public:
 	enum enumEtiquetas
 	{
 		ESTADO,
-		MENSAJE
+		MENSAJE,
+		BYTES
 	};
 
 	static const std::string etiquetas[];
@@ -37,6 +38,7 @@ public:
 	bool getEsDescarga();
 	std::string getPathDelArchivoADescargar();
 
+	void setBytes(std::string bytesEnString);
 	void setEstado(std::string estado);
 	void setMensaje(std::string mensaje);
 	void setEsDescarga(bool);
