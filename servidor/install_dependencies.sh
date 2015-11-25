@@ -25,3 +25,5 @@ mkdir build/
 cd build
 cmake -DINCLUIR_TEST=ON ..
 make
+make test
+coveralls --exclude lib --exclude tests --gcov-options '\-lp'
