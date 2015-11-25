@@ -9,4 +9,4 @@ before_install:
   - sudo docker build -t samiloiza/udrive:v1 .
 
 script: 
-  - sudo docker run -t -i samiloiza/udrive:v1 /bin/bash -c ./Taller2-master/servidor/build/test/tests
+  - sudo docker run -t -i samiloiza/udrive:v1 /bin/bash -c ./Taller2-master/servidor/build/run_tests.sh
