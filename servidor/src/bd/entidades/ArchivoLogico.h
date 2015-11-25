@@ -34,6 +34,7 @@ public:
 		PROPIETARIO,
 		BAJA_LOGICA,
 		DIRECCION,
+		COMPARTIDO_CON,
 		VERSION
 	};
 
@@ -56,6 +57,9 @@ public:
 
 	void agregarEtiqueta(std::string);
 	std::vector<std::string> getEtiquetas();
+
+	void agregarCompartidoCon(std::string);
+	std::vector<std::string> getCompartidoCon();
 
 	// Metodos de EntidadDB
 	virtual std::string getValor();

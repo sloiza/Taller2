@@ -201,6 +201,12 @@ bool Acciones::modificarArchivoLogico(ConexionServidor::BaseDeDatos::ArchivoLogi
 		archivoLogicoNuevo->agregarEtiqueta( etiquetas[i] );
 	}
 
+	std::vector<std::string> compartidoCon = archivoActual.getCompartidoCon();
+	for ( unsigned int i = 0 ; i < compartidoCon.size() ; i++ )
+	{
+		archivoLogicoNuevo->agregarCompartidoCon( compartidoCon[i] );
+	}
+
 	int versionActual = Utiles::Metodos::toInt( archivoActual.getVersion() );
 	int versionNueva = versionActual + 1;
 

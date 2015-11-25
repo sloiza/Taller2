@@ -86,9 +86,9 @@ ConexionServidor::Respuesta OperacionesArchivos::post(Utiles::Bytes* contenido, 
 		return respuesta;
 	}
 
-	bool resultadoAgregarArchivoASuContenido = this->acciones.agregarArchivoLogicoASuCarpetaLogica( archivoLogico );
-	bool resultadoAgregarArchivoAContenidoPorUsuario = this->acciones.agregarArchivoALaListaDeArchivosDeUsuario( archivoLogico );
-	bool resultadoAgregarVersionDeArchivo = this->acciones.crearVersionInicialDeArchivo( archivoLogico );
+	/*bool resultadoAgregarArchivoASuContenido = */this->acciones.agregarArchivoLogicoASuCarpetaLogica( archivoLogico );
+	/*bool resultadoAgregarArchivoAContenidoPorUsuario = */this->acciones.agregarArchivoALaListaDeArchivosDeUsuario( archivoLogico );
+	/*bool resultadoAgregarVersionDeArchivo = */this->acciones.crearVersionInicialDeArchivo( archivoLogico );
 
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Archivo dado de alta correctamente!");
@@ -112,12 +112,12 @@ ConexionServidor::Respuesta OperacionesArchivos::put(Utiles::Bytes* contenido, s
 		return respuesta;
 	}
 
-	bool resultadoModificarArchivoLogico = this->acciones.modificarArchivoLogico( archivoLogicoNuevo );
+	/* bool resultadoModificarArchivoLogico = */ this->acciones.modificarArchivoLogico( archivoLogicoNuevo );
 
-	bool resultadoModificarArchivoFisico = true;
+	//bool resultadoModificarArchivoFisico = true;
 	if ( contenido->getTamanio() > 0 )
 	{
-		resultadoModificarArchivoFisico = this->acciones.modificarArchivoFisico( archivoFisicoNuevo );
+		/* resultadoModificarArchivoFisico = */this->acciones.modificarArchivoFisico( archivoFisicoNuevo );
 	}
 
 

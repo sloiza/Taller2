@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity
         try {
             json.put("nombre", Utility.getNameFromFile(restoreItem));
             json.put("extension", Utility.getExtensionFromFile(restoreItem));
-            json.put("direccion", "tmp/" + email + "/");
+            json.put("direccion", "archivos/" + email + "/");
             json.put("mail", email);
             httpPut.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPut.setHeader("Content-Type", "application/json");
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity
         JSONObject json = new JSONObject();
         try {
             json.put("nombre", restoreItem);
-            json.put("direccion", "tmp/" + email + "/");
+            json.put("direccion", "archivos/" + email + "/");
             json.put("mail", email);
             httpPut.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPut.setHeader("Content-Type", "application/json");
@@ -394,7 +394,7 @@ public class MainActivity extends AppCompatActivity
             new UploadFileToServer().execute(ipAddress + serverPort + "archivos?nombre=" + Utility.getNameFromFile(file.getName())
                     + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=file"
                     + "&fecha_ulti_modi=22/11/2015" + "&usuario_ulti_modi=" + email
-                    + "&propietario=" + email + "&baja_logica=no&direccion=" + "tmp/" + email + "/");
+                    + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/");
         }
     }
 
@@ -457,7 +457,6 @@ public class MainActivity extends AppCompatActivity
             while ((line = rd.readLine()) != null) {
                 sb.append(line);
             }
-            Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_LONG).show();
             fileInputStream.close();
             outputStream.flush();
             outputStream.close();
@@ -647,7 +646,7 @@ public class MainActivity extends AppCompatActivity
             json.put("usuario_ulti_modi", name + " " + surname);
             json.put("propietario", name + " " + surname);
             json.put("baja_logica", "no");
-            json.put("direccion", "tmp/" + email + "/");
+            json.put("direccion", "archivos/" + email + "/");
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
             httpPost.setHeader("Accept-Encoding", "application/json");
@@ -713,7 +712,7 @@ public class MainActivity extends AppCompatActivity
             jsonArray.put(dialogInput);
             json.put("nombre", Utility.getNameFromFile(itemName));
             json.put("extension", Utility.getExtensionFromFile(itemName));
-            json.put("direccion", "tmp/" + email + "/");
+            json.put("direccion", "archivos/" + email + "/");
             json.put("usuarios", jsonArray);
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");
@@ -779,7 +778,7 @@ public class MainActivity extends AppCompatActivity
         try {
             jsonArray.put(dialogInput);
             json.put("nombre", itemName);
-            json.put("direccion", "tmp/" + email + "/");
+            json.put("direccion", "archivos/" + email + "/");
             json.put("usuarios", jsonArray);
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpPost.setHeader("Content-Type", "application/json");

@@ -8,6 +8,9 @@
 #ifndef BYTES_H_
 #define BYTES_H_
 
+// utiles
+#include "base64.h"
+
 // STL
 #include<iostream>
 #include <string.h>
@@ -33,6 +36,7 @@ public:
 	char* getBytes();
 	std::vector<unsigned char> getVectorDeBytes();
 	std::string getStringDeBytes();
+	std::string getBytesBase64();
 
 	int getTamanio();
 

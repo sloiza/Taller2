@@ -49,15 +49,21 @@ ConexionServidor::Respuesta OperacionCompartirArchivo::post(Utiles::Bytes* conte
 {
 	ConexionServidor::BaseDeDatos::ArchivoCompartirConUsuarios archivoYUsuarios( contenido->getStringDeBytes() );
 
-	std::string carpeta = archivoYUsuarios.getPathArchivo();
-	for ( std::string mailUsuario : archivoYUsuarios.getUsuariosACompartirles() )
-	{
-		compartirArchivoConUsuario( mailUsuario, carpeta );
-	}
-
 	ConexionServidor::Respuesta respuesta;
 	respuesta.setEstado("ok");
 	respuesta.setMensaje("Archivo compartido correctamente!");
+
+	std::string archivo = archivoYUsuarios.getPathArchivo();
+	for ( std::string mailUsuario : archivoYUsuarios.getUsuariosACompartirles() )
+	{
+		if ( compartirArchivoConUsuario( mailUsuario, archivo ) == false )
+		{
+			Utiles::Log::instancia()->warn("Archivo '" + archivoYUsuarios.getPathArchivo() + "' no se compartio con usuario '" + mailUsuario + "'.", this->nombreClase() );
+			respuesta.setEstado("error");
+			respuesta.setMensaje("Error al compartir archivo. No se compartio con todos los usuarios..");
+		}
+	}
+
 	Utiles::Log::instancia()->info("Archivo '" + archivoYUsuarios.getPathArchivo() + "' compartido correctamente.", this->nombreClase() );
 	return respuesta;
 }
@@ -75,7 +81,7 @@ void OperacionCompartirArchivo::imprimir()
 	std::cout << "compartirArchivo\n";
 }
 
-void OperacionCompartirArchivo::compartirArchivoConUsuario(std::string mailUsuario, std::string archivo )
+bool OperacionCompartirArchivo::compartirArchivoConUsuario(std::string mailUsuario, std::string archivo )
 {
 	ConexionServidor::BaseDeDatos::ContenidoPorCarpeta carpetaCompartida;
 
@@ -84,16 +90,15 @@ void OperacionCompartirArchivo::compartirArchivoConUsuario(std::string mailUsuar
 	ConexionServidor::BaseDeDatos::ArchivoLogico archivoLogico;
 	archivoLogico.setPath( archivo );
 
-	bool resCompartirArchivo = this->acciones.agregarArchivoLogicoAContenido( &archivoLogico, &carpetaCompartida );
-
-	if ( resCompartirArchivo == false )
+	if ( false == this->acciones.agregarArchivoLogicoAContenido( &archivoLogico, &carpetaCompartida ) )
 	{
-		Utiles::Log::instancia()->warn("No se pudo compartir el archivo: '" + archivoLogico.getPath() + "'.", this->nombreClase() );
-		return;
+		return false;
 	}
 
 	std::string valorRecuperado = archivoLogico.recuperar();
 	archivoLogico.setContenido( valorRecuperado );
+	archivoLogico.agregarCompartidoCon( mailUsuario );
+	archivoLogico.modificar();
 
 	ConexionServidor::BaseDeDatos::VersionDeArchivoPorUsuario version;
 	version.setUsuario( mailUsuario );
@@ -101,6 +106,8 @@ void OperacionCompartirArchivo::compartirArchivoConUsuario(std::string mailUsuar
 	version.setVersion( archivoLogico.getVersion() );
 
 	version.modificar();
+
+	return true;
 }
 std::string OperacionCompartirArchivo::nombreClase()
 {

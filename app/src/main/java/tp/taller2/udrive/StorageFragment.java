@@ -27,7 +27,7 @@ public class StorageFragment extends Fragment {
         storageUsed = getArguments().getFloat("storageUsed");
         TextView storage = (TextView) rootView.findViewById(R.id.storageUsed);
         session = new SessionManager(getContext());
-        storage.setText(session.getUserStorageUsed() + "GB");
+        storage.setText(session.getUserStorageUsed() + " GB");
         return rootView;
     }
 }

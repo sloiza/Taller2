@@ -39,6 +39,7 @@ public:
 	std::string getPathDelArchivoADescargar();
 
 	void setBytes(std::string bytesEnString);
+	std::string getBytes();
 	void setEstado(std::string estado);
 	void setMensaje(std::string mensaje);
 	void setEsDescarga(bool);

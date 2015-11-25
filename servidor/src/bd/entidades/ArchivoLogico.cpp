@@ -9,7 +9,7 @@
 
 using namespace ConexionServidor::BaseDeDatos;
 
-const std::string ArchivoLogico::etiquetas[] = {"nombre", "extension", "etiqueta", "fecha_ulti_modi", "usuario_ulti_modi", "propietario", "baja_logica", "direccion", "version" };
+const std::string ArchivoLogico::etiquetas[] = {"nombre", "extension", "etiqueta", "fecha_ulti_modi", "usuario_ulti_modi", "propietario", "baja_logica", "direccion", "compartido_con" , "version" };
 
 ArchivoLogico::ArchivoLogico() {}
 
@@ -104,6 +104,11 @@ void ArchivoLogico::setPath(std::string path)
 
 	this->setExtension(nombreYExtension[tamanioNombre-1]);
 }
+void ArchivoLogico::agregarCompartidoCon(std::string usuario)
+{
+	this->info->agregarValorAAtributo(etiquetas[COMPARTIDO_CON], usuario);
+}
+
 std::string ArchivoLogico::getNombre()
 {
 	return this->info->getAtributo(etiquetas[NOMBRE], "nombreDefault");
@@ -153,6 +158,10 @@ std::string ArchivoLogico::getPath()
 std::vector<std::string> ArchivoLogico::getEtiquetas()
 {
 	return this->info->getListaDeValorDeAtributo(etiquetas[ETIQUETA], "etiquetaDefault");
+}
+std::vector<std::string> ArchivoLogico::getCompartidoCon()
+{
+	return this->info->getListaDeValorDeAtributo(etiquetas[COMPARTIDO_CON], "compartidosConDefault");
 }
 
 // Metodos de EntidadDB

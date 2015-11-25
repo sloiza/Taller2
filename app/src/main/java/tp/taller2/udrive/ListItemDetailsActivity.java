@@ -85,12 +85,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         itemName = intent.getStringExtra("itemName");
-        actualItemPath = "tmp/" + email + "/";
-
-        nameET.setText(itemName);
-        ownerET.setText(email);
-        locationET.setText(actualItemPath);
-
+        actualItemPath = "archivos/" + email + "/";
         new getItemMetadataService().execute(session.getIp() + session.getPort() + "archivos");
     }
 
@@ -153,6 +148,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                 Object label = jsonObject.getJSONArray("etiqueta");
                 Object lastModDate = jsonObject.get("fecha_ulti_modi");
                 Object lastModUser = jsonObject.get("usuario_ulti_modi");
+                Object name = jsonObject.get("nombre");
                 //Object version = jsonObject.get("version");
                 //Object created = jsonObject.get("fecha_creacion");
                 //Object shareWith = jsonObject.get("compartido_con");
@@ -162,15 +158,15 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                     Utility.appendToInfoLog("Item metadata", message.toString());
                     Log.d("Item metadata", jsonObject.toString());
                     Utility.appendToDebugLog("Item metadata", jsonObject.toString());
-                    nameET.setText(itemName);
-                    labelET.setText(label.toString());
+                    nameET.setText(name.toString());
+                    labelET.setText(label.toString().substring(2,label.toString().length() - 2));
                     createdET.setText("11/10/2015");
                     //createdEt.setText(created.toString());
                     modifiedET.setText(lastModDate.toString() + " by " + lastModUser.toString()); ;
                     ownerET.setText(email);
                     shareWithET.setText("miglesias@gmail.com");
                     //shareWithET.setText(shareWith.toString());
-                    locationET.setText("tmp/" + lastModUser.toString() + "/");
+                    locationET.setText("archivos/" + email + "/");
                 } else {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.e("Item metadata", message.toString());
