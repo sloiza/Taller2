@@ -1,13 +1,13 @@
-#!bin/bash
+#!/usr/bin/env bash
 
-rm info.log
-rm debug.log
-rm warn.log
-rm trace.log
-rm error.log
+rm -f info.log
+rm -f debug.log
+rm -f warn.log
+rm -f trace.log
+rm -f error.log
 
-cd test
+cd build/test
 ./tests
 
-rm -r rocksDB/
-rm tmp/*
+rm -r -f rocksDB/
+rm -r -f  tmp/*
