@@ -6,13 +6,11 @@ echo "install rocks"
 if [ ! -d "rocksdb-master/" ]; then
   	wget https://github.com/NickCis/rocksdb/archive/master.zip
 	unzip master.zip
+	rm master.zip
 	cd rocksdb-master
 	make static_lib
-	make shared_lib
-	sudo make install
-	cd ..
+	sudo cp librocksdb.a /usr/local/lib/
 	ls
-	rm master.zip
 fi
 cd /usr/src/gtest
 cmake .
@@ -24,5 +22,5 @@ ls
 cd /Taller2-master/servidor/
 mkdir build/
 cd build
-cmake ..
+cmake -DINCLUIR_TEST=ON ..
 make
