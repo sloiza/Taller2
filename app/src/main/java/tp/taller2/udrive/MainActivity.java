@@ -237,6 +237,8 @@ public class MainActivity extends AppCompatActivity
     public void getIpAndPortData(String ip, String port) {
         ipAddress = ip;
         serverPort = port;
+        Log.d("ip", ip);
+        Log.d("port", port);
     }
 
     public void updateIpAndPort(View view) {
@@ -385,16 +387,22 @@ public class MainActivity extends AppCompatActivity
             filePath = uri.getPath();
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             String currentDateAndTime = sdf.format(new Date());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            String currentDate = simpleDateFormat.format(new Date());
             File file = new File(filePath);
             JSONArray jsonArray = new JSONArray();
             jsonArray.put("file");
-            //json.put("fecha_creacion", currentDateAndTime);
-            //json.put("version", 1);
-            //json.put("compartido_con", "");
-            new UploadFileToServer().execute(ipAddress + serverPort + "archivos?nombre=" + Utility.getNameFromFile(file.getName())
-                    + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=file"
-                    + "&fecha_ulti_modi=22/11/2015" + "&usuario_ulti_modi=" + email
-                    + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/");
+            try {
+                String name = URLEncoder.encode(Utility.getNameFromFile(file.getName()), "utf-8");
+                String lastModDate = URLEncoder.encode(currentDateAndTime, "utf-8");
+                String label = URLEncoder.encode(jsonArray.toString(), "utf-8");
+                new UploadFileToServer().execute(ipAddress + serverPort + "archivos?nombre=" + name
+                        + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=" + label
+                        + "&fecha_ulti_modi=" + lastModDate + "&usuario_ulti_modi=" + email + "&fecha_creacion=" + currentDate
+                        + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
     }
 
