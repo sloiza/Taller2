@@ -29,7 +29,12 @@ ConexionServidor::Respuesta OperacionDescargarArchivo::get(Utiles::Bytes* conten
 
 	ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico = new ConexionServidor::BaseDeDatos::ArchivoLogico( contenido->getStringDeBytes() );
 	ConexionServidor::BaseDeDatos::User* usuarioQueDescarga = new ConexionServidor::BaseDeDatos::User( contenido->getStringDeBytes() );
-	this->acciones.actualizarVersionDelQueDescarga( archivoLogico, usuarioQueDescarga );
+	if ( this->acciones.actualizarVersionDelQueDescarga( archivoLogico, usuarioQueDescarga ) == false )
+	{
+		respuesta.setEstado("error");
+		respuesta.setMensaje("Error al realizar la descarga.");
+		return respuesta;
+	}
 
 // INICIO ------ CODIGO QUE USO SI DEVUELVO EL ARCHIVO CON mg_send_file -------- //
 //	respuesta.setEstado("ok");

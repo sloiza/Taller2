@@ -96,6 +96,8 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
         CoordinatorLayout coordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.coordinatorLayout);
         Snackbar snackbar = Snackbar.make(coordinatorLayout, "You are logged in as\n" + email, Snackbar.LENGTH_LONG);
         snackbar.show();
+        Log.d("IP", session.getIp());
+        Log.d("PORT", session.getPort());
          new getUserFilesService().execute(session.getIp() + session.getPort());
         return rootView;
     }

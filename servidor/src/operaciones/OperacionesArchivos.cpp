@@ -68,6 +68,22 @@ ConexionServidor::Respuesta OperacionesArchivos::post(Utiles::Bytes* contenido, 
 
 	ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico = this->acciones.parsearArchivoDeQuery( query );
 
+	ConexionServidor::BaseDeDatos::Archivo archivoFisico( archivoLogico->getContenido() );
+
+	if ( archivoFisico.existeFisicamente() )
+	{
+		if ( this->acciones.versionDeUltimoModificadorEstaActualizada( archivoLogico ) == false )
+		{
+			respuesta.setEstado("error");
+			respuesta.setMensaje("Version de archivo desactualizada.");
+			return respuesta;
+		}
+		this->put( contenido, query );
+		respuesta.setEstado("ok");
+		respuesta.setMensaje("Archivo modificado correctamente!");
+		return respuesta;
+	}
+
 	bool resultadoAltaLogica = this->acciones.darDeAltaArchivoLogico( archivoLogico );
 
 	ConexionServidor::BaseDeDatos::Archivo* archivo = new ConexionServidor::BaseDeDatos::Archivo( archivoLogico->getContenido() );

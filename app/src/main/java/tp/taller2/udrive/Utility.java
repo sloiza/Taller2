@@ -21,6 +21,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -171,16 +173,18 @@ public class Utility {
 
     public static void appendToDebugLog(String activity, String text){
     File logFile = new File(Environment.getExternalStorageDirectory() +  "/clientDebugLog.log");
-        if (!logFile.exists()) {
-            try {
-                logFile.createNewFile();
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    String currentDateAndTime = sdf.format(new Date());
+    if (!logFile.exists()) {
+        try {
+            logFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         try {
             BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
-            buf.append(activity + " - " + text);
+            buf.append(currentDateAndTime + " - " + activity + " - " + text);
             buf.newLine();
             buf.flush();
             buf.close();
@@ -191,6 +195,8 @@ public class Utility {
 
     public static void appendToErrorLog(String activity, String text){
         File logFile = new File(Environment.getExternalStorageDirectory() +  "/clientErrorLog.log");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        String currentDateAndTime = sdf.format(new Date());
         if (!logFile.exists()) {
             try {
                 logFile.createNewFile();
@@ -200,7 +206,7 @@ public class Utility {
         }
         try {
             BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
-            buf.append(activity + " - " + text);
+            buf.append(currentDateAndTime + " - " + activity + " - " + text);
             buf.newLine();
             buf.flush();
             buf.close();
@@ -211,6 +217,8 @@ public class Utility {
 
     public static void appendToInfoLog(String activity, String text){
         File logFile = new File(Environment.getExternalStorageDirectory() +  "/clientInfoLog.log");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        String currentDateAndTime = sdf.format(new Date());
         if (!logFile.exists()) {
             try {
                 logFile.createNewFile();
@@ -220,7 +228,7 @@ public class Utility {
         }
         try {
             BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
-            buf.append(activity + " - " + text);
+            buf.append(currentDateAndTime + " - " + activity + " - " + text);
             buf.newLine();
             buf.flush();
             buf.close();
