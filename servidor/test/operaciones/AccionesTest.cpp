@@ -14,7 +14,7 @@ const std::string AccionesTest::archivoEjemplo =
 "\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\", \"direccion\":\"tmp/\"}";
 
 const std::string AccionesTest::queryEjemplo =
-"nombre=resumen_sistemas_distribuido&extension=pdf&etiqueta=file&fecha_ulti_modi=222902015_102908&usuario_ulti_modi=Mati+Carreras+&propietario=Mati+Carreras+&baja_logica=no&direccion=tmp/Mncarreras@hotmail.com/";
+"nombre=resumen_sistemas_distribuido&extension=pdf&etiqueta=file+tp+facultad&fecha_ulti_modi=222902015_102908&usuario_ulti_modi=Mati+Carreras+&propietario=Mati+Carreras+&baja_logica=no&direccion=tmp/Mncarreras@hotmail.com/";
 
 
 char AccionesTest::bytes[] = "estosSonUnosBytesDePrueba";
@@ -92,6 +92,8 @@ void AccionesTest::testParsearArchivoDeQueryCorrectamente()
 	EXPECT_STREQ( "resumen_sistemas_distribuido" , archivoParseado->getNombre().c_str() );
 	EXPECT_STREQ( "pdf" , archivoParseado->getExtension().c_str() );
 	EXPECT_STREQ( "file" , archivoParseado->getEtiquetas()[0].c_str() );
+	EXPECT_STREQ( "tp" , archivoParseado->getEtiquetas()[1].c_str() );
+	EXPECT_STREQ( "facultad" , archivoParseado->getEtiquetas()[2].c_str() );
 	EXPECT_STREQ( "222902015_102908" , archivoParseado->getUltimaFechaModif().c_str() );
 	EXPECT_STREQ( "Mati Carreras " , archivoParseado->getUltimoUsuarioModif().c_str() );
 	EXPECT_STREQ( "Mati Carreras " , archivoParseado->getPropietario().c_str() );

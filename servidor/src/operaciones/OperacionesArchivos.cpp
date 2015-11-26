@@ -77,7 +77,16 @@ ConexionServidor::Respuesta OperacionesArchivos::post(Utiles::Bytes* contenido, 
 
 	if ( archivoFisico.existeFisicamente() )
 	{
-		return this->put( contenido, query );
+		if ( this->acciones.versionDeUltimoModificadorEstaActualizada( archivoLogico ) == false )
+		{
+			respuesta.setEstado("error");
+			respuesta.setMensaje("Version de archivo desactualizada.");
+			return respuesta;
+		}
+		this->put( contenido, query );
+		respuesta.setEstado("ok");
+		respuesta.setMensaje("Archivo modificado correctamente!");
+		return respuesta;
 	}
 
 	bool resultadoAltaLogica = this->acciones.darDeAltaArchivoLogico( archivoLogico );

@@ -195,11 +195,11 @@ bool Acciones::modificarArchivoLogico(ConexionServidor::BaseDeDatos::ArchivoLogi
 	}
 	archivoActual.setContenido(valorRecuperadoActual);
 
-	std::vector<std::string> etiquetas = archivoActual.getEtiquetas();
-	for ( unsigned int i = 0 ; i < etiquetas.size() ; i++ )
-	{
-		archivoLogicoNuevo->agregarEtiqueta( etiquetas[i] );
-	}
+//	std::vector<std::string> etiquetas = archivoActual.getEtiquetas();
+//	for ( unsigned int i = 0 ; i < etiquetas.size() ; i++ )
+//	{
+//		archivoLogicoNuevo->agregarEtiqueta( etiquetas[i] );
+//	}
 
 	std::vector<std::string> compartidoCon = archivoActual.getCompartidoCon();
 	for ( unsigned int i = 0 ; i < compartidoCon.size() ; i++ )
@@ -469,7 +469,11 @@ ConexionServidor::BaseDeDatos::ArchivoLogico* Acciones::parsearArchivoDeQuery( s
 			archivoLogico->setExtension( valor );
 		}else if ( parametro.compare("etiqueta") == 0 )
 		{
-			archivoLogico->agregarEtiqueta( valor );
+			std::vector<std::string> etiquetas = Utiles::Metodos::split( valor, ' ' );
+			for ( unsigned int j = 0 ; j < etiquetas.size() ; j++ )
+			{
+				archivoLogico->agregarEtiqueta( etiquetas[j] );
+			}
 		}else if ( parametro.compare("fecha_ulti_modi") == 0 )
 		{
 			archivoLogico->setUltimaFechaModif( valor );
