@@ -1,9 +1,4 @@
-/*
- * CarpetaCompartirConUsuarios.cpp
- *
- *  Created on: 14/11/2015
- *      Author: manuel
- */
+
 
 #include "CarpetaCompartirConUsuarios.h"
 

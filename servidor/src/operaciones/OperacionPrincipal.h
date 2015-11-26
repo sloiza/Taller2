@@ -1,9 +1,3 @@
-/*
- * OperacionPrincipal.h
- *
- *  Created on: 30/10/2015
- *      Author: manuel
- */
 
 #ifndef OPERACIONPRINCIPAL_H_
 #define OPERACIONPRINCIPAL_H_

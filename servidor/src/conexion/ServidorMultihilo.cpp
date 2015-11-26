@@ -1,9 +1,4 @@
-/*
- * ServidorMultihilo.cpp
- *
- *  Created on: 19/11/2015
- *      Author: manuel
- */
+
 
 #include "ServidorMultihilo.h"
 

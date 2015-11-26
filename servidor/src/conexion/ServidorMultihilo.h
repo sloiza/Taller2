@@ -1,9 +1,3 @@
-/*
- * ServidorMultihilo.h
- *
- *  Created on: 19/11/2015
- *      Author: manuel
- */
 
 #ifndef SERVIDORMULTIHILO_H_
 #define SERVIDORMULTIHILO_H_

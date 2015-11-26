@@ -1,9 +1,3 @@
-/*
- * OperacionBusqueda.cpp
- *
- *  Created on: 17/11/2015
- *      Author: manuel
- */
 
 #include "OperacionBusqueda.h"
 

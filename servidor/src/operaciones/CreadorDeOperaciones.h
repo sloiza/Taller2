@@ -1,9 +1,4 @@
-/*
- * CreadorDeOperaciones.h
- *
- *  Created on: 29/10/2015
- *      Author: manuel
- */
+
 
 #ifndef CREADORDEOPERACIONES_H_
 #define CREADORDEOPERACIONES_H_

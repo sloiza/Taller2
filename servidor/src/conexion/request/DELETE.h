@@ -1,9 +1,4 @@
-/*
- * DELETE.h
- *
- *  Created on: 27/9/2015
- *      Author: manuel
- */
+
 
 #ifndef DELETE_H_
 #define DELETE_H_

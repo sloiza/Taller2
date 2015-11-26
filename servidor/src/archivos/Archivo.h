@@ -1,10 +1,4 @@
-/*
- * Archivo.h
- *
- *  Created on: 26/10/2015
- *      Author: manuel
- */
-
+	
 #ifndef ARCHIVO_H_
 #define ARCHIVO_H_
 
@@ -23,7 +17,9 @@ namespace ConexionServidor
 {
 namespace BaseDeDatos
 {
-
+/**
+* @brief Clase utilizada para administrar los archivos
+*/
 class Archivo: public EntidadDB
 {
 public:

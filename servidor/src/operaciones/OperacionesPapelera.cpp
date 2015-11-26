@@ -1,9 +1,3 @@
-/*
- * OperacionesPapelera.cpp
- *
- *  Created on: 16/11/2015
- *      Author: manuel
- */
 
 #include "OperacionesPapelera.h"
 

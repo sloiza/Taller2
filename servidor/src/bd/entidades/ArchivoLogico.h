@@ -1,9 +1,4 @@
-/*
- * Archivo.h
- *
- *  Created on: 25/10/2015
- *      Author: manuel
- */
+
 
 #ifndef ARCHIVOLOGICO_H_
 #define ARCHIVOLOGICO_H_

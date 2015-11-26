@@ -1,9 +1,4 @@
-/*
- * CreadorDeOperaciones.cpp
- *
- *  Created on: 29/10/2015
- *      Author: manuel
- */
+
 
 #include "CreadorDeOperaciones.h"
 

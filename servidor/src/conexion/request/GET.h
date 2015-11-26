@@ -1,9 +1,3 @@
-/*
- * GET.h
- *
- *  Created on: 27/9/2015
- *      Author: manuel
- */
 
 #ifndef GET_H_
 #define GET_H_

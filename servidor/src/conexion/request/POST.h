@@ -1,9 +1,4 @@
-/*
- * POST.h
- *
- *  Created on: 27/9/2015
- *      Author: manuel
- */
+
 
 #ifndef POST_H_
 #define POST_H_

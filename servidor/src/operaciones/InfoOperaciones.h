@@ -1,9 +1,4 @@
-/*
- * InfoOperaciones.h
- *
- *  Created on: 31/10/2015
- *      Author: manuel
- */
+
 
 #ifndef INFOOPERACIONES_H_
 #define INFOOPERACIONES_H_

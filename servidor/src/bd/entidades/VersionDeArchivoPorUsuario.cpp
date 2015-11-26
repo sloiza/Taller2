@@ -1,9 +1,3 @@
-/*
- * VersionDeArchivoPorUsuario.cpp
- *
- *  Created on: 22/11/2015
- *      Author: manuel
- */
 
 #include "VersionDeArchivoPorUsuario.h"
 

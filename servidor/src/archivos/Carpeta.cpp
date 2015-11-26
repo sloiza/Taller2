@@ -1,9 +1,4 @@
-/*
- * Carpeta.cpp
- *
- *  Created on: 3/11/2015
- *      Author: manuel
- */
+
 
 #include "Carpeta.h"
 
@@ -140,7 +135,7 @@ std::string Carpeta::getDireccion()
 }
 
 std::string Carpeta::getPath()
-{
+{	
 	return this->carpetaLogica->getPath();
 }
 

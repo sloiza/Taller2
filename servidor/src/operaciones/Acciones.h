@@ -1,9 +1,4 @@
-/*
- * Acciones.h
- *
- *  Created on: 21/11/2015
- *      Author: manuel
- */
+
 
 #ifndef ACCIONES_H_
 #define ACCIONES_H_

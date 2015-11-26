@@ -1,9 +1,4 @@
-/*
- * HandlerEventos.h
- *
- *  Created on: 17/9/2015
- *      Author: manuel
- */
+
 
 #ifndef HANDLEREVENTOS_H_
 #define HANDLEREVENTOS_H_

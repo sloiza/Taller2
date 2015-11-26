@@ -1,9 +1,3 @@
-/*
- * ManagerArchivos.h
- *
- *  Created on: 26/10/2015
- *      Author: manuel
- */
 
 #ifndef MANAGERARCHIVOS_H_
 #define MANAGERARCHIVOS_H_

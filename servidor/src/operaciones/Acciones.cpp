@@ -1,9 +1,3 @@
-/*
- * Acciones.cpp
- *
- *  Created on: 21/11/2015
- *      Author: manuel
- */
 
 #include "Acciones.h"
 

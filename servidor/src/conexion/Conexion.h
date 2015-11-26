@@ -1,9 +1,3 @@
-/*
- * Conexion.h
- *
- *  Created on: 27/9/2015
- *      Author: manuel
- */
 
 #ifndef CONEXION_H_
 #define CONEXION_H_

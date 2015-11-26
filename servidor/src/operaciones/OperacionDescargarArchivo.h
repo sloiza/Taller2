@@ -1,9 +1,4 @@
-/*
- * OperacionDescargarArchivo.h
- *
- *  Created on: 30/10/2015
- *      Author: manuel
- */
+
 
 #ifndef OPERACIONDESCARGARARCHIVO_H_
 #define OPERACIONDESCARGARARCHIVO_H_

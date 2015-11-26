@@ -1,9 +1,3 @@
-/*
- * URI.h
- *
- *  Created on: 27/9/2015
- *      Author: manuel
- */
 
 #ifndef URI_H_
 #define URI_H_

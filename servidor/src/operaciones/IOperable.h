@@ -1,9 +1,4 @@
-/*
- * IOperable.h
- *
- *  Created on: 28/10/2015
- *      Author: manuel
- */
+
 
 #ifndef IOPERABLE_H_
 #define IOPERABLE_H_

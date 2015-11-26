@@ -1,9 +1,3 @@
-/*
- * Respuesta.h
- *
- *  Created on: 31/10/2015
- *      Author: manuel
- */
 
 #ifndef RESPUESTA_H_
 #define RESPUESTA_H_

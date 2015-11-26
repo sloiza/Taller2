@@ -1,9 +1,3 @@
-/*
- * OperacionErrorURL.h
- *
- *  Created on: 29/10/2015
- *      Author: manuel
- */
 
 #ifndef OPERACIONERRORURL_H_
 #define OPERACIONERRORURL_H_

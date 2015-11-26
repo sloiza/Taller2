@@ -1,9 +1,3 @@
-/*
- * OperacionesCarpetas.h
- *
- *  Created on: 30/10/2015
- *      Author: manuel
- */
 
 #ifndef OPERACIONESCARPETAS_H_
 #define OPERACIONESCARPETAS_H_

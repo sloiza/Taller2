@@ -1,9 +1,4 @@
-/*
- * CarpetaCompartirConUsuarios.h
- *
- *  Created on: 14/11/2015
- *      Author: manuel
- */
+
 
 #ifndef CARPETACOMPARTIRCONUSUARIOS_H_
 #define CARPETACOMPARTIRCONUSUARIOS_H_

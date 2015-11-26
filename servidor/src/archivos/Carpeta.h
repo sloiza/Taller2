@@ -1,9 +1,3 @@
-/*
- * Carpeta.h
- *
- *  Created on: 3/11/2015
- *      Author: manuel
- */
 
 #ifndef CARPETA_H_
 #define CARPETA_H_

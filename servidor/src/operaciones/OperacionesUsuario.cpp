@@ -1,9 +1,4 @@
-/*
- * OperacionesUsuario.cpp
- *
- *  Created on: 28/10/2015
- *      Author: manuel
- */
+
 
 #include "OperacionesUsuario.h"
 

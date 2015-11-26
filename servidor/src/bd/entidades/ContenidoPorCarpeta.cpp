@@ -1,9 +1,3 @@
-/*
- * ContenidoPorCarpeta.cpp
- *
- *  Created on: 4/11/2015
- *      Author: manuel
- */
 
 #include "ContenidoPorCarpeta.h"
 

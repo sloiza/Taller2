@@ -1,9 +1,3 @@
-/*
- * OperacionesArchivos.h
- *
- *  Created on: 28/10/2015
- *      Author: manuel
- */
 
 #ifndef OPERACIONESARCHIVOS_H_
 #define OPERACIONESARCHIVOS_H_

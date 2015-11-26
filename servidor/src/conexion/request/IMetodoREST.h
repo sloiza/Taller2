@@ -1,9 +1,4 @@
-/*
- * IMetodoREST.h
- *
- *  Created on: 27/9/2015
- *      Author: manuel
- */
+
 
 #ifndef IMETODOREST_H_
 #define IMETODOREST_H_

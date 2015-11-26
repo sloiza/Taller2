@@ -1,9 +1,3 @@
-/*
- * ManagerBD.cpp
- *
- *  Created on: 9/10/2015
- *      Author: manuel
- */
 
 #include "ManagerBD.h"
 

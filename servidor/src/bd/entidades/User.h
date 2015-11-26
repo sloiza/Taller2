@@ -16,7 +16,9 @@ namespace ConexionServidor
 {
 namespace BaseDeDatos
 {
-	
+/**
+ * @brief Clase 
+ */
 class User : public EntidadDB
 {
 
@@ -37,31 +39,91 @@ public:
 	static const std::string etiquetas[];
 
 	User();
+	/**
+	 * @brief Constructor: Crea una instancia de User  dado un json
+	 */
 	User(std::string contenido);
+	/**
+	 * @brief Constructor: Crea una instancia de User  dados los atributos de la clase
+	 */
 	User(string firstName, string lastName, string nickName, string email, string pathProf,string location);
 	virtual ~User();
+	/**
+	 * @brief Devuelve un string con el nombre del usuario
+	 */
 	string getName();
+	/**
+	 * @brief Setea el nombre del usuario
+	 */
 	void setName(string name);
+	/**
+	 * @brief Devuelve un string con el apellido del usuario
+	 */
 	string getLastName();
+	/**
+	 * @brief Setea el apellido del usuario
+	 */
 	void setLastName(string lastName);
+	/**
+	 * @brief Devuelve un string con el mail del usuario
+	 */
 	string getEmail();
+	/**
+	 * @brief Setea el mail del usuario
+	 */
 	void setEmail(string email);
+	/**
+	 * @brief Devuelve un string con el path de la foto del usuario
+	 */
 	string getProfilePhoto();
+	/**
+	 * @brief Setea el path de la foto del usuario
+	 */
 	void setProfilePhoto(string pathProf);
+	/**
+	 * @brief Devuelve un string con la localización del usuario
+	 */
 	string getLocation();
+	/**
+	 * @brief Setea la localización del usuario
+	 */
 	void setLocation(string location);
+	/**
+	 * @brief Devuelve un string con el nickname del usuario
+	 */
 	string getNickName();
+	/**
+	 * @brief Setea el nickname del usuario
+	 */
 	void setNickName(string nickName);
+	/**
+	 * @brief Setea el status del usuario
+	 */
 	void setStatus(bool st);
+	/**
+	 * @brief Devuelve un bool con el status del usuario
+	 */
 	bool getStatus();
-
+	/**
+	 * @brief Devuelve un string con el password del usuario
+	 */
 	std::string getPassword();
+	/**
+	 * @brief Setea el password del usuario
+	 */
 	void setPassword(std::string password);
-
+	/**
+	 * @brief Devuelve un string con el id del usuario
+	 */
 	std::string getID();
+	/**
+	 * @brief Setea el id del usuario
+	 */
 	void setID(std::string id);
 
-	// Metodos de EntidadDB
+	/**
+	 * @brief Devuelve un string con el json asociado al usuario
+	 */
 	virtual std::string getValor();
 
 protected:

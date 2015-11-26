@@ -1,9 +1,4 @@
-/*
- * ArchivoCompartirConUsuarios.cpp
- *
- *  Created on: 16/11/2015
- *      Author: manuel
- */
+
 
 #include "ArchivoCompartirConUsuarios.h"
 

@@ -1,9 +1,4 @@
-/*
- * CarpetaLogica.h
- *
- *  Created on: 3/11/2015
- *      Author: manuel
- */
+
 
 #ifndef CARPETALOGICA_H_
 #define CARPETALOGICA_H_

@@ -1,9 +1,4 @@
-/*
- * OperacionBusqueda.h
- *
- *  Created on: 17/11/2015
- *      Author: manuel
- */
+
 
 #ifndef OPERACIONBUSQUEDA_H_
 #define OPERACIONBUSQUEDA_H_

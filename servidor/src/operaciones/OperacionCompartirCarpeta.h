@@ -1,9 +1,4 @@
-/*
- * OperacionCompartirCarpeta.h
- *
- *  Created on: 30/10/2015
- *      Author: manuel
- */
+
 
 #ifndef OPERACIONCOMPARTIRCARPETA_H_
 #define OPERACIONCOMPARTIRCARPETA_H_

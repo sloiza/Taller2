@@ -1,9 +1,3 @@
-/*
- * Servidor.h
- *
- *  Created on: 16/9/2015
- *      Author: manuel
- */
 
 #ifndef SERVIDOR_H_
 #define SERVIDOR_H_

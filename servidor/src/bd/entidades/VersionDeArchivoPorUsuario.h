@@ -1,9 +1,4 @@
-/*
- * VersionDeArchivoPorUsuario.h
- *
- *  Created on: 22/11/2015
- *      Author: manuel
- */
+
 
 #ifndef VERSIONDEARCHIVOPORUSUARIO_H_
 #define VERSIONDEARCHIVOPORUSUARIO_H_

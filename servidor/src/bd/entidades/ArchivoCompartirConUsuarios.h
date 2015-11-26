@@ -1,9 +1,4 @@
-/*
- * ArchivoCompartirConUsuarios.h
- *
- *  Created on: 16/11/2015
- *      Author: manuel
- */
+
 
 #ifndef ARCHIVOCOMPARTIRCONUSUARIOS_H_
 #define ARCHIVOCOMPARTIRCONUSUARIOS_H_

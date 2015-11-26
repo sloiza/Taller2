@@ -1,9 +1,4 @@
-/*
- * ContenidoPorCarpeta.h
- *
- *  Created on: 4/11/2015
- *      Author: manuel
- */
+
 
 #ifndef CONTENIDOPORCARPETA_H_
 #define CONTENIDOPORCARPETA_H_
@@ -33,9 +28,14 @@ public:
 	static const std::string etiquetas[];
 
 	ContenidoPorCarpeta();
+	/**
+	 * @brief Constructor: Genera una instancia de la entidad a partir de un string con el contenido.
+	 */
 	ContenidoPorCarpeta(std::string contenido);
 	virtual ~ContenidoPorCarpeta();
-
+	/**
+	 * @brief Setea el path 
+	 */
 	void setPath(std::string), setNombre(std::string), setDireccion(std::string), agregarArchivo(std::string), agregarCarpeta(std::string);
 	void eliminarArchivo(std::string), eliminarCarpeta(std::string), eliminarTodosLosArchivos(), eliminarTodasLosCarpetas();
 

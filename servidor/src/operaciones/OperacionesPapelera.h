@@ -1,9 +1,4 @@
-/*
- * OperacionesPapelera.h
- *
- *  Created on: 16/11/2015
- *      Author: manuel
- */
+
 
 #ifndef OPERACIONESPAPELERA_H_
 #define OPERACIONESPAPELERA_H_
@@ -31,9 +26,17 @@ class OperacionesPapelera : public IOperable
 public:
 	OperacionesPapelera();
 	virtual ~OperacionesPapelera();
-
+	/**
+	 * @brief Elimina la papelera
+	 */
 	ConexionServidor::Respuesta delet(Utiles::Bytes* contenido, std::string query);
+	/**
+	 * @brief Obtiene archivos de la papelera
+	 */
 	ConexionServidor::Respuesta get(Utiles::Bytes* contenido, std::string query);
+	/**
+	 * @brief Agrega archivos a la papelera
+	 */
 	ConexionServidor::Respuesta post(Utiles::Bytes* contenido, std::string query);
 	ConexionServidor::Respuesta put(Utiles::Bytes* contenido, std::string query);
 
