@@ -12,3 +12,4 @@ app/Documentation
 Documentation/docClient
 Documentation/docServer
 Documentation/_build
+Documentation/cov

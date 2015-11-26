@@ -20,4 +20,3 @@ desde el navegador ingresar: 'localhost:8080/una/url/cualquiera'.
 deberia aparecer: "Hello! Requested URI is [/una/url/cualquiera]"
 
 [![Build Status](https://travis-ci.org/sloiza/Taller2.svg?branch=master)](https://travis-ci.org/sloiza/Taller2)
-[![Coverage Status](https://coveralls.io/repos/sloiza/Taller2/badge.svg?branch=master&service=github)](https://coveralls.io/github/sloiza/Taller2?branch=master)

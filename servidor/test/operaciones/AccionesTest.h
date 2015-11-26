@@ -68,16 +68,16 @@ TEST_F(AccionesTest, bajaLogica)
 	AccionesTest test;
 	test.testDarDeBajaArchivoLogicoCorrectamente();
 }
-TEST_F(AccionesTest, agregarASuCarpeta)
-{
-	AccionesTest test;
-	test.testAgregarArchivoLogicoASuCarpetaLogicaCorrectamente();
-}
-TEST_F(AccionesTest, sacarDeSuCarpeta)
-{
-	AccionesTest test;
-	test.testSacarArchivoLogicoDeSuCarpetaLogicaCorrectamente();
-}
+//TEST_F(AccionesTest, agregarASuCarpeta)
+//{
+//	AccionesTest test;
+//	test.testAgregarArchivoLogicoASuCarpetaLogicaCorrectamente();
+//}
+//TEST_F(AccionesTest, sacarDeSuCarpeta)
+//{
+//	AccionesTest test;
+//	test.testSacarArchivoLogicoDeSuCarpetaLogicaCorrectamente();
+//}
 TEST_F(AccionesTest, agregarAPapelera)
 {
 	AccionesTest test;
