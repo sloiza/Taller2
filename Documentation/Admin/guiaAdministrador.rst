@@ -19,6 +19,7 @@ Dependencias
 Instalación rocksdb:
 
 .. code-block:: bash
+
    $ wget https://github.com/facebook/rocksdb/archive/v4.1.zip
    $ unzip v4.1.zip
    $ cd rocksdb-4.1
@@ -29,6 +30,7 @@ El resto de las dependencias:
 
 .. code-block:: bash
 
+   $ sudo apt-get install libgflags-dev
    $ sudo apt-get install libsnappy-dev
    $ sudo apt-get install zlib1g-dev
    $ sudo apt-get install libbz2-dev
