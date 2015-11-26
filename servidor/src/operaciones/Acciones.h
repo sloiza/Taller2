@@ -18,6 +18,9 @@
 #include "../bd/entidades/User.h"
 // Operaciones
 #include "InfoOperaciones.h"
+// utiles
+#include "../utiles/base64.h"
+
 
 // STL
 #include <algorithm>

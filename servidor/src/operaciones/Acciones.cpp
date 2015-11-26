@@ -195,11 +195,11 @@ bool Acciones::modificarArchivoLogico(ConexionServidor::BaseDeDatos::ArchivoLogi
 	}
 	archivoActual.setContenido(valorRecuperadoActual);
 
-	std::vector<std::string> etiquetas = archivoActual.getEtiquetas();
-	for ( unsigned int i = 0 ; i < etiquetas.size() ; i++ )
-	{
-		archivoLogicoNuevo->agregarEtiqueta( etiquetas[i] );
-	}
+//	std::vector<std::string> etiquetas = archivoActual.getEtiquetas();
+//	for ( unsigned int i = 0 ; i < etiquetas.size() ; i++ )
+//	{
+//		archivoLogicoNuevo->agregarEtiqueta( etiquetas[i] );
+//	}
 
 	std::vector<std::string> compartidoCon = archivoActual.getCompartidoCon();
 	for ( unsigned int i = 0 ; i < compartidoCon.size() ; i++ )
@@ -425,7 +425,7 @@ bool Acciones::actualizarVersionDelQueDescarga(ConexionServidor::BaseDeDatos::Ar
 	std::string valorRecuperado = versionDescargador.recuperar();
 	if ( valorRecuperado.compare("vacio") == 0 )
 	{
-		Utiles::Log::instancia()->debug( "valorRecuperado versionModificador: " + valorRecuperado, this->nombreClase() );
+		Utiles::Log::instancia()->warn( "No existe el usuario '" + usuario->getEmail() + "' que quiere realizar la descargar.", this->nombreClase() );
 		return false;
 	}
 	versionDescargador.setContenido( valorRecuperado );
@@ -469,10 +469,16 @@ ConexionServidor::BaseDeDatos::ArchivoLogico* Acciones::parsearArchivoDeQuery( s
 			archivoLogico->setExtension( valor );
 		}else if ( parametro.compare("etiqueta") == 0 )
 		{
-			archivoLogico->agregarEtiqueta( valor );
+			std::vector<std::string> etiquetas = Utiles::Metodos::split( valor, ' ' );
+			for ( unsigned int j = 0 ; j < etiquetas.size() ; j++ )
+			{
+				std::string desencodeado = base64_decode( etiquetas[j] );
+				archivoLogico->agregarEtiqueta( desencodeado );
+			}
 		}else if ( parametro.compare("fecha_ulti_modi") == 0 )
 		{
-			archivoLogico->setUltimaFechaModif( valor );
+			std::string desencodeado = base64_decode( valor );
+			archivoLogico->setUltimaFechaModif( desencodeado );
 		}else if ( parametro.compare("usuario_ulti_modi") == 0 )
 		{
 			archivoLogico->setUltimoUsuarioModif( valor );
