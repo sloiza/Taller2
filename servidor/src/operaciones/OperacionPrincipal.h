@@ -1,7 +1,6 @@
 /// \file OperacionPrincipal.h
 /// \date 2015-11-26
 /// \brief Clase que realiza la operacion principal.
-#ifndef OPERACIONESUSUARIO_H_
 #ifndef OPERACIONPRINCIPAL_H_
 #define OPERACIONPRINCIPAL_H_
 
