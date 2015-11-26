@@ -12,7 +12,7 @@ public class SessionManager {
     SharedPreferences pref;
     Editor editor;
     Context context;
-    String ipDefault = "http://192.168.43.71";
+    String ipDefault = "http://192.168.0.19";
     String portDefault = ":8080/";
 
     int PRIVATE_MODE = 0;

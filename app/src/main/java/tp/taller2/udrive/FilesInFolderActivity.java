@@ -516,10 +516,9 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
             JSONArray jsonArray = new JSONArray();
             jsonArray.put("file");
             try {
-                String name = URLEncoder.encode(Utility.getNameFromFile(file.getName()), "utf-8");
                 String lastModDate = URLEncoder.encode(currentDateAndTime, "utf-8");
                 String label = URLEncoder.encode(jsonArray.toString(), "utf-8");
-                new UploadFileToServer().execute(session.getIp() + session.getPort() + "archivos?nombre=" + name
+                new UploadFileToServer().execute(session.getIp() + session.getPort() + "archivos?nombre=" + Utility.getNameFromFile(file.getName())
                         + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=" + label
                         + "&fecha_ulti_modi=" + lastModDate + "&usuario_ulti_modi=" + email + "&fecha_creacion=" + currentDate
                         + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/");

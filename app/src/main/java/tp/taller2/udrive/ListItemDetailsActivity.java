@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -99,11 +100,10 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         JSONArray jsonArray = new JSONArray();
         jsonArray.put(label);
         try {
-            String name = URLEncoder.encode(Utility.getNameFromFile(itemName), "utf-8");
             String lastModDate = URLEncoder.encode(currentDateAndTime, "utf-8");
             String labelEncoded = URLEncoder.encode(jsonArray.toString(), "utf-8");
             if(Utility.isNotNull(label) && Utility.isNotNull(location)){
-                    new putModifyItemDetailsService().execute(session.getIp() + session.getPort() + "archivos?nombre=" + name
+                    new putModifyItemDetailsService().execute(session.getIp() + session.getPort() + "archivos?nombre=" + Utility.getNameFromFile(itemName)
                             + "&extension=" + Utility.getExtensionFromFile(itemName) + "&etiqueta=" + labelEncoded
                             + "&fecha_ulti_modi=" + lastModDate + "&usuario_ulti_modi=" + email
                             + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/");
@@ -161,12 +161,13 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
-                Object label = jsonObject.getJSONArray("etiqueta");
                 Object lastModDate = jsonObject.get("fecha_ulti_modi");
                 Object lastModUser = jsonObject.get("usuario_ulti_modi");
                 Object name = jsonObject.get("nombre");
-                //Object created = jsonObject.get("fecha_creacion");
-                Object shareWith = jsonObject.get("compartido_con");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                String currentDate = simpleDateFormat.format(new Date());
+                JSONArray labelArray;
+                JSONArray shareWithArray;
                 if(status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.i("Item metadata", message.toString());
@@ -174,12 +175,24 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                     Log.d("Item metadata", jsonObject.toString());
                     Utility.appendToDebugLog("Item metadata", jsonObject.toString());
                     nameET.setText(name.toString());
-                    labelET.setText(label.toString().substring(2,label.toString().length() - 2));
-                    //createdEt.setText(created.toString());
-                    modifiedET.setText(lastModDate.toString() + " by " + lastModUser.toString()); ;
+                    createdET.setText(currentDate);
+                    modifiedET.setText(URLDecoder.decode(lastModDate.toString(), "utf-8") + " by " + lastModUser.toString()); ;
                     ownerET.setText(email);
-                    shareWithET.setText(shareWith.toString());
                     locationET.setText("archivos/" + email + "/");
+                    if(jsonObject.has("etiqueta")){
+                        labelArray = jsonObject.getJSONArray("etiqueta");
+                        for (int i=0; i<labelArray.length(); i++) {
+                            String label = URLDecoder.decode(labelArray.getString(i), "utf-8");
+                            labelET.append(label + ",");
+                        }
+                    }
+                    if(jsonObject.has("compartido_con")){
+                        shareWithArray = jsonObject.getJSONArray("compartido_con");
+                        for (int i=0; i<shareWithArray.length(); i++) {
+                            String shareWith = shareWithArray.getString(i);
+                            shareWithET.append(shareWith + ",");
+                        }
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.e("Item metadata", message.toString());
