@@ -1,4 +1,6 @@
-
+/// \file JsonInfo.h
+/// \date 2015-11-26
+/// \brief Clase wrapper de json.
 #ifndef JSONINFO_H_
 #define JSONINFO_H_
 
@@ -14,7 +16,7 @@ namespace ConexionServidor
 {
 namespace BaseDeDatos
 {
-
+/// \brief Clase wrapper de json.
 class JsonInfo {
 public:
 	/**

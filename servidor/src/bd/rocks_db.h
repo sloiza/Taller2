@@ -1,3 +1,6 @@
+/// \file rocks_db.h
+/// \date 2015-11-26
+/// \brief Interfaz para utilizar Rocksdb.
 #ifndef ROCKS_DB_H_
 #define ROCKS_DB_H_
 #include <cstdio>
@@ -14,7 +17,7 @@
 
 using namespace std;
 using namespace rocksdb;
-
+/// \brief Interfaz para utilizar Rocksdb.
 class rocks_db{
 
 	public:

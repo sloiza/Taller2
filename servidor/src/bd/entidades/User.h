@@ -1,3 +1,6 @@
+/// \file User.h
+/// \date 2015-11-26
+/// \brief Clase que representa a un usuario logico.
 #ifndef USER_H_
 #define USER_H_
 #include <cstdio>
@@ -16,9 +19,7 @@ namespace ConexionServidor
 {
 namespace BaseDeDatos
 {
-/**
- * @brief Clase 
- */
+/// \brief Clase que representa a un usuario logico.
 class User : public EntidadDB
 {
 
@@ -37,7 +38,7 @@ public:
 	};
 
 	static const std::string etiquetas[];
-
+	/// \brief Constructor.
 	User();
 	/**
 	 * @brief Constructor: Crea una instancia de User  dado un json
@@ -47,6 +48,7 @@ public:
 	 * @brief Constructor: Crea una instancia de User  dados los atributos de la clase
 	 */
 	User(string firstName, string lastName, string nickName, string email, string pathProf,string location);
+	/// \brief Destructor.
 	virtual ~User();
 	/**
 	 * @brief Devuelve un string con el nombre del usuario

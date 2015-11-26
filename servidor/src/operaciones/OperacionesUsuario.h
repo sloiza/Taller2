@@ -1,5 +1,6 @@
-
-
+/// \file OperacionesUsuario.h
+/// \date 2015-11-26
+/// \brief Clase que realiza las operaciones de usuario.
 #ifndef OPERACIONESUSUARIO_H_
 #define OPERACIONESUSUARIO_H_
 
@@ -22,7 +23,7 @@ namespace ConexionServidor
 
 namespace Operaciones
 {
-
+/// \brief Clase que realiza las operaciones de usuario.
 class OperacionesUsuario : public IOperable {
 
 public:
@@ -68,10 +69,13 @@ public:
 	 */
 	ConexionServidor::Respuesta put(Utiles::Bytes* contenido, std::string query);
 
+	/// \brief Imprime la operacion.
 	void imprimir();
 
 private:
+	/// \brief Chequea si existe el usuario.
 	bool existeUsuarioConLosMismosDatos(std::string);
+	/// \brief Chequea si el password es valido.
 	bool passwordValido(std::string);
 };
 };

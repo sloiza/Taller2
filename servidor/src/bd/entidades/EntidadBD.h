@@ -1,4 +1,6 @@
-
+/// \file EntidadBD.h
+/// \date 2015-11-26
+/// \brief Clase utilizada por las entidades para interactuar con la base de datos
 #ifndef ENTIDAD_H_
 #define ENTIDAD_H_
 
@@ -57,7 +59,9 @@ public:
 	virtual std::string recuperar(); 	// GET
 
 protected:
+	/// \brief Abstracto. Devuelve el nombre de la columna de familia.
 	virtual std::string getColumnaDeFamilia() = 0;
+	/// \brief Abstracto. Devuelve clave de la entidad.
 	virtual std::string getClave() = 0;
 
 	JsonInfo* info;

@@ -1,4 +1,6 @@
-
+/// \file Conexion.h
+/// \date 2015-11-26
+/// \brief Clase que representa a una conexion recibida.
 #ifndef CONEXION_H_
 #define CONEXION_H_
 
@@ -36,23 +38,33 @@ enum METODOS
 	POST,
 	PUT
 };
-
+/// \brief Clase que representa a una conexion recibida.
 class Conexion
 {
 public:
+	/// \brief Constructor.
 	Conexion();
+	/// \brief Destructor.
 	virtual ~Conexion();
 
+	/// \brief Inicializa la conexion, parseando los datos de la conexion.
 	void inicializar(struct mg_connection*);
+	/// \brief Procesa la request y devuelve una respuesta.
 	ConexionServidor::Respuesta procesarRequest();
 
+	/// \brief Devuelve la URI accedida.
 	Request::URI* getUri();
+	/// \brief Devuelve el metodo utilizado.
 	Request::IMetodoREST* getMetodo();
+	/// \brief Devuelve el contenido.
 	std::string getContenido();
+	/// \brief Devuelve la query utilizada.
 	std::string getQuery();
 
+	/// \brief Devuelve el contenido en bytes.
 	Utiles::Bytes* getContenidoBytes();
 
+	/// \brief Devuelve la impresion de la conexion.
 	std::string impresion();
 
 private:
@@ -65,7 +77,9 @@ private:
 
 	std::map<std::string, METODOS>* mapaMetodos;
 
+	/// \brief Parsea el metodo a utilizar.
 	Request::IMetodoREST* reconocerMetodo(std::string);
+	/// \brief Reconoce y devuelve el contenido.
 	std::string reconocerContenido(std::string contenidoTotalDeLaRequestEntera, int contenidoTamanio);
 };
 };

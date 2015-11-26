@@ -11,6 +11,7 @@
 #include "utiles/LectorParametros.h"
 #include "utiles/Log.h"
 
+/// \brief Programa principal.
 int main(int argc, char** argv)
 {
 	ConexionServidor::LectorParametros lector;

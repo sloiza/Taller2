@@ -1,3 +1,6 @@
+/// \file ManagerBD.h
+/// \date 2015-11-26
+/// \brief Clase que maneja el acceso a la base de datos.
 #ifndef MANAGERBD_H_
 #define MANAGERBD_H_
 
@@ -9,7 +12,7 @@ namespace ConexionServidor
 {
 namespace BaseDeDatos
 {
-
+/// \brief Clase que maneja el acceso a la base de datos.
 class ManagerBD {
 public:
 	ManagerBD();
