@@ -73,6 +73,13 @@ ConexionServidor::Respuesta OperacionesArchivos::post(Utiles::Bytes* contenido, 
 
 	ConexionServidor::BaseDeDatos::ArchivoLogico* archivoLogico = this->acciones.parsearArchivoDeQuery( query );
 
+	ConexionServidor::BaseDeDatos::Archivo archivoFisico( archivoLogico->getContenido() );
+
+	if ( archivoFisico.existeFisicamente() )
+	{
+		return this->put( contenido, query );
+	}
+
 	bool resultadoAltaLogica = this->acciones.darDeAltaArchivoLogico( archivoLogico );
 
 	ConexionServidor::BaseDeDatos::Archivo* archivo = new ConexionServidor::BaseDeDatos::Archivo( archivoLogico->getContenido() );
