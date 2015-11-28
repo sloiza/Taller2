@@ -1,9 +1,4 @@
-/*
- * CarpetaLogica.cpp
- *
- *  Created on: 3/11/2015
- *      Author: manuel
- */
+
 
 #include "CarpetaLogica.h"
 

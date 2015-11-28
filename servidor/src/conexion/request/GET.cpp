@@ -1,9 +1,4 @@
-/*
- * GET.cpp
- *
- *  Created on: 27/9/2015
- *      Author: manuel
- */
+
 
 #include "GET.h"
 

@@ -1,10 +1,6 @@
-/*
- * InfoOperaciones.h
- *
- *  Created on: 31/10/2015
- *      Author: manuel
- */
-
+/// \file InfoOperaciones.h
+/// \date 2015-11-26
+/// \brief Clase que contiene informacion que utilizan las operaciones.
 #ifndef INFOOPERACIONES_H_
 #define INFOOPERACIONES_H_
 
@@ -16,10 +12,12 @@ namespace ConexionServidor
 
 namespace Operaciones
 {
-
+/// \brief Clase que contiene informacion que utilizan las operaciones.
 class InfoOperaciones {
 public:
+	/// \brief Constructor.
 	InfoOperaciones();
+	/// \brief Destructor.
 	virtual ~InfoOperaciones();
 
 	enum OPERACIONES

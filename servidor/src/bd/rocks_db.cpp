@@ -1,17 +1,13 @@
 #include "rocks_db.h"
 
-//using namespace rocks_db;
 using namespace rocksdb;
 
 rocks_db::rocks_db(){
 	Status s = this->create_db();
 	if(s.ok()){
-		//cout << "open OK" << endl;
 		this->open_db();
 	}else{
 		//ya fue creada, s´olo se abre
-		//cerr << s.ToString() << endl;
-		//cout << "only open" << endl;
 		this->open_db();
 	}
 	
@@ -26,9 +22,6 @@ Status rocks_db::create_db(){
 	s = DB::Open(options, this->dbpath, &_db);
 	if(s.ok()){
 		this->createCF(_db);
-		//cout << "DB created \n";
-		//this->handles = handles;
-
 	}else{
 		//cout << "DB couldn't be created. DB Error " ;
 		//cerr << s.ToString() << endl;
@@ -64,21 +57,16 @@ void rocks_db::createCFDescriptor(){
 }
 		
 
-
-
 Status rocks_db::open_db(){
 	Status s;
  	Options options ;
 	DB* _db = this->get_db();
-	//this->createCF();
 	this->createCFDescriptor();
 
 	vector<ColumnFamilyHandle*> handles;
 	s = DB::Open(options, this->dbpath, this->column_families, &handles, &_db);
-	//s = DB::Open(options, this->dbpath, &_db);
 	if(s.ok()){
 		this->set_db(_db);
-		//cout << "DB opened \n";
 		this->handles = handles;
 
 	}else{
@@ -96,13 +84,10 @@ int rocks_db::cantCFs(){
 Status rocks_db::put(string column, Slice key, Slice value){
 	DB* db = this->get_db();
 	int id  = this->getIdCF(column);
-	//printf("%p\n", db);
 	Status s = db->Put(WriteOptions(), this->handles[id], key , value);
 	if(s.ok()){
-		//cout << "Put OK" << endl;
 		return s;
 	}else{
-		//cout << "Failed insert in db. DB Error" << endl;
 		cerr << s.ToString() << endl;
 		return s;
 	}
@@ -154,6 +139,7 @@ DB* rocks_db::get_db(){
 void rocks_db::set_db(DB* db){
 	this->db = db;;
 }
+
 int rocks_db::getIdCF(string name){
 	
 	if(strcmp(name.c_str(), this->CF_name[0].c_str()) == 0){

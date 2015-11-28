@@ -16,11 +16,3 @@ Indice:
    /Usuario/manualdeusuario
    /Tecnica/docTecnica
 
-
-Indices y tablas
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-

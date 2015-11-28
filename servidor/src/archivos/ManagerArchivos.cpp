@@ -1,9 +1,3 @@
-/*
- * ManagerArchivos.cpp
- *
- *  Created on: 26/10/2015
- *      Author: manuel
- */
 
 #include "ManagerArchivos.h"
 
@@ -112,9 +106,14 @@ bool ManagerArchivos::carpetaEstaVacia(std::string path)
 {
 
 	DIR*            dp = opendir(path.c_str());
+	if(dp == NULL){
+		 std::cout << "Error opening " << path << std::endl;
+    	return false;
+    }
 	struct dirent*  ep = readdir(dp);
 	struct dirent*  entry = readdir(dp);
 	readdir_r(dp, entry, &ep);
+
 	if ( ep == NULL ) // si el nombre del directorio es ".", entonces no tiene archivos.
 	{
 		closedir(dp);

@@ -37,8 +37,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -508,28 +510,29 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
             filePath = uri.getPath();
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             String currentDateAndTime = sdf.format(new Date());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            String currentDate = simpleDateFormat.format(new Date());
             File file = new File(filePath);
             JSONArray jsonArray = new JSONArray();
             jsonArray.put("file");
-            //json.put("fecha_creacion", currentDateAndTime);
-            //json.put("version", 1);
-            //json.put("compartido_con", "");
-            new UploadFileToServer().execute(session.getIp() + session.getPort() + "archivos?nombre=" + Utility.getNameFromFile(file.getName())
-                    + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=file"
-                    + "&fecha_ulti_modi=24/11/2015" + "&usuario_ulti_modi=" + email
-                    + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/" + itemName + "/");
+            try {
+                String lastModDate = URLEncoder.encode(currentDateAndTime, "utf-8");
+                String label = URLEncoder.encode(jsonArray.toString(), "utf-8");
+                new UploadFileToServer().execute(session.getIp() + session.getPort() + "archivos?nombre=" + Utility.getNameFromFile(file.getName())
+                        + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=" + label
+                        + "&fecha_ulti_modi=" + lastModDate + "&usuario_ulti_modi=" + email + "&fecha_creacion=" + currentDate
+                        + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public String uploadFile(String urlServer) {
-        HttpURLConnection connection = null;
-        DataOutputStream outputStream = null;
-        DataInputStream inputStream = null;
+        HttpURLConnection connection;
+        DataOutputStream outputStream;
         StringBuilder sb = null;
         int serverResponseCode;
-        String lineEnd = "\r\n";
-        String twoHyphens = "--";
-        String boundary =  "*****";
 
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
@@ -551,7 +554,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
             connection.setRequestMethod("POST");
 
             connection.setRequestProperty("Connection", "Keep-Alive");
-            connection.setRequestProperty("Content-Type", "multipart/form-data;boundary="+boundary);
+            connection.setRequestProperty("Content-Type", "multipart/form-data");
 
             outputStream = new DataOutputStream( connection.getOutputStream() );
 

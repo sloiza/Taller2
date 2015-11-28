@@ -1,9 +1,4 @@
-/*
- * Entidad.cpp
- *
- *  Created on: 8/10/2015
- *      Author: manuel
- */
+
 
 #include "EntidadBD.h"
 

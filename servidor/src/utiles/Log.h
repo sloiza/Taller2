@@ -1,10 +1,6 @@
-/*
- * Log.h
- *
- *  Created on: 28/9/2015
- *      Author: manuel
- */
-
+/// \file Log.h
+/// \date 2015-11-26
+/// \brief Logger del servidor.
 #ifndef LOG_H_
 #define LOG_H_
 
@@ -17,19 +13,29 @@
 
 namespace Utiles
 {
-
-class Log {
+/// \brief Logger del servidor.
+class Log
+{
 public:
+	/// \brief Constructor.
 	Log();
+	/// \brief Destructor.
 	virtual ~Log();
 
+	/// \brief Devuelve la instancia del Log.
 	static Log* instancia();
+	/// \brief Cierra y libera el log.
 	static void destruir();
 
+	/// \brief Loggea en el log de informacion.
 	static void info(const std::string& mensaje, const std::string& autor);
+	/// \brief Loggea en el log de errores.
 	static void error(const std::string& mensaje, const std::string& autor);
+	/// \brief Loggea en el log de adventencias.
 	static void warn(const std::string& mensaje, const std::string& autor);
+	/// \brief Loggea en el log de debug.
 	static void debug(const std::string& mensaje, const std::string& autor);
+	/// \brief Loggea en el log de trazabilidad.
 	static void trace(const std::string& mensaje, const std::string& autor);
 
 private:
@@ -42,6 +48,6 @@ private:
 
 };
 
-}
+};
 
 #endif /* LOG_H_ */

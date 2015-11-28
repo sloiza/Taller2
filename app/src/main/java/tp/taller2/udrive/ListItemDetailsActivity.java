@@ -18,6 +18,9 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -92,10 +95,23 @@ public class ListItemDetailsActivity extends AppCompatActivity {
     public void editItemDetails(View view) {
         String label = labelET.getText().toString();
         String location = locationET.getText().toString();
-        if(Utility.isNotNull(label) && Utility.isNotNull(location)){
-                new putModifyItemDetailsService().execute(session.getIp() + session.getPort() + "archivos");
-        }else{
-            Toast.makeText(getApplicationContext(), R.string.error_emptyFields, Toast.LENGTH_LONG).show();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        String currentDateAndTime = sdf.format(new Date());
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(label);
+        try {
+            String lastModDate = URLEncoder.encode(currentDateAndTime, "utf-8");
+            String labelEncoded = URLEncoder.encode(jsonArray.toString(), "utf-8");
+            if(Utility.isNotNull(label) && Utility.isNotNull(location)){
+                    new putModifyItemDetailsService().execute(session.getIp() + session.getPort() + "archivos?nombre=" + Utility.getNameFromFile(itemName)
+                            + "&extension=" + Utility.getExtensionFromFile(itemName) + "&etiqueta=" + labelEncoded
+                            + "&fecha_ulti_modi=" + lastModDate + "&usuario_ulti_modi=" + email
+                            + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/");
+            }else{
+                Toast.makeText(getApplicationContext(), R.string.error_emptyFields, Toast.LENGTH_LONG).show();
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 
@@ -145,13 +161,13 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
-                Object label = jsonObject.getJSONArray("etiqueta");
                 Object lastModDate = jsonObject.get("fecha_ulti_modi");
                 Object lastModUser = jsonObject.get("usuario_ulti_modi");
                 Object name = jsonObject.get("nombre");
-                //Object version = jsonObject.get("version");
-                //Object created = jsonObject.get("fecha_creacion");
-                //Object shareWith = jsonObject.get("compartido_con");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                String currentDate = simpleDateFormat.format(new Date());
+                JSONArray labelArray;
+                JSONArray shareWithArray;
                 if(status.equals("ok")) {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.i("Item metadata", message.toString());
@@ -159,14 +175,24 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                     Log.d("Item metadata", jsonObject.toString());
                     Utility.appendToDebugLog("Item metadata", jsonObject.toString());
                     nameET.setText(name.toString());
-                    labelET.setText(label.toString().substring(2,label.toString().length() - 2));
-                    createdET.setText("11/10/2015");
-                    //createdEt.setText(created.toString());
-                    modifiedET.setText(lastModDate.toString() + " by " + lastModUser.toString()); ;
+                    createdET.setText(currentDate);
+                    modifiedET.setText(URLDecoder.decode(lastModDate.toString(), "utf-8") + " by " + lastModUser.toString()); ;
                     ownerET.setText(email);
-                    shareWithET.setText("miglesias@gmail.com");
-                    //shareWithET.setText(shareWith.toString());
                     locationET.setText("archivos/" + email + "/");
+                    if(jsonObject.has("etiqueta")){
+                        labelArray = jsonObject.getJSONArray("etiqueta");
+                        for (int i=0; i<labelArray.length(); i++) {
+                            String label = URLDecoder.decode(labelArray.getString(i), "utf-8");
+                            labelET.append(label + ",");
+                        }
+                    }
+                    if(jsonObject.has("compartido_con")){
+                        shareWithArray = jsonObject.getJSONArray("compartido_con");
+                        for (int i=0; i<shareWithArray.length(); i++) {
+                            String shareWith = shareWithArray.getString(i);
+                            shareWithET.append(shareWith + ",");
+                        }
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.e("Item metadata", message.toString());
@@ -180,29 +206,10 @@ public class ListItemDetailsActivity extends AppCompatActivity {
     }
 
     public String putModifyItemDetails(String URL) {
-        String label = labelET.getText().toString();
-        String location = locationET.getText().toString();
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
         HttpPut httpPut = new HttpPut(URL);
-        JSONObject json = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        String currentDateAndTime = sdf.format(new Date());
         try {
-            jsonArray.put(label);
-            json.put("nombre",Utility.getNameFromFile(itemName));
-            json.put("extension",Utility.getExtensionFromFile(itemName));
-            json.put("etiqueta",jsonArray);
-            json.put("fecha_ulti_modi",currentDateAndTime);
-            json.put("usuario_ulti_modi",email);
-            json.put("propietario",email);
-            json.put("baja_logica","no");
-            json.put("direccion",location);
-            json.put("path",actualItemPath);
-            httpPut.setEntity(new StringEntity(json.toString(), "UTF-8"));
-            httpPut.setHeader("Content-Type", "application/json");
-            httpPut.setHeader("Accept-Encoding", "application/json");
             HttpResponse response = httpClient.execute(httpPut);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
