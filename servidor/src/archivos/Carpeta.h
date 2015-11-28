@@ -33,10 +33,10 @@ public:
 	virtual void eliminar(); 	// DELETE
 	virtual std::string recuperar(); 	// GET
 
-	void setNombre(std::string), setEtiqueta(std::string), setUltimaFechaModif(std::string),
+	void setNombre(std::string) /*, setEtiqueta(std::string) */, setUltimaFechaModif(std::string),
 			setUltimoUsuarioModif(std::string), setPropietario(std::string), setBajaLogica(std::string), setDireccion(std::string);
 
-	std::string getNombre(), getEtiqueta(), getUltimaFechaModif(),
+	std::string getNombre(), /* getEtiqueta(), */ getUltimaFechaModif(),
 			getUltimoUsuarioModif(), getPropietario(), getBajaLogica(), getDireccion();
 
 	std::string getPath();
@@ -45,6 +45,7 @@ public:
 	bool estaVacia();
 
 	// Metodos de EntidadDB
+	virtual void setContenido(std::string);
 	virtual std::string getValor();
 
 	std::vector<std::string> getEtiquetas();

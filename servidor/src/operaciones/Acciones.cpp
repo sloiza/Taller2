@@ -459,7 +459,7 @@ ConexionServidor::BaseDeDatos::ArchivoLogico* Acciones::parsearArchivoDeQuery( s
 		std::string parametro = valores[0];
 		std::string valor = valores[1];
 
-		replace( valor.begin(), valor.end(), '+', ' ' );
+		//replace( valor.begin(), valor.end(), '+', ' ' );
 
 		if ( parametro.compare("nombre") == 0 )
 		{
@@ -469,11 +469,13 @@ ConexionServidor::BaseDeDatos::ArchivoLogico* Acciones::parsearArchivoDeQuery( s
 			archivoLogico->setExtension( valor );
 		}else if ( parametro.compare("etiqueta") == 0 )
 		{
+
 			std::vector<std::string> etiquetas = Utiles::Metodos::split( valor, ' ' );
 			for ( unsigned int j = 0 ; j < etiquetas.size() ; j++ )
 			{
-				std::string desencodeado = base64_decode( etiquetas[j] );
-				archivoLogico->agregarEtiqueta( desencodeado );
+				//std::string desencodeado = base64_decode( etiquetas[j] );
+				//archivoLogico->agregarEtiqueta( desencodeado );
+				archivoLogico->agregarEtiqueta( etiquetas[j]);
 			}
 		}else if ( parametro.compare("fecha_ulti_modi") == 0 )
 		{
@@ -502,6 +504,12 @@ ConexionServidor::BaseDeDatos::ArchivoLogico* Acciones::parsearArchivoDeQuery( s
 
 	return archivoLogico;
 }
+//std::vector<std::string> Acciones::obtenerEtiquetas(std::string etiquetasEncodeadas)
+//{
+//	std::string etiquetas = base64_decode( etiquetasEncodeadas );
+//
+//	etiquetas.replace( etiquetas.begin(), etiquetas.end(), '[','' );
+//}
 std::string Acciones::nombreClase()
 {
 	return "Acciones";

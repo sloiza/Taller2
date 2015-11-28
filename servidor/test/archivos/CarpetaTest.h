@@ -28,6 +28,8 @@ public:
 
 	void testCrearCarpetaCorrectamente();
 	void testEliminarCarpetaCorrectamente();
+	void testModificarCarpetaCorrectamente();
+	void testCrearCarpetaConContenido();
 
 	void TestBody() {};
 
@@ -53,7 +55,16 @@ TEST_F(CarpetaTest, eliminarCarpeta)
 	CarpetaTest test;
 	test.testEliminarCarpetaCorrectamente();
 }
-
+TEST_F(CarpetaTest, modificarCarpeta)
+{
+	CarpetaTest test;
+	test.testModificarCarpetaCorrectamente();
+}
+TEST_F(CarpetaTest, crearOtraCarpeta)
+{
+	CarpetaTest test;
+	test.testCrearCarpetaConContenido();
+}
 };
 
 #endif /* CARPETATEST_H_ */

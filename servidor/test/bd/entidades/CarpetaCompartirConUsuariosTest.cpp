@@ -27,6 +27,8 @@ void CarpetaCompartirConUsuariosTest::testRecuperarCarpetaCorrectamente()
 	std::string nombre = carpetaCompartir->getNombreCarpeta();
 
 	EXPECT_STREQ("carpetaCompartida", nombre.c_str());
+	EXPECT_STREQ("tmp/", this->carpetaCompartir->getDireccionCarpeta().c_str());
+	EXPECT_STREQ("tmp/carpetaCompartida", this->carpetaCompartir->getPathCarpeta().c_str());
 }
 void CarpetaCompartirConUsuariosTest::testRecuperarUsuariosCorrectamente()
 {
@@ -34,6 +36,12 @@ void CarpetaCompartirConUsuariosTest::testRecuperarUsuariosCorrectamente()
 
 	EXPECT_STREQ("manu2@gmail.com", usuarios[0].c_str());
 	EXPECT_STREQ("manu4@gmail.com", usuarios[1].c_str());
+}
+
+void CarpetaCompartirConUsuariosTest::testMetodosEntidad()
+{
+	ConexionServidor::BaseDeDatos::CarpetaCompartirConUsuarios carpetaCompartir2;
+	carpetaCompartir2.setContenido( this->carpetaCompartir->getValor() );
 }
 
 void CarpetaCompartirConUsuariosTest::setUp()

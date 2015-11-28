@@ -26,18 +26,18 @@ public:
 	static Log* instancia();
 	static void destruir();
 
-	void info(const std::string& mensaje, const std::string& autor);
-	void error(const std::string& mensaje, const std::string& autor);
-	void warn(const std::string& mensaje, const std::string& autor);
-	void debug(const std::string& mensaje, const std::string& autor);
-	void trace(const std::string& mensaje, const std::string& autor);
+	static void info(const std::string& mensaje, const std::string& autor);
+	static void error(const std::string& mensaje, const std::string& autor);
+	static void warn(const std::string& mensaje, const std::string& autor);
+	static void debug(const std::string& mensaje, const std::string& autor);
+	static void trace(const std::string& mensaje, const std::string& autor);
 
 private:
-	std::fstream logInfo;
-	std::fstream logError;
-	std::fstream logWarn;
-	std::fstream logDebug;
-	std::fstream logTrace;
+	static std::fstream logInfo;
+	static std::fstream logError;
+	static std::fstream logWarn;
+	static std::fstream logDebug;
+	static std::fstream logTrace;
 	static Log* ptr;
 
 };

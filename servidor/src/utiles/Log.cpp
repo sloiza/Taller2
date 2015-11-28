@@ -10,10 +10,20 @@
 using namespace Utiles;
 
 Log* Log::ptr = NULL;
+std::fstream Log::logInfo;
+std::fstream Log::logError;
+std::fstream Log::logWarn;
+std::fstream Log::logDebug;
+std::fstream Log::logTrace;
 
 Log::Log(){}
 
 Log::~Log()
+{
+	this->destruir();
+}
+
+void Log::destruir ()
 {
 	if( logInfo.is_open() )
 	{
@@ -31,10 +41,7 @@ Log::~Log()
 	{
 		logTrace.close();
 	}
-}
 
-void Log::destruir ()
-{
 	if ( ptr != NULL ) {
 		delete ( ptr );
 		ptr = NULL;

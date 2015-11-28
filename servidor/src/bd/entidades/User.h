@@ -38,7 +38,6 @@ public:
 
 	User();
 	User(std::string contenido);
-	User(string firstName, string lastName, string nickName, string email, string pathProf,string location);
 	virtual ~User();
 	string getName();
 	void setName(string name);
@@ -50,8 +49,6 @@ public:
 	void setProfilePhoto(string pathProf);
 	string getLocation();
 	void setLocation(string location);
-	string getNickName();
-	void setNickName(string nickName);
 	void setStatus(bool st);
 	bool getStatus();
 

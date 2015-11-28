@@ -156,9 +156,13 @@ bool Carpeta::estaVacia()
 }
 
 // Metodos de EntidadBD
+void Carpeta::setContenido(std::string contenido)
+{
+	this->carpetaLogica->setContenido( contenido );
+}
 std::string Carpeta::getValor()
 {
-	return this->getContenido();
+	return this->carpetaLogica->getContenido();
 }
 std::string Carpeta::getColumnaDeFamilia()
 {

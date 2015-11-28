@@ -31,9 +31,6 @@ class rocks_db{
 		void delete_db();
 		DB* get_db();
 		void set_db(DB* db);
-		void iterate_db();
-		void search(Slice prefix);
-		void ListColumnFamilies();
 
 		//struct que tiene el id en el vector del handler de column families
 		struct CF_id{
@@ -44,8 +41,6 @@ class rocks_db{
 
 	protected:
 		
-		Options get_options();
-		void set_options(Options opt);
 		string CF_name[3] = {kDefaultColumnFamilyName, "user", "file"};
 		int cantCFs();
 

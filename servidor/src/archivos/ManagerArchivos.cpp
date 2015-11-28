@@ -108,12 +108,6 @@ void ManagerArchivos::eliminarCarpetaVacia(std::string path)
 	//delete_folder_tree( path.c_str() );
 }
 
-
-bool ManagerArchivos::pathEsCarpeta(std::string path)
-{
-	return this->path_is_directory( path.c_str() );
-}
-
 bool ManagerArchivos::carpetaEstaVacia(std::string path)
 {
 
@@ -131,33 +125,4 @@ bool ManagerArchivos::carpetaEstaVacia(std::string path)
 		closedir(dp);
 		return false;
 	}
-}
-
-void ManagerArchivos::delete_folder_tree (const char* directory_name)
-{
-    DIR*            dp;
-    struct dirent*  ep;
-    char            p_buf[512] = {0};
-
-    dp = opendir(directory_name);
-
-    while ((ep = readdir(dp)) != NULL) {
-        sprintf(p_buf, "%s/%s", directory_name, ep->d_name);
-        if (path_is_directory(p_buf))
-            this->delete_folder_tree(p_buf);
-        else
-            unlink(p_buf);
-    }
-
-    closedir(dp);
-    rmdir(directory_name);
-}
-
-int ManagerArchivos::path_is_directory (const char* path) {
-    struct stat s_buf;
-
-    if (stat(path, &s_buf))
-        return 0;
-
-    return S_ISDIR(s_buf.st_mode);
 }

@@ -64,6 +64,8 @@ public:
 	ConexionServidor::BaseDeDatos::ArchivoLogico* parsearArchivoDeQuery( std::string query );
 
 	std::string nombreClase();
+
+	//std::vector<std::string> obtenerEtiquetas(std::string etiquetasEncodeadas);
 };
 };
 };

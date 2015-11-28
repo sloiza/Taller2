@@ -63,6 +63,16 @@ void ArchivoTest::testRecuperarArchivoCorrectamente()
 void ArchivoTest::testModificarArchivoCorrectamente()
 {
 
+	this->archivo1->setBytes( new Utiles::Bytes("1234567890", 10) );
+
+	this->archivo1->setDireccion( "direccion1/" );
+
+	this->archivo1->modificar();
+
+	std::string recuperado = manager.leer( this->archivo1->getPath() )->getStringDeBytes();
+
+	EXPECT_STREQ( "1234567890", recuperado.c_str() );
+	EXPECT_STREQ( "direccion1/", this->archivo1->getDireccion().c_str() );
 }
 void ArchivoTest::testEliminarArchivoCorrectamente()
 {
@@ -72,6 +82,15 @@ void ArchivoTest::testEliminarArchivoCorrectamente()
 	EXPECT_EQ( true, manager.existe( path ) );
 
 	this->archivo1->eliminar();
+
+	EXPECT_EQ( false, manager.existe( path ) );
+
+	path = this->archivo1->getPath();
+	manager.escribir( path,  new Utiles::Bytes(bytes, tamanio) ); // lo creo de nuevo
+
+	EXPECT_EQ( true, manager.existe( path ) );
+
+	this->archivo1->eliminarFisicamente();
 
 	EXPECT_EQ( false, manager.existe( path ) );
 }

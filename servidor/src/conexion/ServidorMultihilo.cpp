@@ -49,10 +49,6 @@ void ServidorMultihilo::setPuerto(int puerto)
 {
 	this->puerto = puerto;
 }
-void ServidorMultihilo::setOpcion(std::string nombre, std::string valor)
-{
-
-}
 
 void* ServidorMultihilo::servir(void *server)
 {

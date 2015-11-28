@@ -33,7 +33,6 @@ public:
 	void crear();
 	void setNumeroDeHilos(int);
 	void setPuerto(int);
-	void setOpcion(std::string nombre, std::string valor);
 	static void* servir(void *server);
 	void comenzarAEscuchar();
 	bool estaCorriendo();

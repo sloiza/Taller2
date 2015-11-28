@@ -91,10 +91,10 @@ void AccionesTest::testParsearArchivoDeQueryCorrectamente()
 
 	EXPECT_STREQ( "resumen_sistemas_distribuido" , archivoParseado->getNombre().c_str() );
 	EXPECT_STREQ( "pdf" , archivoParseado->getExtension().c_str() );
-	EXPECT_STREQ( "file" , archivoParseado->getEtiquetas()[0].c_str() );
-	EXPECT_STREQ( "tp" , archivoParseado->getEtiquetas()[1].c_str() );
-	EXPECT_STREQ( "facultad" , archivoParseado->getEtiquetas()[2].c_str() );
-	EXPECT_STREQ( "222902015_102908" , archivoParseado->getUltimaFechaModif().c_str() );
+	EXPECT_STREQ( base64_decode("file").c_str() , archivoParseado->getEtiquetas()[0].c_str() );
+	EXPECT_STREQ( base64_decode("tp").c_str() , archivoParseado->getEtiquetas()[1].c_str() );
+	EXPECT_STREQ( base64_decode("facultad").c_str() , archivoParseado->getEtiquetas()[2].c_str() );
+	EXPECT_STREQ( base64_decode("222902015_102908").c_str() , archivoParseado->getUltimaFechaModif().c_str() );
 	EXPECT_STREQ( "Mati Carreras " , archivoParseado->getUltimoUsuarioModif().c_str() );
 	EXPECT_STREQ( "Mati Carreras " , archivoParseado->getPropietario().c_str() );
 	EXPECT_STREQ( "no" , archivoParseado->getBajaLogica().c_str() );

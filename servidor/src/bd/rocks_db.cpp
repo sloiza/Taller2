@@ -93,15 +93,6 @@ int rocks_db::cantCFs(){
 	return sizeof(this->CF_name)/sizeof(this->CF_name[0]);
 }
 
-
-Options rocks_db::get_options(){
-	return this->options;
-}
-
-void rocks_db::set_options(Options opt){
-	this->options = opt;
-}
-
 Status rocks_db::put(string column, Slice key, Slice value){
 	DB* db = this->get_db();
 	int id  = this->getIdCF(column);
@@ -163,23 +154,6 @@ DB* rocks_db::get_db(){
 void rocks_db::set_db(DB* db){
 	this->db = db;;
 }
-
-//deprecated
-void rocks_db::iterate_db(){
-	Iterator* it = this->db->NewIterator(ReadOptions());
-	for (it->SeekToFirst(); it->Valid(); it->Next()) {
-		cout << it->key().ToString() << ": " << it->value().ToString() << endl;
-	}
-	delete it;
-}
-
-//deprecated
-void rocks_db::search(Slice prefix){
- 	auto iter = this->db->NewIterator(ReadOptions());
-    for (iter->Seek(prefix); iter->Valid() && iter->key().starts_with(prefix); iter->Next()) {
-		cout << iter->key().ToString() << ": " << iter->value().ToString() << endl;
-    }
-}
 int rocks_db::getIdCF(string name){
 	
 	if(strcmp(name.c_str(), this->CF_name[0].c_str()) == 0){
@@ -190,13 +164,4 @@ int rocks_db::getIdCF(string name){
 		return 2;
 	}
 	return -1;
-}
-
-void rocks_db::ListColumnFamilies(){
-	// Status s= this->db->ListColumnFamilies(this->options, this->dbpath, this->column_families);
-	// for (vector<int>::iterator it = this->column_families.begin() ; it != this->column_families.end(); ++it){
-	// 	cout << ' ' << *it << endl;
-		
-	// }
-
 }

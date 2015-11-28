@@ -42,13 +42,7 @@ public:
 	void eliminarCarpetaVacia(std::string direccion, std::string nombre);
 	void eliminarCarpetaVacia(std::string path);
 
-	bool pathEsCarpeta(std::string path);
 	bool carpetaEstaVacia(std::string path);
-
-private:
-
-	void delete_folder_tree(const char*);
-	int path_is_directory(const char*);
 };
 };
 };

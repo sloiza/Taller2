@@ -24,7 +24,7 @@ public:
 	virtual ~EntidadDB();
 
 	void setContenido(JsonInfo* contenido);
-	void setContenido(std::string contenido);
+	virtual void setContenido(std::string contenido);
 	virtual std::string getContenido();
 	bool contenidoValido();
 
