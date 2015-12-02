@@ -1,9 +1,4 @@
-/*
- * ServidorMultihilo.cpp
- *
- *  Created on: 19/11/2015
- *      Author: manuel
- */
+
 
 #include "ServidorMultihilo.h"
 
@@ -48,10 +43,6 @@ void ServidorMultihilo::setNumeroDeHilos(int numeroDeHilos)
 void ServidorMultihilo::setPuerto(int puerto)
 {
 	this->puerto = puerto;
-}
-void ServidorMultihilo::setOpcion(std::string nombre, std::string valor)
-{
-
 }
 
 void* ServidorMultihilo::servir(void *server)

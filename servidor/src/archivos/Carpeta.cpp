@@ -1,9 +1,4 @@
-/*
- * Carpeta.cpp
- *
- *  Created on: 3/11/2015
- *      Author: manuel
- */
+
 
 #include "Carpeta.h"
 
@@ -140,7 +135,7 @@ std::string Carpeta::getDireccion()
 }
 
 std::string Carpeta::getPath()
-{
+{	
 	return this->carpetaLogica->getPath();
 }
 
@@ -156,9 +151,13 @@ bool Carpeta::estaVacia()
 }
 
 // Metodos de EntidadBD
+void Carpeta::setContenido(std::string contenido)
+{
+	this->carpetaLogica->setContenido( contenido );
+}
 std::string Carpeta::getValor()
 {
-	return this->getContenido();
+	return this->carpetaLogica->getContenido();
 }
 std::string Carpeta::getColumnaDeFamilia()
 {

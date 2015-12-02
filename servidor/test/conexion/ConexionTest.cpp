@@ -20,6 +20,11 @@ ConexionTest::ConexionTest() : servidor(NULL) , conexion(NULL)
 	servidor = new ConexionServidor::Servidor();
 	servidor->crear();
 
+	servidorMT = new ConexionServidor::ServidorMultihilo();
+	servidorMT->setPuerto(8080);
+	servidorMT->setNumeroDeHilos(3);
+	servidorMT->crear();
+
 	struct mg_connection* conn = new struct mg_connection;
 
 	std::string contenidoTotal = testContenido + testContenidoRelleno;
@@ -57,6 +62,11 @@ void ConexionTest::testConexionEstable()
 
 	EXPECT_NE(0, numConexiones);
 	EXPECT_EQ(true, estaCorriendo);
+
+	estaCorriendo = servidorMT->estaCorriendo();
+
+	EXPECT_EQ(true, estaCorriendo);
+	EXPECT_STREQ("ServidorMultihilo", servidorMT->nombreClase().c_str() );
 }
 
 void ConexionTest::testInicializacionCorrecta()
@@ -65,6 +75,7 @@ void ConexionTest::testInicializacionCorrecta()
 	EXPECT_STREQ(testMetodo.c_str(), conexion->getMetodo()->impresion().c_str());
 	EXPECT_STREQ(testQuery.c_str(), conexion->getQuery().c_str());
 	EXPECT_STREQ(testContenido.c_str(), conexion->getContenido().c_str());
+	EXPECT_STREQ(testContenido.c_str(), conexion->getContenidoBytes()->getStringDeBytes().c_str());
 }
 
 void ConexionTest::testDevuelveGETComoMetodoDefault()

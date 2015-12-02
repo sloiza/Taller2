@@ -83,11 +83,11 @@ TEST_F(AccionesTest, agregarAPapelera)
 	AccionesTest test;
 	test.testAgregarArchivoLogicoAPapeleraCorrectamente();
 }
-TEST_F(AccionesTest, parsearQuery)
-{
-	AccionesTest test;
-	test.testParsearArchivoDeQueryCorrectamente();
-}
+//TEST_F(AccionesTest, parsearQuery)
+//{
+//	AccionesTest test;
+//	test.testParsearArchivoDeQueryCorrectamente();
+//}
 };
 
 #endif /* ACCIONESTEST_H_ */

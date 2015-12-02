@@ -1,9 +1,4 @@
-/*
- * Servidor.cpp
- *
- *  Created on: 16/9/2015
- *      Author: manuel
- */
+
 
 #include "Servidor.h"
 

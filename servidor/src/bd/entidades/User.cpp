@@ -11,15 +11,6 @@ User::User(std::string contenido)
 
 User::User() {}
 
-User::User(string firstName, string lastName, string nickName, string email, string pathProf,string location) {
-	this->setName(firstName);
-	this->setLastName(lastName);
-	this->setNickName(nickName);
-	this->setEmail(email);
-	this->setProfilePhoto(pathProf);
-	this->setLocation(location);
-}
-
 User::~User()
 {
 
@@ -37,15 +28,6 @@ string User::getLastName(){
 void User::setLastName(string lastName){
 	this->info->setAtributo(etiquetas[APELLIDO], lastName);
 }
-
-string User::getNickName(){
-	return this->info->getAtributo(etiquetas[NICK], "nickDefault");
-}
-
-void User::setNickName(string nickName){
-	this->info->setAtributo(etiquetas[NICK], nickName);
-}
-
 string User::getEmail(){
 	return this->info->getAtributo(etiquetas[MAIL], "mailDefault");
 }

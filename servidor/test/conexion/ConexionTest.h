@@ -16,6 +16,7 @@
 #include "../../src/utiles/Log.h"
 #include "../../src/conexion/mongoose.h"
 #include "../../src/conexion/Servidor.h"
+#include "../../src/conexion/ServidorMultihilo.h"
 
 namespace Tests
 {
@@ -44,6 +45,7 @@ protected:
 	virtual void TearDown();
 
 	ConexionServidor::Servidor* servidor;
+	ConexionServidor::ServidorMultihilo* servidorMT;
 	ConexionServidor::Conexion* conexion;
 };
 

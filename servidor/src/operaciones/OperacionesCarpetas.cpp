@@ -1,9 +1,4 @@
-/*
- * OperacionesCarpetas.cpp
- *
- *  Created on: 30/10/2015
- *      Author: manuel
- */
+
 
 #include "OperacionesCarpetas.h"
 

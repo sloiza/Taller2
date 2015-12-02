@@ -1,9 +1,3 @@
-/*
- * HandlerEventos.cpp
- *
- *  Created on: 17/9/2015
- *      Author: manuel
- */
 
 
 #include "HandlerEventos.h"

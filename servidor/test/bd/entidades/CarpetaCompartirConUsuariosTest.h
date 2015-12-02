@@ -29,6 +29,7 @@ public:
 
 	void testRecuperarCarpetaCorrectamente();
 	void testRecuperarUsuariosCorrectamente();
+	void testMetodosEntidad();
 
 	void TestBody() {};
 
@@ -52,6 +53,11 @@ TEST_F(CarpetaCompartirConUsuariosTest, recuperarUsuarios)
 {
 	CarpetaCompartirConUsuariosTest test;
 	test.testRecuperarUsuariosCorrectamente();
+}
+TEST_F(CarpetaCompartirConUsuariosTest, metodosEntidad)
+{
+	CarpetaCompartirConUsuariosTest test;
+	test.testMetodosEntidad();
 }
 };
 

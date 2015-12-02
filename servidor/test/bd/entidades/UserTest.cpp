@@ -45,6 +45,11 @@ void UserTest::testModificarEnBDCorrectamente()
 
 	this->user->setName("Pedro");
 	this->user->setLastName("Sanchez");
+	this->user->setEmail( "hola@gmail.com" );
+	this->user->setProfilePhoto( "fotitoturra" );
+	this->user->setLocation( "location" );
+	this->user->setPassword( "newpass" );
+	this->user->setID( "newID" );
 
 	this->user->modificar();
 
@@ -55,6 +60,11 @@ void UserTest::testModificarEnBDCorrectamente()
 
 	EXPECT_STREQ("Pedro", usuarioNuevo.getName().c_str());
 	EXPECT_STREQ("Sanchez", usuarioNuevo.getLastName().c_str());
+	EXPECT_STREQ("hola@gmail.com", usuarioNuevo.getEmail().c_str());
+	EXPECT_STREQ("fotitoturra", usuarioNuevo.getProfilePhoto().c_str());
+	EXPECT_STREQ("location", usuarioNuevo.getLocation().c_str());
+	EXPECT_STREQ("newpass", usuarioNuevo.getPassword().c_str());
+	EXPECT_STREQ("newID", usuarioNuevo.getID().c_str());
 }
 
 void UserTest::testEliminarEnBDCorrectamente()
@@ -88,3 +98,4 @@ void UserTest::terminando()
 		this->user = NULL;
 	}
 }
+

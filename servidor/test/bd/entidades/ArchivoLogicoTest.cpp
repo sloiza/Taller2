@@ -20,8 +20,8 @@ ArchivoLogicoTest::~ArchivoLogicoTest()
 }
 
 const std::string ArchivoLogicoTest::archivoEjemplo =
-"{\"nombre\":\"foto_09082015\",\"extension\":\"jpg\",\"etiqueta\":\"imagen\", \"fecha_ulti_modi\":\"26102015\","
-"\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\"}";
+"{\"nombre\":\"foto_09082015\",\"extension\":\"jpg\",\"etiqueta\": [ \"imagen\" ], \"fecha_ulti_modi\":\"26102015\","
+"\"usuario_ulti_modi\":\"1234\", \"propietario\":\"1234\", \"baja_logica\":\"no\", \"compartido_con\": [ \"arturito\"] , \"version\": \"1\" }";
 
 void ArchivoLogicoTest::testCrearYRecuperarEnBDCorrectamente()
 {
@@ -44,6 +44,12 @@ void ArchivoLogicoTest::testModificarEnBDCorrectamente()
 
 	this->archivo->setNombre("foto_26102015");
 	this->archivo->setExtension("png");
+	this->archivo->agregarEtiqueta( "foto" );
+	this->archivo->setUltimaFechaModif( "20151128" );
+	this->archivo->setUltimoUsuarioModif( "changos" );
+	this->archivo->setPropietario( "elpropi" );
+	this->archivo->agregarCompartidoCon( "rober@gmail.com" );
+	this->archivo->setVersion( "2" );
 
 	this->archivo->modificar();
 
@@ -54,6 +60,13 @@ void ArchivoLogicoTest::testModificarEnBDCorrectamente()
 
 	EXPECT_STREQ("foto_26102015", archivoNuevo.getNombre().c_str());
 	EXPECT_STREQ("png", archivoNuevo.getExtension().c_str());
+	EXPECT_STREQ("foto", archivoNuevo.getEtiquetas()[1].c_str());
+	EXPECT_STREQ("20151128", archivoNuevo.getUltimaFechaModif().c_str());
+	EXPECT_STREQ("changos", archivoNuevo.getUltimoUsuarioModif().c_str());
+	EXPECT_STREQ("elpropi", archivoNuevo.getPropietario().c_str());
+	EXPECT_STREQ("rober@gmail.com", archivoNuevo.getCompartidoCon()[1].c_str());
+	EXPECT_STREQ("2", archivoNuevo.getVersion().c_str());
+	EXPECT_STREQ("foto_26102015.png", archivoNuevo.getNombreYExtension().c_str());
 }
 
 void ArchivoLogicoTest::testEliminarEnBDCorrectamente()

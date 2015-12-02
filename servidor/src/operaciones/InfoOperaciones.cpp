@@ -1,9 +1,4 @@
-/*
- * InfoOperaciones.cpp
- *
- *  Created on: 31/10/2015
- *      Author: manuel
- */
+
 
 #include "InfoOperaciones.h"
 

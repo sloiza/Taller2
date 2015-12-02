@@ -1,9 +1,3 @@
-/*
- * Archivo.cpp
- *
- *  Created on: 26/10/2015
- *      Author: manuel
- */
 
 #include "Archivo.h"
 

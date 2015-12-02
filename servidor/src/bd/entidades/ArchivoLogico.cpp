@@ -1,9 +1,4 @@
-/*
- * Archivo.cpp
- *
- *  Created on: 25/10/2015
- *      Author: manuel
- */
+
 
 #include "ArchivoLogico.h"
 
