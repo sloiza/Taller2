@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -396,8 +397,8 @@ public class MainActivity extends AppCompatActivity
                 String lastModDate = URLEncoder.encode(currentDateAndTime, "utf-8");
                 String label = URLEncoder.encode(jsonArray.toString(), "utf-8");
                 new UploadFileToServer().execute(ipAddress + serverPort + "archivos?nombre=" + Utility.getNameFromFile(file.getName())
-                        + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=" + label
-                        + "&fecha_ulti_modi=" + lastModDate + "&usuario_ulti_modi=" + email + "&fecha_creacion=" + currentDate
+                        + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=file"
+                        + "&fecha_ulti_modi=" + currentDate + "&usuario_ulti_modi=" + email + "&fecha_creacion=" + currentDate
                         + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -650,8 +651,8 @@ public class MainActivity extends AppCompatActivity
             Log.d("date", currentDateAndTime);
             //json.put("fecha_creacion", currentDateAndTime);
             //json.put("compartido_con", "");
-            json.put("usuario_ulti_modi", name + " " + surname);
-            json.put("propietario", name + " " + surname);
+            json.put("usuario_ulti_modi", email);
+            json.put("propietario", email);
             json.put("baja_logica", "no");
             json.put("direccion", "archivos/" + email + "/");
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));

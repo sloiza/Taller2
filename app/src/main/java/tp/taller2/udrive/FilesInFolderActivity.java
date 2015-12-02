@@ -398,7 +398,7 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
             json.put("nombre", itemClick);
             json.put("propietario",email);
             json.put("baja_logica","si");
-            json.put("direccion","archivos/" + email + "/" + itemName);
+            json.put("direccion","archivos/" + email + "/" + itemName + "/");
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");
@@ -519,9 +519,9 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
                 String lastModDate = URLEncoder.encode(currentDateAndTime, "utf-8");
                 String label = URLEncoder.encode(jsonArray.toString(), "utf-8");
                 new UploadFileToServer().execute(session.getIp() + session.getPort() + "archivos?nombre=" + Utility.getNameFromFile(file.getName())
-                        + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=" + label
-                        + "&fecha_ulti_modi=" + lastModDate + "&usuario_ulti_modi=" + email + "&fecha_creacion=" + currentDate
-                        + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/");
+                        + "&extension=" + Utility.getExtensionFromFile(filePath) + "&etiqueta=file"
+                        + "&fecha_ulti_modi=" + currentDate + "&usuario_ulti_modi=" + email + "&fecha_creacion=" + currentDate
+                        + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/" + itemName + "/");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -648,8 +648,8 @@ public class FilesInFolderActivity extends AppCompatActivity implements  AbsList
             json.put("fecha_ulti_modi", currentDateAndTime);
             //json.put("fecha_creacion", currentDateAndTime);
             //json.put("compartido_con", "");
-            json.put("usuario_ulti_modi", name + " " + surname);
-            json.put("propietario", name + " " + surname);
+            json.put("usuario_ulti_modi", email);
+            json.put("propietario", email);
             json.put("baja_logica", "no");
             json.put("direccion", "archivos/" + email + "/" + itemName + "/");
             httpPost.setEntity(new StringEntity(json.toString(), "UTF-8"));

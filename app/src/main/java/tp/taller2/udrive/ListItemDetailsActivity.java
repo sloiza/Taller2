@@ -56,6 +56,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
     String itemName;
     String name;
     String surname;
+    String pathToShareFile;
     Integer actualVersion;
 
     @Override
@@ -88,14 +89,20 @@ public class ListItemDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         itemName = intent.getStringExtra("itemName");
-        actualItemPath = "archivos/" + email + "/";
+        pathToShareFile = intent.getStringExtra("pathToShareFile");
+        if(pathToShareFile != null){
+            actualItemPath = pathToShareFile;
+        } else {
+            actualItemPath = "archivos/" + email + "/";
+        }
         new getItemMetadataService().execute(session.getIp() + session.getPort() + "archivos");
     }
 
     public void editItemDetails(View view) {
         String label = labelET.getText().toString();
         String location = locationET.getText().toString();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        String owner = ownerET.getText().toString();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String currentDateAndTime = sdf.format(new Date());
         JSONArray jsonArray = new JSONArray();
         jsonArray.put(label);
@@ -104,9 +111,9 @@ public class ListItemDetailsActivity extends AppCompatActivity {
             String labelEncoded = URLEncoder.encode(jsonArray.toString(), "utf-8");
             if(Utility.isNotNull(label) && Utility.isNotNull(location)){
                     new putModifyItemDetailsService().execute(session.getIp() + session.getPort() + "archivos?nombre=" + Utility.getNameFromFile(itemName)
-                            + "&extension=" + Utility.getExtensionFromFile(itemName) + "&etiqueta=" + labelEncoded
-                            + "&fecha_ulti_modi=" + lastModDate + "&usuario_ulti_modi=" + email
-                            + "&propietario=" + email + "&baja_logica=no&direccion=" + "archivos/" + email + "/");
+                            + "&extension=" + Utility.getExtensionFromFile(itemName) + "&etiqueta=" + label
+                            + "&fecha_ulti_modi=" + currentDateAndTime + "&usuario_ulti_modi=" + email
+                            + "&propietario=" + owner + "&baja_logica=no&direccion=" + location);
             }else{
                 Toast.makeText(getApplicationContext(), R.string.error_emptyFields, Toast.LENGTH_LONG).show();
             }
@@ -121,6 +128,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         HttpGet httpGet = new HttpGet(URL);
         JSONObject json = new JSONObject();
         try {
+            Log.d("actualPath", actualItemPath);
             json.put("direccion",actualItemPath);
             json.put("nombre",Utility.getNameFromFile(itemName));
             json.put("extension",Utility.getExtensionFromFile(itemName));
@@ -161,14 +169,16 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
-                Object lastModDate = jsonObject.get("fecha_ulti_modi");
-                Object lastModUser = jsonObject.get("usuario_ulti_modi");
-                Object name = jsonObject.get("nombre");
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                String currentDate = simpleDateFormat.format(new Date());
-                JSONArray labelArray;
-                JSONArray shareWithArray;
                 if(status.equals("ok")) {
+                    Object lastModDate = jsonObject.get("fecha_ulti_modi");
+                    Object lastModUser = jsonObject.get("usuario_ulti_modi");
+                    Object name = jsonObject.get("nombre");
+                    Object owner = jsonObject.get("propietario");
+                    Object location = jsonObject.get("direccion");
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                    String currentDate = simpleDateFormat.format(new Date());
+                    JSONArray labelArray;
+                    JSONArray shareWithArray;
                     Toast.makeText(getApplicationContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.i("Item metadata", message.toString());
                     Utility.appendToInfoLog("Item metadata", message.toString());
@@ -176,9 +186,9 @@ public class ListItemDetailsActivity extends AppCompatActivity {
                     Utility.appendToDebugLog("Item metadata", jsonObject.toString());
                     nameET.setText(name.toString());
                     createdET.setText(currentDate);
-                    modifiedET.setText(URLDecoder.decode(lastModDate.toString(), "utf-8") + " by " + lastModUser.toString()); ;
-                    ownerET.setText(email);
-                    locationET.setText("archivos/" + email + "/");
+                    modifiedET.setText(lastModDate.toString() + " by " + lastModUser.toString()); ;
+                    ownerET.setText(owner.toString());
+                    locationET.setText(location.toString());
                     if(jsonObject.has("etiqueta")){
                         labelArray = jsonObject.getJSONArray("etiqueta");
                         for (int i=0; i<labelArray.length(); i++) {

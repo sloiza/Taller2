@@ -263,6 +263,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnItemClickLis
             json.put("nombre", Utility.getNameFromFile(itemName));
             json.put("direccion", "archivos/" + email + "/");
             json.put("extension", Utility.getExtensionFromFile(itemName));
+            json.put("mail", email);
             httpGet.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpGet.setHeader("Content-Type", "application/json");
             httpGet.setHeader("Accept-Encoding", "application/json");

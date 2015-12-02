@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Base64;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -51,6 +53,7 @@ public class ShareFragment extends Fragment implements AbsListView.OnItemClickLi
     String itemName;
     SwipeRefreshLayout swipeRefreshLayout;
     SessionManager session;
+    String shareUserEmail;
 
     public ShareFragment(){}
 
@@ -119,6 +122,7 @@ public class ShareFragment extends Fragment implements AbsListView.OnItemClickLi
         Intent intent = new Intent(getContext(), ListItemDetailsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("itemName", itemName);
+        intent.putExtra("pathToShareFile", shareUserEmail);
         startActivity(intent);
     }
 
@@ -135,7 +139,68 @@ public class ShareFragment extends Fragment implements AbsListView.OnItemClickLi
     }
 
     private void downloadCurrentItem() {
-        //new getDownloadFileService().execute(session.getIp() + session.getPort() + "descargar");
+        new getDownloadFileService().execute(session.getIp() + session.getPort() + "descargar");
+    }
+
+    public String getDownloadFile(String URL) {
+        StringBuilder stringBuilder = new StringBuilder();
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet httpGet = new HttpGet(URL);
+        JSONObject json = new JSONObject();
+        try {
+            Log.d("shareUserEmail", shareUserEmail);
+            json.put("nombre", Utility.getNameFromFile(itemName));
+            json.put("direccion", shareUserEmail);
+            json.put("extension", Utility.getExtensionFromFile(itemName));
+            json.put("mail", email);
+            httpGet.setEntity(new StringEntity(json.toString(), "UTF-8"));
+            httpGet.setHeader("Content-Type", "application/json");
+            httpGet.setHeader("Accept-Encoding", "application/json");
+            HttpResponse response = httpClient.execute(httpGet);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+                InputStream inputStream = entity.getContent();
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                inputStream.close();
+            } else {
+                Log.e("Download file", "status code: " + statusCode);
+                Utility.appendToErrorLog("Download file", "status code: " + statusCode);
+            }
+        } catch (Exception e) {
+            Log.e("Download file", e.getLocalizedMessage());
+            Utility.appendToErrorLog("Download file", e.getLocalizedMessage());
+        }
+        return stringBuilder.toString();
+    }
+
+    private class getDownloadFileService extends AsyncTask<String, Void, String> {
+
+        protected String doInBackground(String... urls) {
+            return getDownloadFile(urls[0]);
+        }
+
+        protected void onPostExecute(String result) {
+            try {
+                FileOutputStream out = new FileOutputStream("/sdcard/" + itemName);
+                byte[] data = Base64.decode(result, Base64.DEFAULT);
+                out.write(data);
+                out.flush();
+                out.close();
+                Toast.makeText(getContext(), "Download file success", Toast.LENGTH_LONG).show();
+                Log.i("Download file", "Download file success");
+                Utility.appendToInfoLog("Download file", "Download file success");
+            } catch (Exception e) {
+                Log.e("Download file", e.getLocalizedMessage());
+                Utility.appendToErrorLog("Download file", e.getLocalizedMessage());
+            }
+        }
     }
 
     public void showShareFileDialog() {
@@ -183,7 +248,7 @@ public class ShareFragment extends Fragment implements AbsListView.OnItemClickLi
     public void onRefresh() {
         filesList.clear();
         foldersList.clear();
-        new getShareFilesService().execute(session.getIp() + session.getPort() + "compartirArchivos");
+        new getShareFilesService().execute(session.getIp() + session.getPort() + "compartirArchivo");
     }
 
     @Override
@@ -223,6 +288,7 @@ public class ShareFragment extends Fragment implements AbsListView.OnItemClickLi
                         fileArray = jsonObject.getJSONArray("archivos");
                         for (int i=0; i<fileArray.length(); i++) {
                             String filePath = fileArray.getString(i);
+                            shareUserEmail = filePath.substring(0 ,filePath.lastIndexOf("/") + 1);
                             String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
                             filesList.add(fileName);
                         }
@@ -231,6 +297,7 @@ public class ShareFragment extends Fragment implements AbsListView.OnItemClickLi
                     lv.setAdapter(files);
                     ArrayAdapter<String> folders = new ArrayAdapter<>(getActivity(),R.layout.list_item,foldersList);
                     folderlv.setAdapter(folders);
+                    swipeRefreshLayout.setRefreshing(false);
                 } else {
                     Toast.makeText(getContext(), message.toString(), Toast.LENGTH_LONG).show();
                     Log.e("Share With Me", message.toString());
@@ -253,7 +320,7 @@ public class ShareFragment extends Fragment implements AbsListView.OnItemClickLi
             json.put("extension", Utility.getExtensionFromFile(itemName));
             json.put("propietario",email);
             json.put("baja_logica","si");
-            json.put("direccion","archivos/" + email + "/");
+            json.put("direccion",shareUserEmail);
             httpDelete.setEntity(new StringEntity(json.toString(), "UTF-8"));
             httpDelete.setHeader("Content-Type", "application/json");
             httpDelete.setHeader("Accept-Encoding", "application/json");

@@ -50,6 +50,7 @@ public class EditProfileActivity extends AppCompatActivity {
     String name, email, password, surname, city;
     HashMap<String, String> user;
     Float storage;
+    String sessionPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class EditProfileActivity extends AppCompatActivity {
         email = user.get(SessionManager.KEY_EMAIL);
         city = user.get(SessionManager.KEY_CITY);
         password = user.get(SessionManager.KEY_PASSWORD);
-        String sessionPicture = user.get(SessionManager.KEY_PICTURE);
+        sessionPicture = user.get(SessionManager.KEY_PICTURE);
         storage = session.getUserStorageUsed();
 
         nameET.setText(name);
@@ -165,8 +166,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public String userUpdateProfileAndStartNewSession(String URL) {
-        Bitmap bitmap = ((BitmapDrawable)pic.getDrawable()).getBitmap();
-        String encodedImage = Utility.bitmapToString(bitmap);
+        String encodedImage = sessionPicture;
         if(profilePic != null){
             encodedImage = Utility.bitmapToString(profilePic);
         }
@@ -238,8 +238,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public String userUpdateProfile(String URL) {
-        Bitmap bm=((BitmapDrawable)pic.getDrawable()).getBitmap();
-        String encodedImage = Utility.bitmapToString(bm);
+        String encodedImage = sessionPicture;
         if(profilePic != null){
             encodedImage = Utility.bitmapToString(profilePic);
         }
@@ -288,8 +287,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             try {
-                profilePic = BitmapFactory.decodeFile(picturePath);
-                String encodedImage = Utility.bitmapToString(profilePic);
+                String encodedImage = sessionPicture;
+                if(profilePic != null){
+                    encodedImage = Utility.bitmapToString(profilePic);
+                }
                 JSONObject jsonObject = new JSONObject(result);
                 Object status = jsonObject.get("estado");
                 Object message = jsonObject.get("mensaje");
