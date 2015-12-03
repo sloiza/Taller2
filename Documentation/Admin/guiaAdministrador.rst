@@ -50,6 +50,8 @@ En la carpeta root del proyecto:
 
    En caso que ejecutemos los test debemos compilar con:
 
+.. code-block:: bash
+
    $ cmake -DINCLUIR_TEST=ON ..
 
 Ejecución
@@ -66,26 +68,19 @@ Ejecución con docker
 
 Si no fue instalado previamente:
 
-   $ sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+`Install Docker`_.
 
-Abrir '/etc/apt/sources.list.d/docker.list' y agregar 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' si el OS es Ubuntu 14.04
-
-   $ sudo apt-get update
-   $ sudo apt-get purge lxc-docker
-   $ sudo apt-cache policy docker-engine
-
-   $ sudo apt-get install linux-image-extra-$(uname -r)
-   $ sudo apt-get update
-   $ sudo apt-get install linux-image-generic-lts-trusty
-   $ sudo reboot
-   $ sudo apt-get install docker-engine
-   $ sudo service docker start
+.. _Install Docker: https://docs.docker.com/engine/installation/ubuntulinux/
 
 Para obtener la imagen correcta:   
 
+.. code-block:: bash
+
    $ sudo docker pull samiloiza/Taller2:latest
 
-   Para correr la imagen:
+Para correr la imagen:
+
+.. code-block:: bash
 
    $ sudo docker run -t -i samiloiza/Taller2:latest /bin/bash  ./Taller2-master/servidor/run.sh
 
